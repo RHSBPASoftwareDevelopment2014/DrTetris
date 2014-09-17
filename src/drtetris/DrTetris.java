@@ -3,13 +3,14 @@ package drtetris;
 import java.io.File;
 import org.lwjgl.LWJGLUtil;
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
-public class DrTetris extends BasicGame {
+public class DrTetris extends StateBasedGame {
 
+    public static final int MAIN_MENU = 0, GAME = 1;
+    
     public DrTetris() {
         super("Dr Tetris");
     }
@@ -22,6 +23,8 @@ public class DrTetris extends BasicGame {
         try {
             AppGameContainer app = new AppGameContainer(new DrTetris());
             app.setDisplayMode(800, 600, false);
+            app.setTargetFrameRate(60);
+            app.setShowFPS(false);
             app.start();
         } catch(SlickException e) {
             e.printStackTrace();
@@ -29,18 +32,8 @@ public class DrTetris extends BasicGame {
     }
 
     @Override
-    public void init(GameContainer gc) throws SlickException {
-        
+    public void initStatesList(GameContainer gc) throws SlickException {
+        addState(new MainMenu(MAIN_MENU));
+        addState(new Game(GAME));
     }
-
-    @Override
-    public void update(GameContainer gc, int i) throws SlickException {
-        
-    }
-
-    @Override
-    public void render(GameContainer gc, Graphics grphcs) throws SlickException {
-        
-    }
-
 }
