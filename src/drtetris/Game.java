@@ -34,13 +34,16 @@ public class Game implements GameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
         background.draw();
-        Block.DEFAULT.draw(0, (int)change, rotation);
+        Block.DEFAULT.draw((int)x, (int)y, rotation);
     }
-    double change = 0;
+    double y = 25;
+    double x = 150;
     int rotation = Block.ROTATENONE;
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        if(change<=500) change += delta * .1;
+        if(y <= 575-Tile.SIZE * Block.DEFAULT.getHeight(rotation)) {
+            y += delta * .1;
+        }
     }
 
     @Override
@@ -95,12 +98,20 @@ public class Game implements GameState {
     @Override
     public void keyPressed(int key, char c) {
         switch(key) {
-            case Keyboard.KEY_LEFT:
+            case Keyboard.KEY_Q:
                 rotation += Block.ROTATELEFT;
                 break;
                 
-            case Keyboard.KEY_RIGHT:
+            case Keyboard.KEY_E:
                 rotation += Block.ROTATERIGHT;
+                break;
+            
+            case Keyboard.KEY_A:
+                x -= 50;
+                break;
+                
+            case Keyboard.KEY_D:
+                x += 50;
                 break;
         }
     }

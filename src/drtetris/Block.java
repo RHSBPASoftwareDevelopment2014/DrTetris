@@ -19,8 +19,34 @@ public class Block {
         this.map = map;
     }
     
+    public int getHeight(int rotation) {
+        switch(rotation) {
+            
+            case ROTATELEFT:
+                
+            case ROTATERIGHT:
+                return getWidth();
+            
+            default:
+                return getHeight();
+        }
+    }
+    
     public int getHeight() {
         return map.length;
+    }
+    
+    public int getWidth(int rotation) {
+        switch(rotation) {
+            
+            case ROTATELEFT:
+                
+            case ROTATERIGHT:
+                return getHeight();
+            
+            default:
+                return getWidth();
+        }
     }
     
     public int getWidth() {
