@@ -1,6 +1,7 @@
 
 package drtetris;
 
+import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -33,12 +34,13 @@ public class Game implements GameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
         background.draw();
-        Block.DEFAULT.draw(200, (int)change);
+        Block.DEFAULT.draw(0, (int)change, rotation);
     }
-    double change = 50;
+    double change = 0;
+    int rotation = Block.ROTATENONE;
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        if(change<=400) change += delta * .1;
+        if(change<=500) change += delta * .1;
     }
 
     @Override
@@ -91,11 +93,21 @@ public class Game implements GameState {
     }
 
     @Override
-    public void keyPressed(int i, char c) {
+    public void keyPressed(int key, char c) {
+        switch(key) {
+            case Keyboard.KEY_LEFT:
+                rotation += Block.ROTATELEFT;
+                break;
+                
+            case Keyboard.KEY_RIGHT:
+                rotation += Block.ROTATERIGHT;
+                break;
+        }
     }
 
     @Override
-    public void keyReleased(int i, char c) {
+    public void keyReleased(int key, char c) {
+        
     }
 
     @Override
