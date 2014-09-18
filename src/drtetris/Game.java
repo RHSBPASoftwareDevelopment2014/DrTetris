@@ -17,6 +17,8 @@ public class Game implements GameState {
     
     private Image background;
     
+    private Field field;
+    
     public Game(int id) {
         this.id = id;
     }
@@ -29,20 +31,32 @@ public class Game implements GameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         background = new Image("res/gamebackground.png");
+        field = new Field(new Tile[11][10]);
+        currentBlock = Block.DEFAULT;
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
         background.draw();
-        Block.DEFAULT.draw((int)x, (int)y, rotation);
+        currentBlock.draw((int)x * Tile.SIZE + 150, (int)y - Tile.SIZE * currentBlock.getHeight(rotation) + 25, rotation);
+        field.draw(150, 25);
     }
-    double y = 25;
-    double x = 150;
+    
+    double y = 0;
+    int x = 0;
     int rotation = Block.ROTATENONE;
+    
+    Block currentBlock;
+    
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        if(y <= 575-Tile.SIZE * Block.DEFAULT.getHeight(rotation)) {
+        if(y < 550) {
             y += delta * .1;
+        } else {
+            field.addBlock(currentBlock, rotation, x, (int) (y / Tile.SIZE) - currentBlock.getHeight(rotation));
+            y = 0;
+            x = 0;
+            rotation = Block.ROTATENONE;
         }
     }
 
@@ -107,11 +121,11 @@ public class Game implements GameState {
                 break;
             
             case Keyboard.KEY_A:
-                x -= 50;
+                x--;
                 break;
                 
             case Keyboard.KEY_D:
-                x += 50;
+                x++;
                 break;
         }
     }
