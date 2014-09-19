@@ -46,7 +46,7 @@ public class Game implements GameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
         background.draw();
-        currentBlock.draw((int)x * Tile.SIZE + 150, (int)y - Tile.SIZE * currentBlock.getHeight(rotation) + 25, rotation);
+        currentBlock.draw((int)x * Tile.SIZE + 150, (int)y + 25, rotation);
         field.draw(150, 25);
         if (paused) {
             pausedOverlay.draw();
@@ -54,7 +54,7 @@ public class Game implements GameState {
     }
     
     double y = 0;
-    int x = 0;
+    int x = 4;
     int rotation = Block.ROTATENONE;
     double speed = .1;
     Block currentBlock;
@@ -63,13 +63,13 @@ public class Game implements GameState {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         if (!paused) {
-            if(y < 550) {
+            if(field.isRoom(currentBlock, rotation, x, (int) y / Tile.SIZE + 1)) {
                 y += delta * speed;
             } else if (delay >= 500) {
-                field.addBlock(currentBlock, rotation, x, (int) (y / Tile.SIZE) - currentBlock.getHeight(rotation));
+                field.addMap(currentBlock, rotation, x, (int) (y / Tile.SIZE));
                 currentBlock = blockGen.nextBlock();
                 y = 0;
-                x = 0;
+                x = 4;
                 rotation = Block.ROTATENONE;
                 delay = 0;
             } else {
@@ -132,21 +132,25 @@ public class Game implements GameState {
         if (!paused) {
             switch(key) {
                 case Keyboard.KEY_Q:
-                    rotation += Block.ROTATELEFT;
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y / Tile.SIZE)) {
+                        rotation += Block.ROTATELEFT;
+                    }
                     break;
 
                 case Keyboard.KEY_E:
-                    rotation += Block.ROTATERIGHT;
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, (int) y / Tile.SIZE)) {
+                        rotation += Block.ROTATERIGHT;
+                    }
                     break;
 
                 case Keyboard.KEY_A:
-                    if (x > 0) {
+                    if (field.isRoom(currentBlock, rotation, x - 1, (int) y / Tile.SIZE)) {
                         x--;
                     }
                     break;
 
                 case Keyboard.KEY_D:
-                    if (x < 10 - currentBlock.getWidth(rotation)) {
+                    if (field.isRoom(currentBlock, rotation, x + 1, (int) y / Tile.SIZE)) {
                         x++;
                     }
                     break;
@@ -154,11 +158,12 @@ public class Game implements GameState {
                     speed = .3;
                     break;
                 case Keyboard.KEY_P:
+                    speed = .1;
                     paused = true;
                     break;
             }     
         } else {
-            paused = (key != Keyboard.KEY_P); 
+            paused = key != Keyboard.KEY_P; 
         }
     }
 

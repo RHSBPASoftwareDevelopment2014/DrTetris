@@ -6,8 +6,7 @@ public class Block extends TileMap {
     
     public static final Block NUMBAONE = new Block(new Tile[][]
         {
-            {Tile.DIRT},
-            {Tile.SAPPHIRE, Tile.SAPPHIRE}
+            {Tile.DIRT, Tile.DIRT, Tile.DIRT}
         }
     ),
     
@@ -20,8 +19,8 @@ public class Block extends TileMap {
     
     NUMBATHREE = new Block(new Tile[][]
         {
-            {Tile.DIRT, Tile.SAPPHIRE},
-            {Tile.SAPPHIRE, Tile.SAPPHIRE}
+            {Tile.DIRT, Tile.DIRT},
+            {Tile.DIRT, Tile.DIRT}
         }
     ),
     NUMBAFOUR = new Block(new Tile[][]
