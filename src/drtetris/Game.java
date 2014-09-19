@@ -63,10 +63,10 @@ public class Game implements GameState {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         if (!paused) {
-            if(field.isRoom(currentBlock, rotation, x, (int) y / Tile.SIZE + 1)) {
+            if(field.isRoom(currentBlock, rotation, x, y, 1)) {
                 y += delta * speed;
             } else if (delay >= 500) {
-                field.addMap(currentBlock, rotation, x, (int) (y / Tile.SIZE));
+                field.addMap(currentBlock, rotation, x, y);
                 currentBlock = blockGen.nextBlock();
                 y = 0;
                 x = 4;
@@ -132,30 +132,30 @@ public class Game implements GameState {
         if (!paused) {
             switch(key) {
                 case Keyboard.KEY_Q:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y / Tile.SIZE)) {
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, y)) {
                         rotation += Block.ROTATELEFT;
                     }
                     break;
 
                 case Keyboard.KEY_E:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, (int) y / Tile.SIZE)) {
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, y)) {
                         rotation += Block.ROTATERIGHT;
                     }
                     break;
 
                 case Keyboard.KEY_A:
-                    if (field.isRoom(currentBlock, rotation, x - 1, (int) y / Tile.SIZE)) {
+                    if (field.isRoom(currentBlock, rotation, x - 1, y)) {
                         x--;
                     }
                     break;
 
                 case Keyboard.KEY_D:
-                    if (field.isRoom(currentBlock, rotation, x + 1, (int) y / Tile.SIZE)) {
+                    if (field.isRoom(currentBlock, rotation, x + 1, y)) {
                         x++;
                     }
                     break;
                 case Keyboard.KEY_S:
-                    speed = .3;
+                    speed = .4;
                     break;
                 case Keyboard.KEY_P:
                     speed = .1;

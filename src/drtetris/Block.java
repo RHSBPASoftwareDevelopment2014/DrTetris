@@ -19,13 +19,11 @@ public class Block extends TileMap {
     
     NUMBATHREE = new Block(new Tile[][]
         {
-            {Tile.DIRT, Tile.DIRT},
             {Tile.DIRT, Tile.DIRT}
         }
     ),
     NUMBAFOUR = new Block(new Tile[][]
         {
-            {Tile.TUNNEL},
             {Tile.TUNNEL}
         }
     );
