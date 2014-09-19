@@ -10,6 +10,8 @@ public class Tile {
     public static final int SIZE = 50;
     
     public static final Tile DIRT = new Tile("res/dirttile.png");
+    public static final Tile SAPPHIRE = new Tile("res/sapphiretile.png");
+    public static final Tile TUNNEL = new Tile("res/tunneltile.png");
     
     private Image image;
     

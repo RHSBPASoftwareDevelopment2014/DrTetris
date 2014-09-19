@@ -19,6 +19,12 @@ public class Game implements GameState {
     
     private Field field;
     
+    private BlockGenerator blockGen;
+    
+    private boolean paused = false;
+    
+    private Image pausedOverlay;
+    
     public Game(int id) {
         this.id = id;
     }
@@ -32,7 +38,9 @@ public class Game implements GameState {
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         background = new Image("res/gamebackground.png");
         field = new Field(new Tile[11][10]);
-        currentBlock = Block.DEFAULT;
+        blockGen = new BlockGenerator();
+        currentBlock = blockGen.nextBlock();
+        pausedOverlay = new Image("res/pausedscreen.png");
     }
 
     @Override
@@ -40,23 +48,33 @@ public class Game implements GameState {
         background.draw();
         currentBlock.draw((int)x * Tile.SIZE + 150, (int)y - Tile.SIZE * currentBlock.getHeight(rotation) + 25, rotation);
         field.draw(150, 25);
+        if (paused) {
+            pausedOverlay.draw();
+        }
     }
     
     double y = 0;
     int x = 0;
     int rotation = Block.ROTATENONE;
-    
+    double speed = .1;
     Block currentBlock;
+    int delay = 0;
     
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        if(y < 550) {
-            y += delta * .1;
-        } else {
-            field.addBlock(currentBlock, rotation, x, (int) (y / Tile.SIZE) - currentBlock.getHeight(rotation));
-            y = 0;
-            x = 0;
-            rotation = Block.ROTATENONE;
+        if (!paused) {
+            if(y < 550) {
+                y += delta * speed;
+            } else if (delay >= 500) {
+                field.addBlock(currentBlock, rotation, x, (int) (y / Tile.SIZE) - currentBlock.getHeight(rotation));
+                currentBlock = blockGen.nextBlock();
+                y = 0;
+                x = 0;
+                rotation = Block.ROTATENONE;
+                delay = 0;
+            } else {
+                delay += delta;
+            }
         }
     }
 
@@ -111,28 +129,48 @@ public class Game implements GameState {
 
     @Override
     public void keyPressed(int key, char c) {
-        switch(key) {
-            case Keyboard.KEY_Q:
-                rotation += Block.ROTATELEFT;
-                break;
-                
-            case Keyboard.KEY_E:
-                rotation += Block.ROTATERIGHT;
-                break;
-            
-            case Keyboard.KEY_A:
-                x--;
-                break;
-                
-            case Keyboard.KEY_D:
-                x++;
-                break;
+        if (!paused) {
+            switch(key) {
+                case Keyboard.KEY_Q:
+                    rotation += Block.ROTATELEFT;
+                    break;
+
+                case Keyboard.KEY_E:
+                    rotation += Block.ROTATERIGHT;
+                    break;
+
+                case Keyboard.KEY_A:
+                    if (x > 0) {
+                        x--;
+                    }
+                    break;
+
+                case Keyboard.KEY_D:
+                    if (x < 10 - currentBlock.getWidth(rotation)) {
+                        x++;
+                    }
+                    break;
+                case Keyboard.KEY_S:
+                    speed = .3;
+                    break;
+                case Keyboard.KEY_P:
+                    paused = true;
+                    break;
+            }     
+        } else {
+            paused = (key != Keyboard.KEY_P); 
         }
     }
 
     @Override
     public void keyReleased(int key, char c) {
-        
+        if (!paused) {
+            switch (key) {
+                case Keyboard.KEY_S:
+                    speed = .1;
+                    break;
+            }
+        }
     }
 
     @Override
