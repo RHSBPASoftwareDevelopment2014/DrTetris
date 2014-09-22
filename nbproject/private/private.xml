@@ -3,15 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/DrTetris.java</file>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/BlockGenerator.java</file>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/Field.java</file>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/Block.java</file>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/MainMenu.java</file>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/Game.java</file>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/Button.java</file>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/Tile.java</file>
-            <file>file://hsserv/Shared/Users/StudentFolders/200002009/NetBeansProjects/DrTetris/src/drtetris/TileMap.java</file>
+            <file>src/drtetris/DrTetris.java</file>
+            <file>src/drtetris/BlockGenerator.java</file>
+            <file>src/drtetris/Field.java</file>
+            <file>src/drtetris/Block.java</file>
+            <file>src/drtetris/MainMenu.java</file>
+            <file>src/drtetris/Game.java</file>
+            <file>src/drtetris/Button.java</file>
+            <file>src/drtetris/Tile.java</file>
+            <file>src/drtetris/TileMap.java</file>
         </group>
     </open-files>
 </project-private>
