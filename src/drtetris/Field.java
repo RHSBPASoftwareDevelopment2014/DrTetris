@@ -15,7 +15,7 @@ public class Field extends TileMap {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if(map[i][j] != null) {
-                    this.map[parseY(y)[0] + i][x + j] = map[i][j];
+                    this.map[(int) (y - 10) / Tile.SIZE + i][x + j] = map[i][j];
                 }
             }
         }
@@ -27,7 +27,7 @@ public class Field extends TileMap {
     
     public boolean isRoom(TileMap tileMap, int rotation, int x, double yDouble, int yShift) {
         
-        int[] ys = parseY(yDouble, yShift);
+        int[] ys = yTolerance(yDouble, yShift);
         
         for (int h = 0; h < ys.length; h++) {
             if(x < 0 || x > getWidth() - tileMap.getWidth(rotation) || ys[h] < 0 || ys[h] > getHeight() - tileMap.getHeight(rotation)) {
@@ -48,18 +48,15 @@ public class Field extends TileMap {
         return true;
     }
     
-    private static int[] parseY(double y) {
-        return parseY(y, 0);
-    }
-    
-    private static int[] parseY(double y, int offset) {
+    private static int[] yTolerance(double y, int offset) {
         int[] ys = new int[2];
-        System.out.println(y);
-        ys[0]  = (int) (y) / Tile.SIZE + offset;
-        System.out.println(ys[0]);
-//        if (y % Tile.SIZE > 45) {
-//            ys[1] = ys[0] - 1;
-//        }
+        
+        ys[0] = (int) y / Tile.SIZE + offset;
+        
         return ys;
+    }
+
+    public double yLimit(double y) {
+        return y;
     }
 }

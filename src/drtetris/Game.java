@@ -63,8 +63,8 @@ public class Game implements GameState {
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         if (!paused) {
-            if(field.isRoom(currentBlock, rotation, x, y, 1)) {
-                y += delta * speed;
+            if(field.isRoom(currentBlock, rotation, x, y, 0)) {
+                y = field.yLimit(y + delta * speed);
             } else if (delay >= 500) {
                 field.addMap(currentBlock, rotation, x, y);
                 currentBlock = blockGen.nextBlock();
