@@ -22,8 +22,16 @@ public class Block extends TileMap {
             {Tile.DIRT, Tile.DIRT}
         }
     ),
+            
     NUMBAFOUR = new Block(new Tile[][]
         {
+            {Tile.TUNNEL}
+        }
+    ),
+    
+    NUMBAFIVE = new Block(new Tile[][]
+        {
+            {Tile.TUNNEL},
             {Tile.TUNNEL}
         }
     );

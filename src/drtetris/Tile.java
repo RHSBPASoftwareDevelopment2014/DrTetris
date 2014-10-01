@@ -7,7 +7,7 @@ import org.newdawn.slick.SlickException;
 
 public class Tile {
     
-    public static final int SIZE = 50;
+    public static final int SIZE = 40;
     
     public static final Tile DIRT = new Tile("res/dirttile.png");
     public static final Tile SAPPHIRE = new Tile("res/sapphiretile.png");
@@ -17,7 +17,7 @@ public class Tile {
     
     private Tile(String image) {
         try {
-            this.image = new Image(image);
+            this.image = new Image(image).getScaledCopy(SIZE, SIZE);
         } catch (SlickException ex) {
             ex.printStackTrace();
         }
@@ -25,5 +25,6 @@ public class Tile {
 
     public void draw(int x, int y) {
         image.draw(x, y);
+        
     }
 }

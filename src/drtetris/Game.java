@@ -13,17 +13,21 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Game implements GameState {
 
+    private static final double SPEED = .16;
+    private static final double SPEEDINCREMENT = .1;
+    
     private final int id;
     
     private Image background;
+    private Image pausedOverlay;
+    private Image gameoverOverlay;
     
     private Field field;
     
     private BlockGenerator blockGen;
     
     private boolean paused = false;
-    
-    private Image pausedOverlay;
+    private boolean gameover = false;
     
     public Game(int id) {
         this.id = id;
@@ -37,45 +41,67 @@ public class Game implements GameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         background = new Image("res/gamebackground.png");
-        field = new Field(new Tile[11][10]);
+        field = new Field(new Tile[12][12]);
         blockGen = new BlockGenerator();
         currentBlock = blockGen.nextBlock();
         pausedOverlay = new Image("res/pausedscreen.png");
+        gameoverOverlay = new Image("res/gameover.png");
     }
 
     @Override
-    public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
+    public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         background.draw();
-        currentBlock.draw((int)x * Tile.SIZE + 150, (int)y + 25, rotation);
-        field.draw(150, 25);
-        if (paused) {
+        currentBlock.draw((int)x * Tile.SIZE + 150, (int)y + 90, rotation);
+        field.draw(150, 90);
+        g.drawString("Level: " + level, 5, 5);
+        if (gameover) {
+            gameoverOverlay.draw();
+        } else if (paused) {
             pausedOverlay.draw();
         }
     }
     
-    double y = 0;
-    int x = 4;
+    double y = -50;
+    int x = 6;
     int rotation = Block.ROTATENONE;
-    double speed = .1;
+    double speed = SPEED;
     Block currentBlock;
     int delay = 0;
+    int level = 1;
     
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        if (!paused) {
-            if(field.isRoom(currentBlock, rotation, x, y, 0)) {
-                y = field.yLimit(y + delta * speed);
-            } else if (delay >= 500) {
-                field.addMap(currentBlock, rotation, x, y);
-                currentBlock = blockGen.nextBlock();
-                y = 0;
-                x = 4;
-                rotation = Block.ROTATENONE;
-                delay = 0;
-            } else {
-                delay += delta;
-            }
+        
+        switch (field.getState()) {
+            case Field.CONTINUE:
+                field.reset();
+                level++;
+                break;
+            case Field.END:
+                gameover = true;
+                break;
+            default:
+                if (!paused) {
+                    if (field.isRoom(currentBlock, rotation, x, y + delta * speed)) {
+                        if (!field.isRoom(currentBlock, rotation, x, y + delta * speed, 1, true)) {
+                            if (delay >= 500) {
+                                field.addMap(currentBlock, rotation, x, y);
+                                currentBlock = blockGen.nextBlock();
+                                y = -50;
+                                x = 6;
+                                rotation = Block.ROTATENONE;
+                                delay = 0;
+                            } else {
+                                delay += delta;
+                            }
+                        } else {
+                            y = field.yLimit(currentBlock, rotation, x, y + delta * speed);
+                        }
+                    }
+                }
         }
+        
+        
     }
 
     @Override
@@ -129,7 +155,7 @@ public class Game implements GameState {
 
     @Override
     public void keyPressed(int key, char c) {
-        if (!paused) {
+        if (!paused && !gameover) {
             switch(key) {
                 case Keyboard.KEY_Q:
                     if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, y)) {
@@ -155,10 +181,10 @@ public class Game implements GameState {
                     }
                     break;
                 case Keyboard.KEY_S:
-                    speed = .4;
+                    speed = (SPEED + SPEEDINCREMENT * (level - 1)) * 2;
                     break;
                 case Keyboard.KEY_P:
-                    speed = .1;
+                    speed = SPEED + SPEEDINCREMENT * (level - 1);
                     paused = true;
                     break;
             }     
@@ -169,10 +195,10 @@ public class Game implements GameState {
 
     @Override
     public void keyReleased(int key, char c) {
-        if (!paused) {
+        if (!paused && !gameover) {
             switch (key) {
                 case Keyboard.KEY_S:
-                    speed = .1;
+                    speed = SPEED + SPEEDINCREMENT * (level - 1);
                     break;
             }
         }

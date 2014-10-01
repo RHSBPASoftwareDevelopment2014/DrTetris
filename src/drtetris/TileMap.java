@@ -5,7 +5,7 @@ public class TileMap {
     
     public static final int ROTATENONE = 0, ROTATELEFT = 1, ROTATEHALF = 2, ROTATERIGHT = 3;
     
-    protected final Tile[][] map;
+    protected Tile[][] map;
     
     protected TileMap(Tile[][] map) {
         this.map = map;
