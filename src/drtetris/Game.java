@@ -29,6 +29,14 @@ public class Game implements GameState {
     private boolean paused = false;
     private boolean gameover = false;
     
+    double y = -50;
+    int x = 6;
+    int rotation = Block.ROTATENONE;
+    double speed = SPEED;
+    Block currentBlock;
+    int delay = 0;
+    int level = 1;
+    
     public Game(int id) {
         this.id = id;
     }
@@ -60,14 +68,6 @@ public class Game implements GameState {
             pausedOverlay.draw();
         }
     }
-    
-    double y = -50;
-    int x = 6;
-    int rotation = Block.ROTATENONE;
-    double speed = SPEED;
-    Block currentBlock;
-    int delay = 0;
-    int level = 1;
     
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {

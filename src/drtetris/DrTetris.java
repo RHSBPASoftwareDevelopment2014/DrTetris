@@ -12,7 +12,7 @@ public class DrTetris extends StateBasedGame {
     public static final int MAIN_MENU = 0, GAME = 1;
     
     public DrTetris() {
-        super("Dr Tetris");
+        super("Siranga");
     }
     
     public static void main(String[] args) {
