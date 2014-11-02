@@ -23,83 +23,19 @@ public class Field extends TileMap {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if(map[i][j] != null) {
-                    this.map[(int) (y + 10) / Tile.SIZE + i][x + j] = map[i][j];
+                    this.map[(int) (y + Config.FIELDOFFSET
+                            ) / Tile.SIZE + i][x + j] = map[i][j];
                 }
             }
         }
     }
     
-    public boolean isRoom(TileMap tileMap, int rotation, int x, double y) {
-        return isRoom(tileMap, rotation, x, y, 0, false);
-    }
-    
-    public boolean isRoom(TileMap tileMap, int rotation, int x, double yDouble, int yShift, boolean absolute) {
-        
-        int[] ys;
-
-        if (absolute) {
-            ys = new int[]{(int) yDouble / Tile.SIZE + yShift};
-        } else {
-            ys = yPositions(yDouble, yShift);
-        }
-
-        for (int h = 0; h < ys.length; h++) {
-            if(x < 0 || x > getWidth() - tileMap.getWidth(rotation) || ys[h] < 0 || ys[h] > getHeight() - tileMap.getHeight(rotation)) {
-                return false;
-            }
-
-            Tile[][] checkedMap = tileMap.getMap(rotation);
-
-            for (int i = 0; i < checkedMap.length; i++) {
-                for (int j = 0; j < checkedMap[i].length; j++) {
-                    if(checkedMap[i][j] != null && this.map[ys[h] + i][x + j] != null) {
-                        return false;
-                    }
-                }
-            }
-        }
+    public boolean isRoom(TileMap tileMap, int rotation, int x, int y) {
         return true;
     }
     
-    private static int[] yPositions(double y, int offset) {
-        int[] ys = new int[2];
-        
-        if (y >= -TOLERANCE) {
-            if (y % Tile.SIZE > 5) {
-                if (y % Tile.SIZE >= 45) {
-                    ys[0] = (int) y / Tile.SIZE + offset + 1;
-                } else {
-                    ys[0] = (int) y / Tile.SIZE + offset;
-                    ys[1] = (int) y / Tile.SIZE + offset + 1;
-                }
-            } else {
-                ys[0] = (int) y / Tile.SIZE + offset;
-            }
-        } else {
-            ys[0] = 0;
-        }
-        
-        return ys;
-    }
-
     double yLimit(Block currentBlock, int rotation, int x, double y) {
-        return yLimit(currentBlock, rotation, x, y, 0);
-    }
-    
-    double yLimit(Block currentBlock, int rotation, int x, double y, int yShift) {
-        if (y > -TOLERANCE && !isRoom(currentBlock, rotation, x, y, yShift + 1, true)) {
-            if (y % Tile.SIZE > TOLERANCE) {
-                if (y % Tile.SIZE >= Tile.SIZE - TOLERANCE) {
-                    return y - y % Tile.SIZE + Tile.SIZE;
-                } else {
-                    return y;
-                }
-            } else {
-                return y - y % Tile.SIZE;
-            }
-        } else {
-            return y;
-        }
+        return y;
     }
     
     public int getState() {

@@ -12,9 +12,6 @@ import org.newdawn.slick.state.StateBasedGame;
 
 
 public class Game implements GameState {
-
-    private static final double SPEED = .16;
-    private static final double SPEEDINCREMENT = .1;
     
     private final int id;
     
@@ -29,13 +26,13 @@ public class Game implements GameState {
     private boolean paused = false;
     private boolean gameover = false;
     
-    double y = -50;
-    int x = 6;
-    int rotation = Block.ROTATENONE;
-    double speed = SPEED;
-    Block currentBlock;
-    int delay = 0;
-    int level = 1;
+    private double y = -50;
+    private int x = 6;
+    private int rotation = Block.ROTATENONE;
+    private double speed = Config.BASESPEED;
+    private Block currentBlock;
+    private int delay = 0;
+    private int level = 1;
     
     public Game(int id) {
         this.id = id;
@@ -48,19 +45,19 @@ public class Game implements GameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        background = new Image("res/gamebackground.png");
+        background = new Image(Config.GAMEBACKGROUND);
+        pausedOverlay = new Image(Config.PAUSESCREEN);
+        gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
         field = new Field(new Tile[12][12]);
         blockGen = new BlockGenerator();
         currentBlock = blockGen.nextBlock();
-        pausedOverlay = new Image("res/pausedscreen.png");
-        gameoverOverlay = new Image("res/gameover.png");
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         background.draw();
-        currentBlock.draw((int)x * Tile.SIZE + 150, (int)y + 90, rotation);
-        field.draw(150, 90);
+        currentBlock.draw((int)x * Tile.SIZE + Config.FIELDX, (int)y + Config.FIELDY, rotation);
+        field.draw(Config.FIELDX, Config.FIELDY);
         g.drawString("Level: " + level, 5, 5);
         if (gameover) {
             gameoverOverlay.draw();
@@ -82,21 +79,19 @@ public class Game implements GameState {
                 break;
             default:
                 if (!paused) {
-                    if (field.isRoom(currentBlock, rotation, x, y + delta * speed)) {
-                        if (!field.isRoom(currentBlock, rotation, x, y + delta * speed, 1, true)) {
-                            if (delay >= 500) {
-                                field.addMap(currentBlock, rotation, x, y);
-                                currentBlock = blockGen.nextBlock();
-                                y = -50;
-                                x = 6;
-                                rotation = Block.ROTATENONE;
-                                delay = 0;
-                            } else {
-                                delay += delta;
-                            }
+                    if (!field.isRoom(currentBlock, rotation, x, (int) y)) {
+                        if (delay >= Config.BLOCKDELAY) {
+                            field.addMap(currentBlock, rotation, x, y);
+                            currentBlock = blockGen.nextBlock();
+                            y = -50;
+                            x = 6;
+                            rotation = Block.ROTATENONE;
+                            delay = 0;
                         } else {
-                            y = field.yLimit(currentBlock, rotation, x, y + delta * speed);
+                            delay += delta;
                         }
+                    } else {
+                        y = field.yLimit(currentBlock, rotation, x, y + delta * speed);
                     }
                 }
         }
@@ -158,33 +153,33 @@ public class Game implements GameState {
         if (!paused && !gameover) {
             switch(key) {
                 case Keyboard.KEY_Q:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, y)) {
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y)) {
                         rotation += Block.ROTATELEFT;
                     }
                     break;
 
                 case Keyboard.KEY_E:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, y)) {
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, (int) y)) {
                         rotation += Block.ROTATERIGHT;
                     }
                     break;
 
                 case Keyboard.KEY_A:
-                    if (field.isRoom(currentBlock, rotation, x - 1, y)) {
+                    if (field.isRoom(currentBlock, rotation, x - 1, (int) y)) {
                         x--;
                     }
                     break;
 
                 case Keyboard.KEY_D:
-                    if (field.isRoom(currentBlock, rotation, x + 1, y)) {
+                    if (field.isRoom(currentBlock, rotation, x + 1, (int) y)) {
                         x++;
                     }
                     break;
                 case Keyboard.KEY_S:
-                    speed = (SPEED + SPEEDINCREMENT * (level - 1)) * 2;
+                    speed = (Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1)) * 2;
                     break;
                 case Keyboard.KEY_P:
-                    speed = SPEED + SPEEDINCREMENT * (level - 1);
+                    speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
                     paused = true;
                     break;
             }     
@@ -198,7 +193,7 @@ public class Game implements GameState {
         if (!paused && !gameover) {
             switch (key) {
                 case Keyboard.KEY_S:
-                    speed = SPEED + SPEEDINCREMENT * (level - 1);
+                    speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
                     break;
             }
         }
