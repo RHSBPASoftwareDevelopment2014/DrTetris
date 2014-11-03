@@ -7,17 +7,15 @@ import org.newdawn.slick.SlickException;
 
 public class Tile {
     
-    public static final int SIZE = 40;
-    
-    public static final Tile DIRT = new Tile("res/dirttile.png");
-    public static final Tile SAPPHIRE = new Tile("res/sapphiretile.png");
-    public static final Tile TUNNEL = new Tile("res/tunneltile.png");
+    public static final Tile DIRT = new Tile(Config.DIRTTILE);
+    public static final Tile SAPPHIRE = new Tile(Config.SAPPHIRETILE);
+    public static final Tile TUNNEL = new Tile(Config.TUNNELTILE);
     
     private Image image;
     
     private Tile(String image) {
         try {
-            this.image = new Image(image).getScaledCopy(SIZE, SIZE);
+            this.image = new Image(image).getScaledCopy(Config.BLOCKSIZE, Config.BLOCKSIZE);
         } catch (SlickException ex) {
             ex.printStackTrace();
         }

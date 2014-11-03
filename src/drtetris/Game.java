@@ -56,7 +56,7 @@ public class Game implements GameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         background.draw();
-        currentBlock.draw((int)x * Tile.SIZE + Config.FIELDX, (int)y + Config.FIELDY, rotation);
+        currentBlock.draw((int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY, rotation);
         field.draw(Config.FIELDX, Config.FIELDY);
         g.drawString("Level: " + level, 5, 5);
         if (gameover) {
@@ -79,7 +79,7 @@ public class Game implements GameState {
                 break;
             default:
                 if (!paused) {
-                    if (!field.isRoom(currentBlock, rotation, x, (int) y)) {
+                    if (!field.isRoom(currentBlock, rotation, x, (int) y, Config.STACKTOLERANCE)) {
                         if (delay >= Config.BLOCKDELAY) {
                             field.addMap(currentBlock, rotation, x, y);
                             currentBlock = blockGen.nextBlock();
@@ -153,25 +153,25 @@ public class Game implements GameState {
         if (!paused && !gameover) {
             switch(key) {
                 case Keyboard.KEY_Q:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y)) {
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y, Config.STACKTOLERANCE)) {
                         rotation += Block.ROTATELEFT;
                     }
                     break;
 
                 case Keyboard.KEY_E:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, (int) y)) {
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, (int) y, Config.STACKTOLERANCE)) {
                         rotation += Block.ROTATERIGHT;
                     }
                     break;
 
                 case Keyboard.KEY_A:
-                    if (field.isRoom(currentBlock, rotation, x - 1, (int) y)) {
+                    if (field.isRoom(currentBlock, rotation, x - 1, (int) y, Config.STACKTOLERANCE)) {
                         x--;
                     }
                     break;
 
                 case Keyboard.KEY_D:
-                    if (field.isRoom(currentBlock, rotation, x + 1, (int) y)) {
+                    if (field.isRoom(currentBlock, rotation, x + 1, (int) y, Config.STACKTOLERANCE)) {
                         x++;
                     }
                     break;

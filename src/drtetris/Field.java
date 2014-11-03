@@ -24,13 +24,26 @@ public class Field extends TileMap {
             for (int j = 0; j < map[i].length; j++) {
                 if(map[i][j] != null) {
                     this.map[(int) (y + Config.FIELDOFFSET
-                            ) / Tile.SIZE + i][x + j] = map[i][j];
+                            ) / Config.BLOCKSIZE + i][x + j] = map[i][j];
                 }
             }
         }
     }
     
-    public boolean isRoom(TileMap tileMap, int rotation, int x, int y) {
+    public boolean isRoom(TileMap tileMap, int rotation, int x, int y, double tolerance) {
+        Tile[][] map = tileMap.getMap(rotation);
+        
+        double lowY = y - tolerance,
+                lowCheck = y - tolerance,
+                highCheck = y + tolerance,
+                highY = y + tolerance;
+        
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                //TODO
+            }
+        }
+        
         return true;
     }
     
