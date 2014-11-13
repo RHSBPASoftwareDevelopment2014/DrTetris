@@ -15,6 +15,6 @@ public class BlockGenerator {
     }
     
     public Block nextBlock() {
-        return Block.BLOCKS[random.nextInt(Block.BLOCKS.length)];
+        return Block.BLOCKS[(random.nextInt(Block.BLOCKS.length))];
     }
 }

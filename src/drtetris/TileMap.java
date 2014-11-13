@@ -110,7 +110,7 @@ public class TileMap {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if(map[i][j] != null ) {
-                    map[i][j].draw(x + Tile.SIZE * j, y + Tile.SIZE * i);
+                    map[i][j].draw(x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
                 }
             }
         }

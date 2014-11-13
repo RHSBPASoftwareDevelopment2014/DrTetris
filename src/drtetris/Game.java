@@ -2,6 +2,7 @@
 package drtetris;
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.util.Timer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -23,16 +24,21 @@ public class Game implements GameState {
     
     private BlockGenerator blockGen;
     
-    private boolean paused = false;
+    private Block currentBlock;
+    
+    private Timer timer;
+    
     private boolean gameover = false;
     
     private double y = -50;
     private int x = 6;
     private int rotation = Block.ROTATENONE;
     private double speed = Config.BASESPEED;
-    private Block currentBlock;
-    private int delay = 0;
+    private int stackDelay = 0;
     private int level = 1;
+    
+    private float A = 0,
+            D = 0;
     
     public Game(int id) {
         this.id = id;
@@ -48,20 +54,23 @@ public class Game implements GameState {
         background = new Image(Config.GAMEBACKGROUND);
         pausedOverlay = new Image(Config.PAUSESCREEN);
         gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
-        field = new Field(new Tile[12][12]);
+        field = new Field(new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]);
         blockGen = new BlockGenerator();
         currentBlock = blockGen.nextBlock();
+        timer = new Timer();
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         background.draw();
         currentBlock.draw((int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY, rotation);
+//        g.drawString(Integer.toString((int) ((y - Config.STACKTOLERANCE) / Config.BLOCKSIZE + 1)),(int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY);
+//        g.drawString(Double.toString(y),(int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY + 14);
         field.draw(Config.FIELDX, Config.FIELDY);
         g.drawString("Level: " + level, 5, 5);
         if (gameover) {
             gameoverOverlay.draw();
-        } else if (paused) {
+        } else if (timer.isPaused()) {
             pausedOverlay.draw();
         }
     }
@@ -72,26 +81,26 @@ public class Game implements GameState {
         switch (field.getState()) {
             case Field.CONTINUE:
                 field.reset();
-                level++;
+                level++;gc.getInput().isKeyPressed(Input.KEY_A);
                 break;
             case Field.END:
                 gameover = true;
                 break;
             default:
-                if (!paused) {
-                    if (!field.isRoom(currentBlock, rotation, x, (int) y, Config.STACKTOLERANCE)) {
-                        if (delay >= Config.BLOCKDELAY) {
+                if (!timer.isPaused()) {
+                    if (!field.isRoom(currentBlock, rotation, x, (int) y, Config.STACKTOLERANCE, true)) {
+                        if (stackDelay >= Config.BLOCKDELAY) {
                             field.addMap(currentBlock, rotation, x, y);
                             currentBlock = blockGen.nextBlock();
                             y = -50;
                             x = 6;
                             rotation = Block.ROTATENONE;
-                            delay = 0;
+                            stackDelay = 0;
                         } else {
-                            delay += delta;
+                            stackDelay += delta;
                         }
                     } else {
-                        y = field.yLimit(currentBlock, rotation, x, y + delta * speed);
+                        y = field.yLimit(currentBlock, rotation, x, y + delta * speed, Config.STACKTOLERANCE);
                     }
                 }
         }
@@ -150,29 +159,42 @@ public class Game implements GameState {
 
     @Override
     public void keyPressed(int key, char c) {
-        if (!paused && !gameover) {
+        
+        if (!timer.isPaused() && !gameover) {
             switch(key) {
                 case Keyboard.KEY_Q:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y, Config.STACKTOLERANCE)) {
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y, Config.STACKTOLERANCE, false)) {
                         rotation += Block.ROTATELEFT;
+                        y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
                     }
                     break;
 
                 case Keyboard.KEY_E:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, (int) y, Config.STACKTOLERANCE)) {
+                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, (int) y, Config.STACKTOLERANCE, false)) {
                         rotation += Block.ROTATERIGHT;
+                        y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
                     }
                     break;
 
                 case Keyboard.KEY_A:
-                    if (field.isRoom(currentBlock, rotation, x - 1, (int) y, Config.STACKTOLERANCE)) {
+                    if (field.isRoom(currentBlock, rotation, x - 1, (int) y, Config.STACKTOLERANCE, false)) {
                         x--;
+                        y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                        if (A <= 0) {
+                            A = timer.getTime();
+                        }
+                        D = 0;
                     }
                     break;
 
                 case Keyboard.KEY_D:
-                    if (field.isRoom(currentBlock, rotation, x + 1, (int) y, Config.STACKTOLERANCE)) {
+                    if (field.isRoom(currentBlock, rotation, x + 1, (int) y, Config.STACKTOLERANCE, false)) {
                         x++;
+                        y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                        if (D <= 0) {
+                           D = timer.getTime();
+                        }
+                        A = 0;
                     }
                     break;
                 case Keyboard.KEY_S:
@@ -180,17 +202,21 @@ public class Game implements GameState {
                     break;
                 case Keyboard.KEY_P:
                     speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
-                    paused = true;
+                    timer.pause();
                     break;
-            }     
+            }
         } else {
-            paused = key != Keyboard.KEY_P; 
+            if (key == Keyboard.KEY_P) {
+                timer.resume();
+            } 
         }
     }
 
     @Override
     public void keyReleased(int key, char c) {
-        if (!paused && !gameover) {
+        A = 0;
+        D = 0;
+        if (!timer.isPaused() && !gameover) {
             switch (key) {
                 case Keyboard.KEY_S:
                     speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);

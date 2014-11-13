@@ -23,31 +23,46 @@ public class Field extends TileMap {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if(map[i][j] != null) {
-                    this.map[(int) (y + Config.FIELDOFFSET
-                            ) / Config.BLOCKSIZE + i][x + j] = map[i][j];
+                    int yPos = (int) (y + Config.FIELDOFFSET) / Config.BLOCKSIZE + i;
+                    if(yPos >= 0) {
+                        this.map[yPos][x + j] = map[i][j];
+                    }
                 }
             }
         }
     }
     
-    public boolean isRoom(TileMap tileMap, int rotation, int x, int y, double tolerance) {
+    public boolean isRoom(TileMap tileMap, int rotation, int x, double y, double tolerance, boolean falling) {
         Tile[][] map = tileMap.getMap(rotation);
+        if(!falling) System.out.println("x: "+x+" y:"+y);
+        int lowCheck = (int) ((y + tolerance) / Config.BLOCKSIZE),
+                highCheck = (int) ((y - tolerance) / Config.BLOCKSIZE + 1),
+                lowY = (int) (y / Config.BLOCKSIZE),
+                highY = (int) (y / Config.BLOCKSIZE + 1);
         
-        double lowY = y - tolerance,
-                lowCheck = y - tolerance,
-                highCheck = y + tolerance,
-                highY = y + tolerance;
+        if(x < 0 || x + map[0].length > 12 || (lowY + map.length >= 12 && falling)) {
+            return false;
+        }
         
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                //TODO
+                if (map[i][j] != null) {
+                    if (lowCheck >= 0  && this.map[i + lowCheck][j + x] != null) {
+                        return false;
+                    } else if (highCheck >= 0 && highCheck + map.length < 12 && this.map[i + (falling ? highY : highCheck)][j + x] != null) {
+                        return false;
+                    }
+                }
             }
         }
         
         return true;
     }
     
-    double yLimit(Block currentBlock, int rotation, int x, double y) {
+    double yLimit(Block currentBlock, int rotation, int x, double y, double tolerance) {
+        if(!isRoom(currentBlock, rotation, x, y, tolerance, true) && y > ((int) y / Config.BLOCKSIZE) * Config.BLOCKSIZE) {
+            return ((int) y / Config.BLOCKSIZE) * Config.BLOCKSIZE;
+        }
         return y;
     }
     
@@ -71,35 +86,35 @@ public class Field extends TileMap {
         return false;
     }
     
+    private static final int UP = 0, LEFT = 1, RIGHT = 2;
+    
     private boolean isTunnel() {
         boolean isTunnel = false;
-        
         for (int i = 0; i < map[map.length - 1].length && !isTunnel; i++) {
             if (map[map.length - 1][i] == Tile.TUNNEL) {
-                isTunnel = isTunnel || isTunnel(i, map.length - 1);
+                isTunnel = isTunnel || isTunnel(i, map.length - 1, UP);
             }
         }
         
         return isTunnel;
     }
     
-    private boolean isTunnel(int x, int y) {
+    private boolean isTunnel(int x, int y, int direction) {
         
         boolean isTunnel = false;
-        
         if (y < 3) {
             isTunnel = true;
         } else {
             if (y > 0 && map[y - 1][x] == Tile.TUNNEL && !isTunnel) {
-                isTunnel = isTunnel || isTunnel(x, y - 1);
+                isTunnel = isTunnel || isTunnel(x, y - 1, UP);
             }
 
-            if (x > 0 && map[y][x - 1] == Tile.TUNNEL && !isTunnel) {
-                isTunnel = isTunnel || isTunnel(x - 1, y - 1);
+            if (direction != RIGHT && x > 0 && map[y][x - 1] == Tile.TUNNEL && !isTunnel) {
+                isTunnel = isTunnel || isTunnel(x - 1, y, LEFT);
             }
 
-            if (x < map[y].length - 1 && map[y][x + 1] == Tile.TUNNEL && !isTunnel) {
-                isTunnel = isTunnel || isTunnel(x + 1, y - 1);
+            if (direction != LEFT && x < map[y].length - 1 && map[y][x + 1] == Tile.TUNNEL && !isTunnel) {
+                isTunnel = isTunnel || isTunnel(x + 1, y, RIGHT);
             }
         }
         
