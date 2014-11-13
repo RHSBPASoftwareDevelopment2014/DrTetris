@@ -3,7 +3,7 @@ package drtetris;
 
 public class Config {
     public static final double BASESPEED = .16;
-    public static final double BASEXSPEED = .16;
+    public static final double BASEXSPEED = .02;
     public static final double SPEEDINCREMENT = .1;
     public static final double STACKTOLERANCE = 10;
     public static final double PARTICLESTRAY = 0;
@@ -16,6 +16,7 @@ public class Config {
     public static final int BLOCKDELAY = 400;
     public static final int BLOCKSIZE = 40;
     public static final int TILEPARTICLESIZE = 40;
+    public static final int XMOVEDELAY = 300;
     
     public static final String GAMEBACKGROUND = "res/gamebackground.png";
     public static final String PAUSESCREEN = "res/pausedscreen.png";

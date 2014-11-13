@@ -2,7 +2,6 @@
 package drtetris;
 
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.util.Timer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -26,19 +25,20 @@ public class Game implements GameState {
     
     private Block currentBlock;
     
-    private Timer timer;
-    
-    private boolean gameover = false;
+    private boolean gameover = false,
+            paused = false;
     
     private double y = -50;
     private int x = 6;
     private int rotation = Block.ROTATENONE;
     private double speed = Config.BASESPEED;
-    private int stackDelay = 0;
+    private int stackDelay = 0,
+            aDelay = 0,
+            dDelay = 0;
     private int level = 1;
     
-    private float A = 0,
-            D = 0;
+    private boolean A = false,
+            D = false;
     
     public Game(int id) {
         this.id = id;
@@ -57,7 +57,6 @@ public class Game implements GameState {
         field = new Field(new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]);
         blockGen = new BlockGenerator();
         currentBlock = blockGen.nextBlock();
-        timer = new Timer();
     }
 
     @Override
@@ -70,7 +69,7 @@ public class Game implements GameState {
         g.drawString("Level: " + level, 5, 5);
         if (gameover) {
             gameoverOverlay.draw();
-        } else if (timer.isPaused()) {
+        } else if (paused) {
             pausedOverlay.draw();
         }
     }
@@ -87,7 +86,42 @@ public class Game implements GameState {
                 gameover = true;
                 break;
             default:
-                if (!timer.isPaused()) {
+                if (!paused) {
+                    
+                    if(A) {
+                        aDelay += delta;
+                    } else {
+                        aDelay = 0;
+                    }
+                    
+                    if(D) {
+                        dDelay += delta;
+                    } else {
+                        dDelay = 0;
+                    }
+                    
+                    if(aDelay >= Config.XMOVEDELAY) {
+                        int xDelta = -(int)((aDelay - Config.XMOVEDELAY) * Config.BASEXSPEED);
+                        if (xDelta < 0) {
+                            if (field.isRoom(currentBlock, rotation, x + xDelta, (int) y, Config.STACKTOLERANCE, false)) {
+                                x += xDelta;
+                                y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                            }
+                            aDelay = Config.XMOVEDELAY;
+                        }
+                    }
+                    
+                    if(dDelay >= Config.XMOVEDELAY) {
+                        int xDelta = (int)((dDelay - Config.XMOVEDELAY) * Config.BASEXSPEED);
+                        if (xDelta > 0) {
+                            if (field.isRoom(currentBlock, rotation, x + xDelta, (int) y, Config.STACKTOLERANCE, false)) {
+                                x += xDelta;
+                                y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                            }
+                            dDelay = Config.XMOVEDELAY;
+                        }
+                    }
+                    
                     if (!field.isRoom(currentBlock, rotation, x, (int) y, Config.STACKTOLERANCE, true)) {
                         if (stackDelay >= Config.BLOCKDELAY) {
                             field.addMap(currentBlock, rotation, x, y);
@@ -96,6 +130,8 @@ public class Game implements GameState {
                             x = 6;
                             rotation = Block.ROTATENONE;
                             stackDelay = 0;
+                            aDelay = 0;
+                            dDelay = 0;
                         } else {
                             stackDelay += delta;
                         }
@@ -160,7 +196,7 @@ public class Game implements GameState {
     @Override
     public void keyPressed(int key, char c) {
         
-        if (!timer.isPaused() && !gameover) {
+        if (!paused && !gameover) {
             switch(key) {
                 case Keyboard.KEY_Q:
                     if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y, Config.STACKTOLERANCE, false)) {
@@ -180,10 +216,8 @@ public class Game implements GameState {
                     if (field.isRoom(currentBlock, rotation, x - 1, (int) y, Config.STACKTOLERANCE, false)) {
                         x--;
                         y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
-                        if (A <= 0) {
-                            A = timer.getTime();
-                        }
-                        D = 0;
+                        A = true;
+                        D = false;
                     }
                     break;
 
@@ -191,10 +225,8 @@ public class Game implements GameState {
                     if (field.isRoom(currentBlock, rotation, x + 1, (int) y, Config.STACKTOLERANCE, false)) {
                         x++;
                         y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
-                        if (D <= 0) {
-                           D = timer.getTime();
-                        }
-                        A = 0;
+                        D = true;
+                        A = false;
                     }
                     break;
                 case Keyboard.KEY_S:
@@ -202,21 +234,21 @@ public class Game implements GameState {
                     break;
                 case Keyboard.KEY_P:
                     speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
-                    timer.pause();
+                    paused = true;
                     break;
             }
         } else {
             if (key == Keyboard.KEY_P) {
-                timer.resume();
+                paused = false;
             } 
         }
     }
 
     @Override
     public void keyReleased(int key, char c) {
-        A = 0;
-        D = 0;
-        if (!timer.isPaused() && !gameover) {
+        A = false;
+        D = false;
+        if (!paused && !gameover) {
             switch (key) {
                 case Keyboard.KEY_S:
                     speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
