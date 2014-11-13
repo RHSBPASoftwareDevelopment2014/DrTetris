@@ -15,7 +15,7 @@ public class Config {
     public static final String GAMEBACKGROUND = "res/gamebackground.png";
     public static final String PAUSESCREEN = "res/pausedscreen.png";
     public static final String GAMEOVERSCREEN = "res/gameover.png";
-    public static final String DIRTTILE = "res/dirttile.png";
-    public static final String SAPPHIRETILE = "res/sapphiretile.png";
+    public static final String DIRTTILE = "res/Dirt2.png";
+    public static final String SAPPHIRETILE = "res/Sapphire4.png";
     public static final String TUNNELTILE = "res/tunneltile.png";
 }
