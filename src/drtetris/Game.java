@@ -101,10 +101,10 @@ public class Game implements GameState {
                     }
                     
                     if(aDelay >= Config.XMOVEDELAY) {
-                        int xDelta = -(int)((aDelay - Config.XMOVEDELAY) * Config.BASEXSPEED);
+                        int xDelta = -(int)((aDelay - Config.XMOVEDELAY) * (Config.BASEXSPEED + Config.SPEEDXINCREMENT * level));
                         if (xDelta < 0) {
-                            if (field.isRoom(currentBlock, rotation, x + xDelta, (int) y, Config.STACKTOLERANCE, false)) {
-                                x += xDelta;
+                            for (int i = -1; i >= xDelta && field.isRoom(currentBlock, rotation, x + i, (int) y, Config.STACKTOLERANCE, false); i--) {
+                                x--;
                                 y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
                             }
                             aDelay = Config.XMOVEDELAY;
@@ -112,10 +112,10 @@ public class Game implements GameState {
                     }
                     
                     if(dDelay >= Config.XMOVEDELAY) {
-                        int xDelta = (int)((dDelay - Config.XMOVEDELAY) * Config.BASEXSPEED);
+                        int xDelta = (int)((dDelay - Config.XMOVEDELAY) * (Config.BASEXSPEED + Config.SPEEDXINCREMENT * level));
                         if (xDelta > 0) {
-                            if (field.isRoom(currentBlock, rotation, x + xDelta, (int) y, Config.STACKTOLERANCE, false)) {
-                                x += xDelta;
+                            for (int i = 1; i <= xDelta && field.isRoom(currentBlock, rotation, x + i, (int) y, Config.STACKTOLERANCE, false); i++) {
+                                x++;
                                 y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
                             }
                             dDelay = Config.XMOVEDELAY;
@@ -137,6 +137,7 @@ public class Game implements GameState {
                         }
                     } else {
                         y = field.yLimit(currentBlock, rotation, x, y + delta * speed, Config.STACKTOLERANCE);
+                        stackDelay = 0;
                     }
                 }
         }

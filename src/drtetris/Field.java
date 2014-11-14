@@ -34,7 +34,6 @@ public class Field extends TileMap {
     
     public boolean isRoom(TileMap tileMap, int rotation, int x, double y, double tolerance, boolean falling) {
         Tile[][] map = tileMap.getMap(rotation);
-        if(!falling) System.out.println("x: "+x+" y:"+y);
         int lowCheck = (int) ((y + tolerance) / Config.BLOCKSIZE),
                 highCheck = (int) ((y - tolerance) / Config.BLOCKSIZE + 1),
                 lowY = (int) (y / Config.BLOCKSIZE),

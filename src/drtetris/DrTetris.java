@@ -23,7 +23,7 @@ public class DrTetris extends StateBasedGame {
         try {
             AppGameContainer app = new AppGameContainer(new DrTetris());
             app.setDisplayMode(800, 600, false);
-            app.setTargetFrameRate(60);
+            app.setTargetFrameRate(120);
             app.setShowFPS(false);
             app.start();
         } catch(SlickException e) {
