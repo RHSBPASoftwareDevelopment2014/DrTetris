@@ -217,18 +217,18 @@ public class Game implements GameState {
                     if (field.isRoom(currentBlock, rotation, x - 1, (int) y, Config.STACKTOLERANCE, false)) {
                         x--;
                         y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
-                        A = true;
-                        D = false;
                     }
+                    A = true;
+                    D = false;
                     break;
 
                 case Keyboard.KEY_D:
                     if (field.isRoom(currentBlock, rotation, x + 1, (int) y, Config.STACKTOLERANCE, false)) {
                         x++;
                         y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
-                        D = true;
-                        A = false;
                     }
+                    D = true;
+                    A = false;
                     break;
                 case Keyboard.KEY_S:
                     speed = (Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1)) * 2;
@@ -247,12 +247,21 @@ public class Game implements GameState {
 
     @Override
     public void keyReleased(int key, char c) {
-        A = false;
-        D = false;
+        
         if (!paused && !gameover) {
             switch (key) {
                 case Keyboard.KEY_S:
                     speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
+                    break;
+                    
+                case Keyboard.KEY_A:
+                    A = false;
+                    D = false;
+                    break;
+                    
+                case Keyboard.KEY_D:
+                    A = false;
+                    D = false;
                     break;
             }
         }
