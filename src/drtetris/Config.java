@@ -10,6 +10,7 @@ public class Config {
     public static final double PARTICLESTRAY = 0;
     public static final double SPEEDLIMIT = 1;
     public static final double SPEEDXLIMIT = .1;
+    public static final double DEFAULTY = -50;
     
     public static final int FIELDHEIGHT = 12;
     public static final int FIELDWIDTH = 12;
@@ -21,6 +22,7 @@ public class Config {
     public static final int TILEPARTICLESIZE = 40;
     public static final int XMOVEDELAY = 200;
     public static final int XMOVEDELAYDECREMENT = 5;
+    public static final int DEFAULTX = 6;
     
     public static final String GAMEBACKGROUND = "res/gamebackground.png";
     public static final String PAUSESCREEN = "res/pausedscreen.png";

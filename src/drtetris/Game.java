@@ -23,14 +23,11 @@ public class Game implements GameState {
     
     private BlockGenerator blockGen;
     
-    private Block currentBlock;
+    private MovingBlock currentBlock;
     
     private boolean gameover = false,
             paused = false;
     
-    private double y = -50;
-    private int x = 6;
-    private int rotation = Block.ROTATENONE;
     private double speed = Config.BASESPEED;
     private int stackDelay = 0,
             aDelay = 0,
@@ -56,13 +53,13 @@ public class Game implements GameState {
         gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
         field = new Field(new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]);
         blockGen = new BlockGenerator();
-        currentBlock = blockGen.nextBlock();
+        currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         background.draw();
-        currentBlock.draw((int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY, rotation);
+        currentBlock.draw(Config.FIELDX, Config.FIELDY);
 //        g.drawString(Integer.toString((int) ((y - Config.STACKTOLERANCE) / Config.BLOCKSIZE + 1)),(int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY);
 //        g.drawString(Double.toString(y),(int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY + 14);
         field.draw(Config.FIELDX, Config.FIELDY);
@@ -103,9 +100,9 @@ public class Game implements GameState {
                     if(aDelay >= Config.XMOVEDELAY) {
                         int xDelta = -(int)((aDelay - Config.XMOVEDELAY) * (Config.BASEXSPEED + Config.SPEEDXINCREMENT * level));
                         if (xDelta < 0) {
-                            for (int i = -1; i >= xDelta && field.isRoom(currentBlock, rotation, x + i, (int) y, Config.STACKTOLERANCE, false); i--) {
-                                x--;
-                                y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                            for (int i = -1; i >= xDelta && field.isRoom(currentBlock.getMap(), currentBlock.getX() + i, (int) currentBlock.getY(), Config.STACKTOLERANCE, false); i--) {
+                                currentBlock.modX(-1);
+                                field.yLimit(currentBlock, Config.STACKTOLERANCE);
                             }
                             aDelay = Config.XMOVEDELAY;
                         }
@@ -114,21 +111,18 @@ public class Game implements GameState {
                     if(dDelay >= Config.XMOVEDELAY) {
                         int xDelta = (int)((dDelay - Config.XMOVEDELAY) * (Config.BASEXSPEED + Config.SPEEDXINCREMENT * level));
                         if (xDelta > 0) {
-                            for (int i = 1; i <= xDelta && field.isRoom(currentBlock, rotation, x + i, (int) y, Config.STACKTOLERANCE, false); i++) {
-                                x++;
-                                y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                            for (int i = 1; i <= xDelta && field.isRoom(currentBlock.getMap(), currentBlock.getX() + i, (int) currentBlock.getY(), Config.STACKTOLERANCE, false); i++) {
+                                currentBlock.modX(1);
+                                field.yLimit(currentBlock, Config.STACKTOLERANCE);
                             }
                             dDelay = Config.XMOVEDELAY;
                         }
                     }
                     
-                    if (!field.isRoom(currentBlock, rotation, x, (int) y, Config.STACKTOLERANCE, true)) {
+                    if (!field.isRoom(currentBlock, Config.STACKTOLERANCE, true)) {
                         if (stackDelay >= Config.BLOCKDELAY) {
-                            field.addMap(currentBlock, rotation, x, y);
-                            currentBlock = blockGen.nextBlock();
-                            y = -50;
-                            x = 6;
-                            rotation = Block.ROTATENONE;
+                            field.addMap(currentBlock);
+                            currentBlock = new MovingBlock(blockGen.nextBlock(), Field.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
                             stackDelay = 0;
                             aDelay = 0;
                             dDelay = 0;
@@ -136,7 +130,8 @@ public class Game implements GameState {
                             stackDelay += delta;
                         }
                     } else {
-                        y = field.yLimit(currentBlock, rotation, x, y + delta * speed, Config.STACKTOLERANCE);
+                        currentBlock.modY(delta * speed);
+                        field.yLimit(currentBlock, Config.STACKTOLERANCE);
                         stackDelay = 0;
                     }
                 }
@@ -200,32 +195,32 @@ public class Game implements GameState {
         if (!paused && !gameover) {
             switch(key) {
                 case Keyboard.KEY_Q:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATELEFT, x, (int) y, Config.STACKTOLERANCE, false)) {
-                        rotation += Block.ROTATELEFT;
-                        y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                    if (field.isRoom(currentBlock, currentBlock.getRotation() + Block.ROTATELEFT, currentBlock.getX(), currentBlock.getY(), Config.STACKTOLERANCE, false)) {
+                        currentBlock.modRotation(Block.ROTATELEFT);
+                        field.yLimit(currentBlock, Config.STACKTOLERANCE);
                     }
                     break;
 
                 case Keyboard.KEY_E:
-                    if (field.isRoom(currentBlock, rotation + Block.ROTATERIGHT, x, (int) y, Config.STACKTOLERANCE, false)) {
-                        rotation += Block.ROTATERIGHT;
-                        y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                    if (field.isRoom(currentBlock, currentBlock.getRotation() + Block.ROTATERIGHT, currentBlock.getX(), currentBlock.getY(), Config.STACKTOLERANCE, false)) {
+                        currentBlock.modRotation(Block.ROTATERIGHT);
+                        field.yLimit(currentBlock, Config.STACKTOLERANCE);
                     }
                     break;
 
                 case Keyboard.KEY_A:
-                    if (field.isRoom(currentBlock, rotation, x - 1, (int) y, Config.STACKTOLERANCE, false)) {
-                        x--;
-                        y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                    if (field.isRoom(currentBlock, currentBlock.getRotation(), currentBlock.getX() - 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
+                        currentBlock.modX(-1);
+                        field.yLimit(currentBlock, Config.STACKTOLERANCE);
                     }
                     A = true;
                     D = false;
                     break;
 
                 case Keyboard.KEY_D:
-                    if (field.isRoom(currentBlock, rotation, x + 1, (int) y, Config.STACKTOLERANCE, false)) {
-                        x++;
-                        y = field.yLimit(currentBlock, rotation, x, y, Config.BLOCKSIZE);
+                    if (field.isRoom(currentBlock, currentBlock.getRotation(), currentBlock.getX() + 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
+                        currentBlock.modX(1);
+                         field.yLimit(currentBlock, Config.STACKTOLERANCE);
                     }
                     D = true;
                     A = false;

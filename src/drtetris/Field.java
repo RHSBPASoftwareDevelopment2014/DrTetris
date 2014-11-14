@@ -3,8 +3,6 @@ package drtetris;
 
 public class Field extends TileMap {
     
-    private static final int TOLERANCE = 8;
-    
     public static final int STAY = 0, END = 1, CONTINUE = 2;
     
     public Field(Tile[][] map) {
@@ -13,6 +11,10 @@ public class Field extends TileMap {
     
     public void reset() {
         map = new Tile[getHeight()][getWidth()];
+    }
+    
+    public void addMap(MovingBlock block) {
+        addMap(block.getMap(), block.getX(), block.getY());
     }
     
     public void addMap(TileMap map, int rotation, int x, double y) {
@@ -32,8 +34,15 @@ public class Field extends TileMap {
         }
     }
     
+    public boolean isRoom(MovingBlock block, double tolerance, boolean falling) {
+        return isRoom(block.getMap(), block.getX(), block.getY(), tolerance, falling);
+    }
+    
     public boolean isRoom(TileMap tileMap, int rotation, int x, double y, double tolerance, boolean falling) {
-        Tile[][] map = tileMap.getMap(rotation);
+        return isRoom(tileMap.getMap(rotation), x, y, tolerance, falling);
+    }
+    
+    public boolean isRoom(Tile[][] map, int x, double y, double tolerance, boolean falling) {
         int lowCheck = (int) ((y + tolerance) / Config.BLOCKSIZE),
                 highCheck = (int) ((y - tolerance) / Config.BLOCKSIZE + 1),
                 lowY = (int) (y / Config.BLOCKSIZE),
@@ -58,11 +67,10 @@ public class Field extends TileMap {
         return true;
     }
     
-    double yLimit(Block currentBlock, int rotation, int x, double y, double tolerance) {
-        if(!isRoom(currentBlock, rotation, x, y, tolerance, true) && y > ((int) y / Config.BLOCKSIZE) * Config.BLOCKSIZE) {
-            return ((int) y / Config.BLOCKSIZE) * Config.BLOCKSIZE;
+    public void yLimit(MovingBlock block, double tolerance) {
+        if(!isRoom(block, tolerance, true) && block.getY() > ((int) block.getY() / Config.BLOCKSIZE) * Config.BLOCKSIZE) {
+            block.setY(((int) block.getY() / Config.BLOCKSIZE) * Config.BLOCKSIZE);
         }
-        return y;
     }
     
     public int getState() {
