@@ -145,7 +145,7 @@ public class Field extends TileMap {
      */
     public boolean[] getSurroundingTunnels(int x, int y) {
         return new boolean[]{y - 1 >= 0 && y < map.length && x >= 0 && x < map.length && map[y - 1][x] instanceof Tunnel ? true : false,
-                y + 1 >= 0 && y + 1 < map.length && x >= 0  && x < map.length && map[y + 1][x] instanceof Tunnel ? true : false,
+                y + 1 >= 0 && y + 1 <= map.length && x >= 0  && x < map.length && (y + 1 == map.length || map[y + 1][x] instanceof Tunnel) ? true : false,
                 y >= 0 && y < map.length && x - 1 >= 0  && x + 1 < map.length && map[y][x - 1] instanceof Tunnel ? true : false,
                 y >= 0 && y < map.length && x - 1 >= 0  && x - 1 < map.length && map[y][x + 1] instanceof Tunnel ? true : false};
     }
