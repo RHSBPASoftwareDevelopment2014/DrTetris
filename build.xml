@@ -83,7 +83,7 @@
             <fileset dir="natives"/>
         </copy>
         
-        <zip destfile="${dist.dir}/${application.title}.zip">
+        <zip destfile="${dist.dir}/Siranga.zip">
             <fileset dir="${dist.dir}"/>
         </zip>
     </target>
