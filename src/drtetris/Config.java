@@ -23,11 +23,18 @@ public class Config {
     public static final int XMOVEDELAY = 200;
     public static final int XMOVEDELAYDECREMENT = 5;
     public static final int DEFAULTX = 6;
+    public static final int TUNNELSHEETWIDTH = 100;
     
     public static final String GAMEBACKGROUND = "res/gamebackground.png";
     public static final String PAUSESCREEN = "res/pausedscreen.png";
     public static final String GAMEOVERSCREEN = "res/gameover.png";
-    public static final String DIRTTILE = "res/Dirt2.png";
-    public static final String SAPPHIRETILE = "res/Sapphire4.png";
-    public static final String TUNNELTILE = "res/bluetunnel.png";
+    public static final String DIRTTILE = "res/Dirt.png";
+    public static final String SAPPHIRETILE = "res/Sapphire.png";
+    public static final String RUBYTILE = "res/Ruby.png";
+    public static final String AMETHYSTTILE = "res/Amethyst.png";
+    public static final String SANDTILE = "res/Sand.png";
+    public static final String GREENGARNETTILE = "res/greengarnet.png";
+    public static final String BLUETUNNEL = "res/bluetunnelspritesheet.png";
+    public static final String REDTUNNEL = "res/redtunnelspritesheet.png";
+    public static final String GREENTUNNEL = "res/greentunnelspritesheet.png";
 }

@@ -8,18 +8,32 @@ import org.newdawn.slick.SpriteSheet;
 
 public class Tile {
     
-    public static final Tile DIRT = new Tile(Config.DIRTTILE);
-    public static final Tile SAPPHIRE = new Tile(Config.SAPPHIRETILE);
-    public static final Tile TUNNEL = new Tile(Config.TUNNELTILE);
+    public static final Tile DIRT = new Tile(Config.DIRTTILE),
+            SAPPHIRE = new Tile(Config.SAPPHIRETILE),
+            RUBY = new Tile(Config.RUBYTILE),
+            AMETHYST = new Tile(Config.AMETHYSTTILE),
+            SAND = new Tile(Config.SANDTILE),
+            GREENGARNET = new Tile(Config.GREENGARNETTILE);
+            
     
     private SpriteSheet image;
     
     private Tile(String image) {
         try {
             this.image = new SpriteSheet(new Image(image).getScaledCopy(Config.BLOCKSIZE, Config.BLOCKSIZE), Config.TILEPARTICLESIZE, Config.TILEPARTICLESIZE);
-        } catch (SlickException ex) {
-            ex.printStackTrace();
-        }
+        } catch (SlickException ex) {}
+    }
+    
+    protected Tile(String image, int width, int height, int tWidth, int tHeight) {
+        try {
+            this.image = new SpriteSheet(new Image(image).getScaledCopy(width, height), tWidth, tHeight);
+        } catch (SlickException ex) {}
+    }
+    
+    protected Tile(String image, int tWidth, int tHeight) {
+        try {
+            this.image = new SpriteSheet(image, tWidth, tHeight);
+        } catch (SlickException ex) {}
     }
 
     public void draw(int x, int y) {
@@ -28,5 +42,11 @@ public class Tile {
                 image.getSprite(i,j).draw(x + i * Config.TILEPARTICLESIZE + (int) ((Math.random()) * Config.PARTICLESTRAY), y + j * Config.TILEPARTICLESIZE + (int) ((Math.random()) * Config.PARTICLESTRAY));
             }
         }
+    }
+    
+    public void draw(int row, int column, int x, int y, float angle) {
+        Image i = image.getSprite(row, column).getScaledCopy(Config.BLOCKSIZE, Config.BLOCKSIZE);
+        i.setRotation(angle);
+        i.draw(x, y);
     }
 }

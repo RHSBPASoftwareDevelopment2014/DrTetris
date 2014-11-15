@@ -7,6 +7,8 @@ public class MovingBlock extends Block {
     private int x;
     private double y;
     
+    private int xOffset = 0;
+    
     public MovingBlock(Tile[][] map, int rotation, int x, double y) {
         super(map);
         this.rotation = rotation;
@@ -18,6 +20,10 @@ public class MovingBlock extends Block {
         this(block.getMap(), rotation, x, y);
     }
     
+    private int realX() {
+        return x + xOffset;
+    }
+    
     @Override
     public Tile[][] getMap() {
         return super.getMap(rotation);
@@ -25,20 +31,41 @@ public class MovingBlock extends Block {
     
     @Override
     public void draw() {
-        super.draw(x * Config.BLOCKSIZE, (int) y);
+        super.draw(realX() * Config.BLOCKSIZE, (int) y);
     }
     
     @Override
-    public void draw(int xOffset, int yOffset) {
-        super.draw(x * Config.BLOCKSIZE + xOffset, (int) y + yOffset, rotation);
+    public void draw(int startX, int startY) {
+        super.draw(realX() * Config.BLOCKSIZE + startX, (int) y + startY, rotation);
+    }
+    
+    private void offset() {
+        int width = getHeight();
+        int height = getWidth();
+        switch(trimRotation(rotation)) {
+            case TileMap.ROTATELEFT:
+                xOffset = width >= height ? - (width - 1) / 2 : (height - 1) / 2;
+                System.out.println(xOffset);
+                break;
+                
+            case TileMap.ROTATERIGHT:
+                xOffset = width >= height ? - (width - 1) / 2 : (height - 1) / 2;
+                System.out.println(xOffset);
+                break;
+                
+            default:
+                xOffset = 0;
+        }
     }
     
     public void setRotation(int rotation) {
         this.rotation = rotation;
+        offset();
     }
     
     public void modRotation(int rotation) {
         this.rotation += rotation;
+        offset();
     }
     
     public int getRotation() {
@@ -54,7 +81,7 @@ public class MovingBlock extends Block {
     }
     
     public int getX() {
-        return x;
+        return realX();
     }
     
     public void setY(double y) {

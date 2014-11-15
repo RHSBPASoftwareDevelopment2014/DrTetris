@@ -60,8 +60,6 @@ public class Game implements GameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         background.draw();
         currentBlock.draw(Config.FIELDX, Config.FIELDY);
-//        g.drawString(Integer.toString((int) ((y - Config.STACKTOLERANCE) / Config.BLOCKSIZE + 1)),(int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY);
-//        g.drawString(Double.toString(y),(int)x * Config.BLOCKSIZE + Config.FIELDX, (int)y + Config.FIELDY + 14);
         field.draw(Config.FIELDX, Config.FIELDY);
         g.drawString("Level: " + level, 5, 5);
         if (gameover) {
@@ -195,21 +193,25 @@ public class Game implements GameState {
         if (!paused && !gameover) {
             switch(key) {
                 case Keyboard.KEY_Q:
-                    if (field.isRoom(currentBlock, currentBlock.getRotation() + Block.ROTATELEFT, currentBlock.getX(), currentBlock.getY(), Config.STACKTOLERANCE, false)) {
-                        currentBlock.modRotation(Block.ROTATELEFT);
+                    currentBlock.modRotation(Block.ROTATELEFT);
+                    if (field.isRoom(currentBlock, Config.STACKTOLERANCE, false)) {
                         field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                    } else {
+                        currentBlock.modRotation(Block.ROTATERIGHT);
                     }
                     break;
 
                 case Keyboard.KEY_E:
-                    if (field.isRoom(currentBlock, currentBlock.getRotation() + Block.ROTATERIGHT, currentBlock.getX(), currentBlock.getY(), Config.STACKTOLERANCE, false)) {
-                        currentBlock.modRotation(Block.ROTATERIGHT);
+                    currentBlock.modRotation(Block.ROTATERIGHT);
+                    if (field.isRoom(currentBlock, Config.STACKTOLERANCE, false)) {
                         field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                    } else {
+                        currentBlock.modRotation(Block.ROTATELEFT);
                     }
                     break;
 
                 case Keyboard.KEY_A:
-                    if (field.isRoom(currentBlock, currentBlock.getRotation(), currentBlock.getX() - 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
+                    if (field.isRoom(currentBlock.getMap(currentBlock.getRotation()), currentBlock.getX() - 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
                         currentBlock.modX(-1);
                         field.yLimit(currentBlock, Config.STACKTOLERANCE);
                     }
@@ -218,7 +220,7 @@ public class Game implements GameState {
                     break;
 
                 case Keyboard.KEY_D:
-                    if (field.isRoom(currentBlock, currentBlock.getRotation(), currentBlock.getX() + 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
+                    if (field.isRoom(currentBlock.getMap(currentBlock.getRotation()), currentBlock.getX() + 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
                         currentBlock.modX(1);
                          field.yLimit(currentBlock, Config.STACKTOLERANCE);
                     }

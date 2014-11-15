@@ -38,10 +38,6 @@ public class Field extends TileMap {
         return isRoom(block.getMap(), block.getX(), block.getY(), tolerance, falling);
     }
     
-    public boolean isRoom(TileMap tileMap, int rotation, int x, double y, double tolerance, boolean falling) {
-        return isRoom(tileMap.getMap(rotation), x, y, tolerance, falling);
-    }
-    
     public boolean isRoom(Tile[][] map, int x, double y, double tolerance, boolean falling) {
         int lowCheck = (int) ((y + tolerance) / Config.BLOCKSIZE),
                 highCheck = (int) ((y - tolerance) / Config.BLOCKSIZE + 1),
@@ -55,9 +51,9 @@ public class Field extends TileMap {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] != null) {
-                    if (lowCheck >= 0  && this.map[i + lowCheck][j + x] != null) {
+                    if (lowCheck < 0  || lowCheck + map.length > this.map.length || this.map[i + lowCheck][j + x] != null) {
                         return false;
-                    } else if (highCheck >= 0 && highCheck + map.length < 12 && this.map[i + (falling ? highY : highCheck)][j + x] != null) {
+                    } else if (highCheck < 0 || highCheck + map.length > this.map.length || this.map[i + (falling ? highY : highCheck)][j + x] != null) {
                         return false;
                     }
                 }
@@ -98,7 +94,7 @@ public class Field extends TileMap {
     private boolean isTunnel() {
         boolean isTunnel = false;
         for (int i = 0; i < map[map.length - 1].length && !isTunnel; i++) {
-            if (map[map.length - 1][i] == Tile.TUNNEL) {
+            if (map[map.length - 1][i] instanceof Tunnel) {
                 isTunnel = isTunnel || isTunnel(i, map.length - 1, UP);
             }
         }
@@ -112,15 +108,15 @@ public class Field extends TileMap {
         if (y < 3) {
             isTunnel = true;
         } else {
-            if (y > 0 && map[y - 1][x] == Tile.TUNNEL && !isTunnel) {
+            if (y > 0 && map[y - 1][x] instanceof Tunnel && !isTunnel) {
                 isTunnel = isTunnel || isTunnel(x, y - 1, UP);
             }
 
-            if (direction != RIGHT && x > 0 && map[y][x - 1] == Tile.TUNNEL && !isTunnel) {
+            if (direction != RIGHT && x > 0 && map[y][x - 1] instanceof Tunnel && !isTunnel) {
                 isTunnel = isTunnel || isTunnel(x - 1, y, LEFT);
             }
 
-            if (direction != LEFT && x < map[y].length - 1 && map[y][x + 1] == Tile.TUNNEL && !isTunnel) {
+            if (direction != LEFT && x < map[y].length - 1 && map[y][x + 1] instanceof Tunnel && !isTunnel) {
                 isTunnel = isTunnel || isTunnel(x + 1, y, RIGHT);
             }
         }
