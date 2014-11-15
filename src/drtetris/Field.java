@@ -9,6 +9,20 @@ public class Field extends TileMap {
         super(map);
     }
     
+    public void draw(int x, int y, Tile[][] map) {
+        for (int i = 0; i < map.length; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if(map[i][j] != null) {
+                    if (map[i][j] instanceof Tunnel) {
+                        ((Tunnel) map[i][j]).draw(getSurroundingTunnels(j, i), x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
+                    } else {
+                        map[i][j].draw(x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
+                    }
+                }
+            }
+        }
+    }
+    
     public void reset() {
         map = new Tile[getHeight()][getWidth()];
     }
@@ -122,5 +136,17 @@ public class Field extends TileMap {
         }
         
         return isTunnel;
+    }
+    
+    /**
+     * @param x
+     * @param y
+     * @return [tunnel above, tunnel below, tunnel left, tunnel right]
+     */
+    public boolean[] getSurroundingTunnels(int x, int y) {
+        return new boolean[]{y - 1 >= 0 && y < map.length && x >= 0 && x < map.length && map[y - 1][x] instanceof Tunnel ? true : false,
+                y + 1 >= 0 && y + 1 < map.length && x >= 0  && x < map.length && map[y + 1][x] instanceof Tunnel ? true : false,
+                y >= 0 && y < map.length && x - 1 >= 0  && x + 1 < map.length && map[y][x - 1] instanceof Tunnel ? true : false,
+                y >= 0 && y < map.length && x - 1 >= 0  && x - 1 < map.length && map[y][x + 1] instanceof Tunnel ? true : false};
     }
 }
