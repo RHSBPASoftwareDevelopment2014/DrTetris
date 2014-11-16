@@ -35,6 +35,27 @@ public class Block extends TileMap {
                 {Tunnel.RED}
             }
         ),
+        
+        new Block(new Tile[][]
+            {
+                {Tunnel.BLUE},
+                {Tunnel.BLUE}
+            }
+        ),
+        
+        new Block(new Tile[][]
+            {
+                {Tunnel.GREEN},
+                {Tunnel.GREEN}
+            }
+        ),
+        
+        new Block(new Tile[][]
+            {
+                {Tunnel.RED},
+                {Tunnel.RED}
+            }
+        ),
 
         new Block(new Tile[][]
             {

@@ -102,15 +102,27 @@ public class TileMap {
         draw(x, y, ROTATENONE);
     }
     
-    public void draw(int x, int y, int rotation) {
-        draw(x, y, getMap(rotation));
+    public void draw(int x, int y, boolean field) {
+        draw(x, y, ROTATENONE, field);
     }
     
-    public void draw(int x, int y, Tile[][] map) {
+    public void draw(int x, int y, int rotation, boolean field) {
+        draw(x, y, getMap(rotation), field);
+    }
+    
+    public void draw(int x, int y, int rotation) {
+        draw(x, y, getMap(rotation), false);
+    }
+    
+    public void draw(int x, int y, Tile[][] map, boolean field) {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if(map[i][j] != null ) {
-                    map[i][j].draw(x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
+                if(map[i][j] != null) {
+                    if (map[i][j] instanceof Tunnel) {
+                        ((Tunnel) map[i][j]).draw(getSurroundingTunnels(j, i, map, field), x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
+                    } else {
+                        map[i][j].draw(x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
+                    }
                 }
             }
         }
@@ -118,5 +130,19 @@ public class TileMap {
     
     public static int trimRotation(int rotation) {
         return rotation % 4;
+    }
+    
+    /**
+     * @param x
+     * @param y
+     * @param map
+     * @return [tunnel above, tunnel below, tunnel left, tunnel right]
+     */
+    protected boolean[] getSurroundingTunnels(int x, int y, Tile[][] map, boolean field) {
+        System.out.println(map.length);
+        return new boolean[]{y - 1 >= 0 && y - 1 < map.length && x >= 0 && x < map[y - 1].length && map[y - 1][x] instanceof Tunnel,
+                y + 1 >= 0 && x >= 0  && x < map[0].length && ((field && y + 1 == map.length) || (y + 1 < map.length && map[y + 1][x] instanceof Tunnel)),
+                y >= 0 && y < map.length && x - 1 >= 0  && x - 1 < map[y].length && map[y][x - 1] instanceof Tunnel,
+                y >= 0 && y < map.length && x + 1 >= 0  && x + 1 < map[y].length && map[y][x + 1] instanceof Tunnel};
     }
 }
