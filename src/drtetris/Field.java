@@ -5,6 +5,8 @@ public class Field extends TileMap {
     
     public static final int STAY = 0, END = 1, CONTINUE = 2;
     
+    private static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
+    
     public Field(Tile[][] map) {
         super(map);
     }
@@ -27,16 +29,69 @@ public class Field extends TileMap {
     }
     
     public void addMap(Tile[][] map, int x, double y) {
+        int yPos = (int) (y + Config.FIELDOFFSET) / Config.BLOCKSIZE;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if(map[i][j] != null) {
-                    int yPos = (int) (y + Config.FIELDOFFSET) / Config.BLOCKSIZE + i;
-                    if(yPos >= 0) {
-                        this.map[yPos][x + j] = map[i][j];
+                    if(yPos + i >= 0) {
+                        this.map[yPos + i][x + j] = map[i][j];
                     }
                 }
             }
         }
+        
+        breakBlocks(x, yPos, x + map[0].length, yPos + map.length);
+    }
+    
+    private void breakBlocks(int minX, int minY, int maxX, int maxY) {
+        for (int i = minY; i < maxY; i++) {
+            for (int j = minX; j < maxX; j++) {
+                for (int k = 0; k < 4; k++) {
+                    blockMatch(map[i][j], j, i, k);
+                }
+            }
+        }
+    }
+    
+    private void blockMatch(Tile tile, int x, int y, int direction) {
+        blockMatch(tile, x, y, direction, 1);
+    }
+    
+    private int blockMatch(Tile tile, int x, int y, int direction, int count) {
+        if (y >= 0 && x >= 0 && y < map.length && x < map[y].length) {
+            switch(direction) {
+
+                case UP:
+                    if(y - 1 >= 0 && map[y - 1][x] == tile) {
+                        count = blockMatch(tile, x, y - 1, direction, count + 1);
+                    }
+                    break;
+
+                case DOWN:
+                    if(y + 1 < map.length && map[y + 1][x] == tile) {
+                        count = blockMatch(tile, x, y + 1, direction, count + 1);
+                    }
+                    break;
+
+                case LEFT:
+                    if(x - 1 >= 0 && map[y][x - 1] == tile) {
+                        count = blockMatch(tile, x - 1, y, direction, count + 1);
+                    }
+                    break;
+
+                case RIGHT:
+                    if(x + 1 < map[y].length && map[y][x + 1] == tile) {
+                        count = blockMatch(tile, x + 1, y, direction, count + 1);
+                    }
+                    break;
+            }
+        }
+        
+        if (count >= 4) {
+            map[y][x] = null;
+        }
+        
+        return count;
     }
     
     public boolean isRoom(MovingBlock block, double tolerance, boolean falling) {
@@ -93,8 +148,6 @@ public class Field extends TileMap {
         
         return false;
     }
-    
-    private static final int UP = 0, LEFT = 1, RIGHT = 2;
     
     private boolean isTunnel() {
         boolean isTunnel = false;
