@@ -45,12 +45,10 @@ public class MovingBlock extends Block {
         switch(trimRotation(rotation)) {
             case TileMap.ROTATELEFT:
                 xOffset = width >= height ? - (width - 1) / 2 : (height - 1) / 2;
-                System.out.println(xOffset);
                 break;
                 
             case TileMap.ROTATERIGHT:
                 xOffset = width >= height ? - (width - 1) / 2 : (height - 1) / 2;
-                System.out.println(xOffset);
                 break;
                 
             default:

@@ -136,10 +136,10 @@ public class TileMap {
      * @param x
      * @param y
      * @param map
+     * @param field
      * @return [tunnel above, tunnel below, tunnel left, tunnel right]
      */
     protected boolean[] getSurroundingTunnels(int x, int y, Tile[][] map, boolean field) {
-        System.out.println(map.length);
         return new boolean[]{y - 1 >= 0 && y - 1 < map.length && x >= 0 && x < map[y - 1].length && map[y - 1][x] instanceof Tunnel,
                 y + 1 >= 0 && x >= 0  && x < map[0].length && ((field && y + 1 == map.length) || (y + 1 < map.length && map[y + 1][x] instanceof Tunnel)),
                 y >= 0 && y < map.length && x - 1 >= 0  && x - 1 < map[y].length && map[y][x - 1] instanceof Tunnel,
