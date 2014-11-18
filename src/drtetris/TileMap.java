@@ -7,7 +7,7 @@ public class TileMap {
     
     protected Tile[][] map;
     
-    protected TileMap(Tile[][] map) {
+    public TileMap(Tile[][] map) {
         this.map = map;
     }
     

@@ -6,10 +6,11 @@ import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 public class DrTetris extends StateBasedGame {
 
-    public static final int MAIN_MENU = 0, GAME = 1;
+    public static final int MAIN_MENU = 0, INFINITE_MODE = 1, ERR_REPORT = 2;
     
     public DrTetris() {
         super("Siranga");
@@ -26,14 +27,23 @@ public class DrTetris extends StateBasedGame {
             app.setTargetFrameRate(120);
             app.setShowFPS(false);
             app.start();
-        } catch(SlickException e) {
-            e.printStackTrace();
+        } catch (SlickException e) {
+            Log.error(e);
         }
+    }
+    
+    public String stackTraceToString(Throwable e) {
+        StringBuilder sb = new StringBuilder();
+        for (StackTraceElement element : e.getStackTrace()) {
+            sb.append(element.toString());
+            sb.append("\n");
+        }
+        return sb.toString();
     }
 
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
         addState(new MainMenu(MAIN_MENU));
-        addState(new Game(GAME));
+        addState(new InfiniteMode(INFINITE_MODE));
     }
 }

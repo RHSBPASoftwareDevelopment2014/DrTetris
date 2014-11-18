@@ -30,7 +30,7 @@ public class Field extends TileMap {
     
     public void addMap(Tile[][] map, int x, double y) {
         int yPos = (int) (y + Config.FIELDOFFSET) / Config.BLOCKSIZE;
-        for (int i = 0; i < map.length; i++) {
+        for (int i = 0; i < map.length + 1; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if(map[i][j] != null) {
                     if(yPos + i >= 0) {
