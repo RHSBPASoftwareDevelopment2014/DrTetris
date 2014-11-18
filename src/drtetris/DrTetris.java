@@ -32,7 +32,7 @@ public class DrTetris extends StateBasedGame {
         }
     }
     
-    public String stackTraceToString(Throwable e) {
+    public static String stackTraceToString(Throwable e) {
         StringBuilder sb = new StringBuilder();
         for (StackTraceElement element : e.getStackTrace()) {
             sb.append(element.toString());
