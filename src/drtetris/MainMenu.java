@@ -30,7 +30,7 @@ class MainMenu implements GameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        backgroundMusic = new Music(Config.BACKGROUNDMUISC);
+        backgroundMusic = new Music(Config.BACKGROUNDMUSIC);
         background = new Image("res/mainmenu.png");
         playbutton = new Button("res/playbutton.png", "res/playbuttonselected.png", "res/playbuttonclicked.png", 322, 375);
     }
