@@ -5,6 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -16,6 +17,7 @@ class MainMenu implements GameState {
     
     private Image background;
     private Button playbutton;
+    private Music backgroundMusic;
     
     public MainMenu(int id) {
         this.id = id;
@@ -28,6 +30,7 @@ class MainMenu implements GameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        backgroundMusic = new Music(Config.BACKGROUNDMUISC);
         background = new Image("res/mainmenu.png");
         playbutton = new Button("res/playbutton.png", "res/playbuttonselected.png", "res/playbuttonclicked.png", 322, 375);
     }
@@ -47,7 +50,7 @@ class MainMenu implements GameState {
 
     @Override
     public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        
+        backgroundMusic.loop(1F, 0.07F);
     }
 
     @Override

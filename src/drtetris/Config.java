@@ -4,8 +4,8 @@ package drtetris;
 public class Config {
     public static final double BASESPEED = .16;
     public static final double BASEXSPEED = .015;
-    public static final double SPEEDINCREMENT = .04;
-    public static final double SPEEDXINCREMENT = .005;
+    public static final double SPEEDINCREMENT = .02;
+    public static final double SPEEDXINCREMENT = .002;
     public static final double STACKTOLERANCE = 12;
     public static final double PARTICLESTRAY = 1.2;
     public static final double SPEEDLIMIT = 3.0;
@@ -37,4 +37,6 @@ public class Config {
     public static final String BLUETUNNEL = "res/bluetunnelspritesheet.png";
     public static final String REDTUNNEL = "res/redtunnelspritesheet.png";
     public static final String GREENTUNNEL = "res/greentunnelspritesheet.png";
+    
+    public static final String BACKGROUNDMUISC = "res/LiveAndSlam.wav";
 }

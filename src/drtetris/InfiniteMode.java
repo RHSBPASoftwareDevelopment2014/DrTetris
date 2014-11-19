@@ -87,8 +87,8 @@ public class InfiniteMode implements GameState {
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         try {
             if (exception != null) {
-            sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, exception));
-            sbg.enterState(DrTetris.ERR_REPORT);
+                sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, exception));
+                sbg.enterState(DrTetris.ERR_REPORT);
             }
             
             if (speed > Config.SPEEDLIMIT) {
