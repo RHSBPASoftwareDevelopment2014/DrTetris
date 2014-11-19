@@ -48,72 +48,84 @@ public class Field extends TileMap {
             for (int i = 0; i < tempMap.length; i++) {
                 for (int j = 0; j < tempMap[i].length; j++) {
                     if(tempMap[i][j] != null) {
-                        blockMatch(tempMap[i][j], j + minX, i + minY, UP);
-                        blockMatch(tempMap[i][j], j + minX, i + minY, LEFT);
+                        blockMatch(tempMap[i][j], j + minX, i + minY, tempMap, minX, minY, UP);
+                        blockMatch(tempMap[i][j], j + minX, i + minY, tempMap, minX, minY, LEFT);
                     }
                 }
             }
         }
     }
     
-    private void blockMatch(Tile tile, int x, int y, int direction) {
+    private void blockMatch(Tile tile, int x, int y, Tile[][] tempMap, int startX, int startY, int direction) {
         int count1, count2;
         switch (direction) {
             case UP:
-                count1 = blockMatch(tile, x, y, UP, 0) + 1;
-                count2 = blockMatch(tile, x, y, DOWN, 0) + 1;
-                blockMatch(tile, x, y, UP, count2);
-                blockMatch(tile, x, y, DOWN, count1);
+                count1 = blockMatch(tile, x, y, tempMap, startX, startY, UP, 0) + 1;
+                count2 = blockMatch(tile, x, y, tempMap, startX, startY, DOWN, 0) + 1;
+                blockMatch(tile, x, y, tempMap, startX, startY, UP, count2);
+                blockMatch(tile, x, y, tempMap, startX, startY, DOWN, count1);
                 break;
                 
             case DOWN:
-                count1 = blockMatch(tile, x, y, DOWN, 0) + 1;
-                count2 = blockMatch(tile, x, y, UP, 0) + 1;
-                blockMatch(tile, x, y, DOWN, count2);
-                blockMatch(tile, x, y, UP, count1);
+                count1 = blockMatch(tile, x, y, tempMap, startX, startY, DOWN, 0) + 1;
+                count2 = blockMatch(tile, x, y, tempMap, startX, startY, UP, 0) + 1;
+                blockMatch(tile, x, y, tempMap, startX, startY, DOWN, count2);
+                blockMatch(tile, x, y, tempMap, startX, startY, UP, count1);
                 break;
 
             case LEFT:
-                count1 = blockMatch(tile, x, y, LEFT, 0) + 1;
-                count2 = blockMatch(tile, x, y, RIGHT, 0) + 1;
-                blockMatch(tile, x, y, LEFT, count2);
-                blockMatch(tile, x, y, RIGHT, count1);
+                count1 = blockMatch(tile, x, y, tempMap, startX, startY, LEFT, 0) + 1;
+                count2 = blockMatch(tile, x, y, tempMap, startX, startY, RIGHT, 0) + 1;
+                blockMatch(tile, x, y, tempMap, startX, startY, LEFT, count2);
+                blockMatch(tile, x, y, tempMap, startX, startY, RIGHT, count1);
                 break;
                 
             case RIGHT:
-                count1 = blockMatch(tile, x, y, RIGHT, 0) + 1;
-                count2 = blockMatch(tile, x, y, LEFT, 0) + 1;
-                blockMatch(tile, x, y, RIGHT, count2);
-                blockMatch(tile, x, y, LEFT, count1);
+                count1 = blockMatch(tile, x, y, tempMap, startX, startY, RIGHT, 0) + 1;
+                count2 = blockMatch(tile, x, y, tempMap, startX, startY, LEFT, 0) + 1;
+                blockMatch(tile, x, y, tempMap, startX, startY, RIGHT, count2);
+                blockMatch(tile, x, y, tempMap, startX, startY, LEFT, count1);
                 break;
         }
     }
     
-    private int blockMatch(Tile tile, int x, int y, int direction, int count) {
+    private int blockMatch(Tile tile, int x, int y, Tile[][] tempMap, int startX, int startY, int direction, int count) {
         
         switch(direction) {
 
             case UP:
-                if(y - 1 >= 0 && map[y - 1][x] == tile) {
-                    count = blockMatch(tile, x, y - 1, direction, count + 1);
+                if(y - 1 >= 0 && map[y - 1][x] == tile ||
+                        ( y - 1 >= startY && y - 1 < startY + tempMap.length && 
+                          x >= startX && x < startX + tempMap[y - startY - 1].length &&
+                          tempMap[y - startY - 1][x - startX] == tile)) {
+                    count = blockMatch(tile, x, y - 1, tempMap, startX, startY, direction, count + 1);
                 }
                 break;
                 
             case DOWN:
-                if(y + 1 < map.length && map[y + 1][x] == tile) {
-                    count = blockMatch(tile, x, y + 1, direction, count + 1);
+                if(y + 1 < map.length && map[y + 1][x] == tile ||
+                        ( y + 1 >= startY && y + 1 < startY + tempMap.length && 
+                          x >= startX && x < startX + tempMap[y - startY + 1].length &&
+                          tempMap[y - startY + 1][x - startX] == tile)) {
+                    count = blockMatch(tile, x, y + 1, tempMap, startX, startY, direction, count + 1);
                 }
                 break;
 
             case LEFT:
-                if(x - 1 >= 0 && map[y][x - 1] == tile) {
-                    count = blockMatch(tile, x - 1, y, direction, count + 1);
+                if(x - 1 >= 0 && map[y][x - 1] == tile ||
+                        ( y >= startY && y < startY + tempMap.length && 
+                          x - 1 >= startX && x - 1 < startX + tempMap[y - startY].length &&
+                          tempMap[y - startY][x - startX - 1] == tile)) {
+                    count = blockMatch(tile, x - 1, y, tempMap, startX, startY, direction, count + 1);
                 }
                 break;
                 
             case RIGHT:
-                if(x + 1 < map[y].length && map[y][x + 1] == tile) {
-                    count = blockMatch(tile, x + 1, y, direction, count + 1);
+                if(x + 1 < map[y].length && map[y][x + 1] == tile ||
+                        ( y >= startY && y < startY + tempMap.length && 
+                          x + 1 >= startX && x + 1 < startX + tempMap[y - startY].length &&
+                          tempMap[y - startY][x - startX + 1] == tile)) {
+                    count = blockMatch(tile, x + 1, y, tempMap, startX, startY, direction, count + 1);
                 }
                 break;
         }
