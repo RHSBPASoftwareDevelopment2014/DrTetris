@@ -85,13 +85,16 @@ public class InfiniteMode implements GameState {
     
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-        
-        if (exception != null) {
+        try {
+            if (exception != null) {
             sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, exception));
             sbg.enterState(DrTetris.ERR_REPORT);
-        }
-        
-        try {
+            }
+            
+            if (speed > Config.SPEEDLIMIT) {
+                speed = Config.SPEEDLIMIT;
+            }
+            
             switch (field.getState()) {
                 case Field.CONTINUE:
                     field.reset();
@@ -116,7 +119,13 @@ public class InfiniteMode implements GameState {
                         }
 
                         if(aDelay >= Config.XMOVEDELAY) {
-                            int xDelta = -(int)((aDelay - Config.XMOVEDELAY) * (Config.BASEXSPEED + Config.SPEEDXINCREMENT * level));
+                            double speed = Config.BASEXSPEED + Config.SPEEDXINCREMENT * level;
+                            
+                            if (speed > Config.SPEEDXLIMIT) {
+                                speed = Config.SPEEDXLIMIT;
+                            }
+                            
+                            int xDelta = -(int)((aDelay - Config.XMOVEDELAY) * speed);
                             if (xDelta < 0) {
                                 for (int i = -1; i >= xDelta && field.isRoom(currentBlock.getMap(), currentBlock.getX() + i, (int) currentBlock.getY(), Config.STACKTOLERANCE, false); i--) {
                                     currentBlock.modX(-1);
@@ -127,7 +136,13 @@ public class InfiniteMode implements GameState {
                         }
 
                         if(dDelay >= Config.XMOVEDELAY) {
-                            int xDelta = (int)((dDelay - Config.XMOVEDELAY) * (Config.BASEXSPEED + Config.SPEEDXINCREMENT * level));
+                            double speed = Config.BASEXSPEED + Config.SPEEDXINCREMENT * level;
+                            
+                            if (speed > Config.SPEEDXLIMIT) {
+                                speed = Config.SPEEDXLIMIT;
+                            }
+                            
+                            int xDelta = (int)((dDelay - Config.XMOVEDELAY) * speed);
                             if (xDelta > 0) {
                                 for (int i = 1; i <= xDelta && field.isRoom(currentBlock.getMap(), currentBlock.getX() + i, (int) currentBlock.getY(), Config.STACKTOLERANCE, false); i++) {
                                     currentBlock.modX(1);

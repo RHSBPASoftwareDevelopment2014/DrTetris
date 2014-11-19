@@ -8,8 +8,8 @@ public class Config {
     public static final double SPEEDXINCREMENT = .005;
     public static final double STACKTOLERANCE = 12;
     public static final double PARTICLESTRAY = 1.2;
-    public static final double SPEEDLIMIT = 1;
-    public static final double SPEEDXLIMIT = .1;
+    public static final double SPEEDLIMIT = 3.0;
+    public static final double SPEEDXLIMIT = .2;
     public static final double DEFAULTY = -50;
     
     public static final int FIELDHEIGHT = 12;
