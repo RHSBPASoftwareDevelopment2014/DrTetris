@@ -38,5 +38,5 @@ public class Config {
     public static final String REDTUNNEL = "res/redtunnelspritesheet.png";
     public static final String GREENTUNNEL = "res/greentunnelspritesheet.png";
     
-    public static final String BACKGROUNDMUISC = "res/LiveAndSlam.wav";
+    public static final String BACKGROUNDMUISC = "res/LiveAndSlam.ogg";
 }
