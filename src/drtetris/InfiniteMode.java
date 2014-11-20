@@ -69,7 +69,7 @@ public class InfiniteMode implements GameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         try {
             background.draw();
-            if(field.getState() != Field.ANIMATE) {
+            if(field.getState() == Field.NORMAL) {
                 currentBlock.draw(Config.FIELDX, Config.FIELDY);
             }
             field.draw(Config.FIELDX, Config.FIELDY);
@@ -97,7 +97,9 @@ public class InfiniteMode implements GameState {
                 speed = Config.SPEEDLIMIT;
             }
             
-            field.update(delta);
+            if (!paused && !gameover) {
+                field.update(delta);
+            }
             
             switch (field.getState()) {
                 case Field.CONTINUE:
@@ -110,7 +112,7 @@ public class InfiniteMode implements GameState {
                 case Field.ANIMATE:
                     break;
                 default:
-                    if (!paused) {
+                    if (!paused && !gameover) {
 
                         if(A) {
                             aDelay += delta;

@@ -13,11 +13,13 @@ public class Field extends TileMap {
     
     private int state;
     private List<MovingBlock> fallingBlocks;
+    private List<MovingBlock> checkBlocks;
     
     public Field(Tile[][] map) {
         super(map);
         state = NORMAL;
-        fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
+        fallingBlocks = new CopyOnWriteArrayList<>();
+        checkBlocks = new ArrayList<>();
     }
     
     @Override
@@ -29,15 +31,26 @@ public class Field extends TileMap {
         }
     }
     
+    
+    
     public void update(int delta) {
         
         if (fallingBlocks.size() <= 0) {
-            state = NORMAL;
+            for (MovingBlock block : checkBlocks) {
+                breakBlocks(block.getX(), (int) (block.getY() + Config.FIELDOFFSET) / Config.BLOCKSIZE, block.getMap());
+            }
+            
+            findFallingBlocks();
+            
+            if (fallingBlocks.size() <= 0) {
+                state = NORMAL;
+            }
         } else {
             for (MovingBlock block : fallingBlocks) {
                 if (block != null) {
                     if (!isRoom(block, Config.STACKTOLERANCE, true)) {
-                        addMap(block);
+                        addMap(block, false);
+                        checkBlocks.add(block);
                         fallingBlocks.remove(block);
                     } else {
                         block.modY(delta * Config.FALLINGBLOCKSPEED);
@@ -45,6 +58,8 @@ public class Field extends TileMap {
                     }
                 }
             }
+            
+            findFallingBlocks();
         }
         
         updateState();
@@ -53,18 +68,23 @@ public class Field extends TileMap {
     public void reset() {
         map = new Tile[getHeight()][getWidth()];
         state = NORMAL;
-        fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
+        fallingBlocks = new CopyOnWriteArrayList<>();
+        checkBlocks = new ArrayList<>();
+    }
+    
+    public void addMap(MovingBlock block, boolean breakBlocks) {
+        addMap(block.getMap(), block.getX(), block.getY(), breakBlocks);
     }
     
     public void addMap(MovingBlock block) {
-        addMap(block.getMap(), block.getX(), block.getY());
+        addMap(block.getMap(), block.getX(), block.getY(), true);
     }
     
     public void addMap(TileMap map, int rotation, int x, double y) {
-        addMap(map.getMap(rotation), x, y);
+        addMap(map.getMap(rotation), x, y, true);
     }
     
-    public void addMap(Tile[][] map, int x, double y) {
+    public void addMap(Tile[][] map, int x, double y, boolean breakBlocks) {
         int yPos = (int) (y + Config.FIELDOFFSET) / Config.BLOCKSIZE;
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
@@ -76,8 +96,10 @@ public class Field extends TileMap {
             }
         }
         
-        breakBlocks(x, yPos, map);
-        findFallingBlocks();
+        if (breakBlocks) {
+            breakBlocks(x, yPos, map);
+            findFallingBlocks();
+        }
     }
     
     private void findFallingBlocks() {

@@ -12,7 +12,7 @@ public class Config {
     public static final double SPEEDLIMIT = 3.0;
     public static final double SPEEDXLIMIT = .2;
     public static final double DEFAULTY = -50;
-    public static final double FALLINGBLOCKSPEED = .4;
+    public static final double FALLINGBLOCKSPEED = .04;
     
     public static final int FIELDHEIGHT = 12;
     public static final int FIELDWIDTH = 12;
@@ -40,5 +40,5 @@ public class Config {
     public static final String REDTUNNEL = "res/redtunnelspritesheet.png";
     public static final String GREENTUNNEL = "res/greentunnelspritesheet.png";
     
-    public static final String BACKGROUNDMUSIC = "res/LiveAndLearn.ogg";
+    public static final String BACKGROUNDMUSIC = "res/LiveAndSlam.ogg";
 }
