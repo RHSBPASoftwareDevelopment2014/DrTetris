@@ -10,6 +10,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.util.Log;
 
 
 public class ErrorReport implements GameState {
@@ -24,14 +25,25 @@ public class ErrorReport implements GameState {
     private int id;
     private String report;
     
-    public ErrorReport(int id, String report) {
+    public ErrorReport(int id, Throwable e) {
+        
+        Log.error(e);
         
         StringSelection selection = new StringSelection(report);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, selection);
         
         this.id = id;
-        this.report = header + report;
+        this.report = header + stackTraceToString(e);
+    }
+    
+    public static String stackTraceToString(Throwable e) {
+        StringBuilder sb = new StringBuilder();
+        for (StackTraceElement element : e.getStackTrace()) {
+            sb.append(element.toString());
+            sb.append("\n");
+        }
+        return sb.toString();
     }
     
     @Override

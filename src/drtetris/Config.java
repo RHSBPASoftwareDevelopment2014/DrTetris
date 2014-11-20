@@ -2,6 +2,7 @@
 package drtetris;
 
 public class Config {
+    
     public static final double BASESPEED = .16;
     public static final double BASEXSPEED = .015;
     public static final double SPEEDINCREMENT = .02;
@@ -11,6 +12,7 @@ public class Config {
     public static final double SPEEDLIMIT = 3.0;
     public static final double SPEEDXLIMIT = .2;
     public static final double DEFAULTY = -50;
+    public static final double FALLINGBLOCKSPEED = .4;
     
     public static final int FIELDHEIGHT = 12;
     public static final int FIELDWIDTH = 12;
@@ -38,5 +40,5 @@ public class Config {
     public static final String REDTUNNEL = "res/redtunnelspritesheet.png";
     public static final String GREENTUNNEL = "res/greentunnelspritesheet.png";
     
-    public static final String BACKGROUNDMUSIC = "res/LiveAndSlam.ogg";
+    public static final String BACKGROUNDMUSIC = "res/LiveAndLearn.ogg";
 }

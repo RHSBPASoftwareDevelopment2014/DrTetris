@@ -1,23 +1,59 @@
 
 package drtetris;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 public class Field extends TileMap {
     
-    public static final int STAY = 0, END = 1, CONTINUE = 2;
+    public static final int END = 0, CONTINUE = 1, NORMAL = 2, ANIMATE = 3;
     
     private static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
     
+    private int state;
+    private List<MovingBlock> fallingBlocks;
+    
     public Field(Tile[][] map) {
         super(map);
+        state = NORMAL;
+        fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
     }
     
     @Override
     public void draw(int x, int y) {
         super.draw(x, y, true);
+        
+        for (MovingBlock block : fallingBlocks) {
+            block.draw(Config.FIELDX, Config.FIELDY);
+        }
+    }
+    
+    public void update(int delta) {
+        
+        if (fallingBlocks.size() <= 0) {
+            state = NORMAL;
+        } else {
+            for (MovingBlock block : fallingBlocks) {
+                if (block != null) {
+                    if (!isRoom(block, Config.STACKTOLERANCE, true)) {
+                        addMap(block);
+                        fallingBlocks.remove(block);
+                    } else {
+                        block.modY(delta * Config.FALLINGBLOCKSPEED);
+                        yLimit(block, Config.STACKTOLERANCE);
+                    }
+                }
+            }
+        }
+        
+        updateState();
     }
     
     public void reset() {
         map = new Tile[getHeight()][getWidth()];
+        state = NORMAL;
+        fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
     }
     
     public void addMap(MovingBlock block) {
@@ -41,6 +77,19 @@ public class Field extends TileMap {
         }
         
         breakBlocks(x, yPos, map);
+        findFallingBlocks();
+    }
+    
+    private void findFallingBlocks() {
+        for (int i = 0; i < map.length - 1; i++) {
+            for (int j = 0; j < map[i].length; j++) {
+                if (map[i][j] != null && map[i + 1][j] == null) {
+                    fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
+                    map[i][j] = null;
+                    state = ANIMATE;
+                }
+            }
+        }
     }
     
     private void breakBlocks(int minX, int minY, Tile[][] tempMap) {
@@ -172,14 +221,16 @@ public class Field extends TileMap {
         }
     }
     
-    public int getState() {
+    public void updateState() {
         if (isTunnel()) {
-            return CONTINUE;
+            state = CONTINUE;
         } else if (isFull()) {
-            return END;
-        } else {
-            return STAY;
+            state = END;
         }
+    }
+    
+    public int getState() {
+        return state;
     }
     
     private boolean isFull() {

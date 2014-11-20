@@ -39,7 +39,7 @@ public class InfiniteMode implements GameState {
     private boolean A = false,
             D = false;
     
-    private String exception;
+    private Throwable exception;
     
     public InfiniteMode(int id) {
         this.id = id;
@@ -60,7 +60,7 @@ public class InfiniteMode implements GameState {
             blockGen = new BlockGenerator();
             currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
         } catch (Exception e) {
-            sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, DrTetris.stackTraceToString(e)));
+            sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
             sbg.enterState(DrTetris.ERR_REPORT);
         }
     }
@@ -69,7 +69,9 @@ public class InfiniteMode implements GameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         try {
             background.draw();
-            currentBlock.draw(Config.FIELDX, Config.FIELDY);
+            if(field.getState() != Field.ANIMATE) {
+                currentBlock.draw(Config.FIELDX, Config.FIELDY);
+            }
             field.draw(Config.FIELDX, Config.FIELDY);
             g.drawString("Level: " + level, 5, 5);
             if (gameover) {
@@ -78,7 +80,7 @@ public class InfiniteMode implements GameState {
                 pausedOverlay.draw();
             }
         } catch (Exception e) {
-            sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, DrTetris.stackTraceToString(e)));
+            sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
             sbg.enterState(DrTetris.ERR_REPORT);
         }
     }
@@ -95,13 +97,17 @@ public class InfiniteMode implements GameState {
                 speed = Config.SPEEDLIMIT;
             }
             
+            field.update(delta);
+            
             switch (field.getState()) {
                 case Field.CONTINUE:
                     field.reset();
-                    level++;gc.getInput().isKeyPressed(Input.KEY_A);
+                    level++;
                     break;
                 case Field.END:
                     gameover = true;
+                    break;
+                case Field.ANIMATE:
                     break;
                 default:
                     if (!paused) {
@@ -170,7 +176,7 @@ public class InfiniteMode implements GameState {
                     }
             }
         } catch (Exception e) {
-            sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, DrTetris.stackTraceToString(e)));
+            sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
             sbg.enterState(DrTetris.ERR_REPORT);
         }
     }
@@ -278,7 +284,7 @@ public class InfiniteMode implements GameState {
                 } 
             }
         } catch (Exception e) {
-            exception = DrTetris.stackTraceToString(e);
+            exception = e;
         }
     }
 
@@ -303,7 +309,7 @@ public class InfiniteMode implements GameState {
                 }
             }
         } catch (Exception e) {
-            exception = DrTetris.stackTraceToString(e);
+            exception = e;
         }
     }
 
