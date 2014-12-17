@@ -18,8 +18,8 @@ public class Field extends TileMap {
     public Field(Tile[][] map) {
         super(map);
         state = NORMAL;
-        fallingBlocks = new CopyOnWriteArrayList<>();
-        checkBlocks = new ArrayList<>();
+        fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
+        checkBlocks = new ArrayList<MovingBlock>();
     }
     
     @Override
@@ -68,8 +68,8 @@ public class Field extends TileMap {
     public void reset() {
         map = new Tile[getHeight()][getWidth()];
         state = NORMAL;
-        fallingBlocks = new CopyOnWriteArrayList<>();
-        checkBlocks = new ArrayList<>();
+        fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
+        checkBlocks = new ArrayList<MovingBlock>();
     }
     
     public void addMap(MovingBlock block, boolean breakBlocks) {
