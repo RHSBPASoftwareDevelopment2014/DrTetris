@@ -21,7 +21,6 @@ public class Config {
     public static final int FIELDY = 90;
     public static final int BLOCKDELAY = 400;
     public static final int BLOCKSIZE = 40;
-    public static final int TILEPARTICLESIZE = 5;
     public static final int XMOVEDELAY = 200;
     public static final int XMOVEDELAYDECREMENT = 5;
     public static final int DEFAULTX = 6;
