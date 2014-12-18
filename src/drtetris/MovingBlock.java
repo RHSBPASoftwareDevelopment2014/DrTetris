@@ -1,6 +1,8 @@
 
 package drtetris;
 
+import java.util.UUID;
+
 public class MovingBlock extends Block {
     
     private int rotation;

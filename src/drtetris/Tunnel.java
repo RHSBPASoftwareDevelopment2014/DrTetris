@@ -3,12 +3,12 @@ package drtetris;
 
 public class Tunnel extends Tile {
     
-    public static final Tunnel BLUE = new Tunnel(Config.BLUETUNNEL),
-            RED = new Tunnel(Config.REDTUNNEL),
-            GREEN = new Tunnel(Config.GREENTUNNEL);
+    public static final Tunnel BLUE = new Tunnel("Blue Tunnel", Config.BLUETUNNEL),
+            RED = new Tunnel("Red Tunnel", Config.REDTUNNEL),
+            GREEN = new Tunnel("Green Tunnel", Config.GREENTUNNEL);
     
-    public Tunnel(String image) {
-        super(image, 4, Config.TUNNELSHEETWIDTH, Config.TUNNELSHEETWIDTH);
+    public Tunnel(String name, String image) {
+        super(name, image, 4, Config.TUNNELSHEETWIDTH, Config.TUNNELSHEETWIDTH);
     }
     
     public void draw(int x, int y) {

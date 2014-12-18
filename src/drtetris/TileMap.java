@@ -120,8 +120,8 @@ public class TileMap {
                 if(map[i][j] != null) {
                     if (map[i][j] instanceof Tunnel) {
                         ((Tunnel) map[i][j]).draw(getSurroundingTunnels(j, i, map, field), x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
-                    } else if (map[i][j] instanceof LinkedTile) {
-                        ((LinkedTile) map[i][j]).draw(getSurroundingBlocks(j, i, map), x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
+                    } else if (field ? map[i][j] instanceof LinkedTile : true) {
+                        map[i][j].draw(getSurroundingBlocks(j, i, map, field), x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
                     } else {
                         map[i][j].draw(x + Config.BLOCKSIZE * j, y + Config.BLOCKSIZE * i);
                     }
@@ -152,12 +152,13 @@ public class TileMap {
      * @param x
      * @param y
      * @param map
+     * @param field
      * @return [block above, block below, block left, block right]
      */
-    protected boolean[] getSurroundingBlocks(int x, int y, Tile[][] map) {
-        return new boolean[]{y - 1 >= 0 && y - 1 < map.length && x >= 0 && x < map[y - 1].length && map[y - 1][x] instanceof LinkedTile && ((LinkedTile) map[y - 1][x]).getBlockId().equals(((LinkedTile) map[y][x]).getBlockId()),
-                y + 1 >= 0 && x >= 0 &&  y + 1 < map.length && x < map[y + 1].length && map[y + 1][x] instanceof LinkedTile && ((LinkedTile) map[y + 1][x]).getBlockId().equals(((LinkedTile) map[y][x]).getBlockId()),
-                y >= 0 && y < map.length && x - 1 >= 0  && x - 1 < map[y].length && map[y][x - 1] instanceof LinkedTile && ((LinkedTile) map[y][x - 1]).getBlockId().equals(((LinkedTile) map[y][x]).getBlockId()),
-                y >= 0 && y < map.length && x + 1 >= 0  && x + 1 < map[y].length && map[y][x + 1] instanceof LinkedTile && ((LinkedTile) map[y][x + 1]).getBlockId().equals(((LinkedTile) map[y][x]).getBlockId())};
+    protected boolean[] getSurroundingBlocks(int x, int y, Tile[][] map, boolean field) {
+        return new boolean[]{y - 1 >= 0 && y - 1 < map.length && x >= 0 && x < map[y - 1].length && (field ? map[y - 1][x] instanceof LinkedTile : map[y - 1][x] != null) && (field ? ((LinkedTile) map[y - 1][x]).getBlockId().equals(((LinkedTile) map[y][x]).getBlockId()) : true),
+                y + 1 >= 0 && x >= 0 &&  y + 1 < map.length && x < map[y + 1].length && (field ? map[y + 1][x] instanceof LinkedTile : map[y + 1][x] != null) && (field ? ((LinkedTile) map[y + 1][x]).getBlockId().equals(((LinkedTile) map[y][x]).getBlockId()) : true),
+                y >= 0 && y < map.length && x - 1 >= 0  && x - 1 < map[y].length && (field ? map[y][x - 1] instanceof LinkedTile : map[y][x - 1] != null) && (field ? ((LinkedTile) map[y][x - 1]).getBlockId().equals(((LinkedTile) map[y][x]).getBlockId()) : true),
+                y >= 0 && y < map.length && x + 1 >= 0  && x + 1 < map[y].length && (field ? map[y][x + 1] instanceof LinkedTile : map[y][x + 1] != null) && (field ? ((LinkedTile) map[y][x + 1]).getBlockId().equals(((LinkedTile) map[y][x]).getBlockId()) : true)};
     }
 }

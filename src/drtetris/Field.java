@@ -3,6 +3,7 @@ package drtetris;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Field extends TileMap {
@@ -86,11 +87,16 @@ public class Field extends TileMap {
     
     public void addMap(Tile[][] map, int x, double y, boolean breakBlocks) {
         int yPos = (int) (y + Config.FIELDOFFSET) / Config.BLOCKSIZE;
+        UUID id = UUID.randomUUID();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if(map[i][j] != null) {
                     if(yPos + i >= 0) {
-                        this.map[yPos + i][x + j] = map[i][j];
+                        if (map[i][j] instanceof Tunnel) {
+                            this.map[yPos + i][x + j] = map[i][j];
+                        } else {
+                            this.map[yPos + i][x + j] = new LinkedTile(map[i][j], id.toString());
+                        }
                     }
                 }
             }
@@ -168,7 +174,7 @@ public class Field extends TileMap {
                 if(y - 1 >= 0 && map[y - 1][x] == tile ||
                         ( y - 1 >= startY && y - 1 < startY + tempMap.length && 
                           x >= startX && x < startX + tempMap[y - startY - 1].length &&
-                          tempMap[y - startY - 1][x - startX] == tile)) {
+                          tempMap[y - startY - 1][x - startX].equals(tile))) {
                     count = blockMatch(tile, x, y - 1, tempMap, startX, startY, direction, count + 1);
                 }
                 break;
@@ -177,7 +183,7 @@ public class Field extends TileMap {
                 if(y + 1 < map.length && map[y + 1][x] == tile ||
                         ( y + 1 >= startY && y + 1 < startY + tempMap.length && 
                           x >= startX && x < startX + tempMap[y - startY + 1].length &&
-                          tempMap[y - startY + 1][x - startX] == tile)) {
+                          tempMap[y - startY + 1][x - startX].equals(tile))) {
                     count = blockMatch(tile, x, y + 1, tempMap, startX, startY, direction, count + 1);
                 }
                 break;
@@ -186,7 +192,7 @@ public class Field extends TileMap {
                 if(x - 1 >= 0 && map[y][x - 1] == tile ||
                         ( y >= startY && y < startY + tempMap.length && 
                           x - 1 >= startX && x - 1 < startX + tempMap[y - startY].length &&
-                          tempMap[y - startY][x - startX - 1] == tile)) {
+                          tempMap[y - startY][x - startX - 1].equals(tile))) {
                     count = blockMatch(tile, x - 1, y, tempMap, startX, startY, direction, count + 1);
                 }
                 break;
@@ -195,7 +201,7 @@ public class Field extends TileMap {
                 if(x + 1 < map[y].length && map[y][x + 1] == tile ||
                         ( y >= startY && y < startY + tempMap.length && 
                           x + 1 >= startX && x + 1 < startX + tempMap[y - startY].length &&
-                          tempMap[y - startY][x - startX + 1] == tile)) {
+                          tempMap[y - startY][x - startX + 1] .equals(tile))) {
                     count = blockMatch(tile, x + 1, y, tempMap, startX, startY, direction, count + 1);
                 }
                 break;

@@ -101,16 +101,11 @@ public class LinkedTile extends Tile {
     private String blockId;
 
     public LinkedTile(Tile tile, String blockId) {
-        super(tile.image, tile.length);
+        super(tile.name, tile.image, tile.length);
         this.blockId = blockId;
     }
 
     public String getBlockId() {
         return blockId;
-    }
-    
-    public void draw(boolean[] surroundings, int x, int y) {
-        TileConstruct construct = LinkedTile.CONSTRUCTS[surroundings[0] ? 1 : 0][surroundings[1] ? 1 : 0][surroundings[2] ? 1 : 0][surroundings[3] ? 1 : 0];
-        super.draw(construct.getState(), 0, x, y, construct.getRotation());
     }
 }
