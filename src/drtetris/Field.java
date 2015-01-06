@@ -37,7 +37,9 @@ public class Field extends TileMap {
     public void update(int delta) {
         
         if (fallingBlocks.size() <= 0) {
+            
             for (MovingBlock block : checkBlocks) {
+                System.out.println("--------");
                 breakBlocks(block.getX(), (int) (block.getY() + Config.FIELDOFFSET) / Config.BLOCKSIZE, block.getMap());
             }
             
@@ -112,9 +114,13 @@ public class Field extends TileMap {
         for (int i = 0; i < map.length - 1; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] != null && map[i + 1][j] == null) {
-                    fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
-                    map[i][j] = null;
-                    state = ANIMATE;
+                    if (map[i][j] instanceof LinkedTile) {
+                        
+                    } else {
+                        fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
+                        map[i][j] = null;
+                        state = ANIMATE;
+                    }
                 }
             }
         }
@@ -174,6 +180,7 @@ public class Field extends TileMap {
                 if(y - 1 >= 0 && map[y - 1][x] == tile ||
                         ( y - 1 >= startY && y - 1 < startY + tempMap.length && 
                           x >= startX && x < startX + tempMap[y - startY - 1].length &&
+                          tempMap[y - startY - 1][x - startX] != null &&
                           tempMap[y - startY - 1][x - startX].equals(tile))) {
                     count = blockMatch(tile, x, y - 1, tempMap, startX, startY, direction, count + 1);
                 }
@@ -183,6 +190,7 @@ public class Field extends TileMap {
                 if(y + 1 < map.length && map[y + 1][x] == tile ||
                         ( y + 1 >= startY && y + 1 < startY + tempMap.length && 
                           x >= startX && x < startX + tempMap[y - startY + 1].length &&
+                          tempMap[y - startY + 1][x - startX] != null &&
                           tempMap[y - startY + 1][x - startX].equals(tile))) {
                     count = blockMatch(tile, x, y + 1, tempMap, startX, startY, direction, count + 1);
                 }
@@ -192,6 +200,7 @@ public class Field extends TileMap {
                 if(x - 1 >= 0 && map[y][x - 1] == tile ||
                         ( y >= startY && y < startY + tempMap.length && 
                           x - 1 >= startX && x - 1 < startX + tempMap[y - startY].length &&
+                          tempMap[y - startY][x - startX - 1] != null &&
                           tempMap[y - startY][x - startX - 1].equals(tile))) {
                     count = blockMatch(tile, x - 1, y, tempMap, startX, startY, direction, count + 1);
                 }
@@ -201,6 +210,7 @@ public class Field extends TileMap {
                 if(x + 1 < map[y].length && map[y][x + 1] == tile ||
                         ( y >= startY && y < startY + tempMap.length && 
                           x + 1 >= startX && x + 1 < startX + tempMap[y - startY].length &&
+                          tempMap[y - startY][x - startX + 1] != null &&
                           tempMap[y - startY][x - startX + 1] .equals(tile))) {
                     count = blockMatch(tile, x + 1, y, tempMap, startX, startY, direction, count + 1);
                 }

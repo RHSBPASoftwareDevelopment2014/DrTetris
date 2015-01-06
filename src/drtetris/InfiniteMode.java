@@ -96,7 +96,7 @@ public class InfiniteMode implements GameState {
             if (speed > Config.SPEEDLIMIT) {
                 speed = Config.SPEEDLIMIT;
             }
-            
+            System.out.println(delta * speed);
             if (!paused && !gameover) {
                 field.update(delta);
             }
