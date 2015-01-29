@@ -16,7 +16,7 @@ public class Button {
     private int x, y;
     
     public Button(String image, int x, int y) throws SlickException {
-        sheet = new SpriteSheet(new Image(image).getScaledCopy(900, 150), 300, 150);
+        sheet = new SpriteSheet(new Image(image), 300, 60);
         this.x = x;
         this.y = y;
     }
