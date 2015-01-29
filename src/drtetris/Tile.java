@@ -8,45 +8,50 @@ import org.newdawn.slick.SpriteSheet;
 
 public class Tile {
     
-    public static final Tile DIRT = new Tile("Dirt", Config.DIRTTILE, 6),
-            SAPPHIRE = new Tile("Sapphire", Config.SAPPHIRETILE, 6),
-            RUBY = new Tile("Ruby", Config.RUBYTILE, 6),
-            AMETHYST = new Tile("Amethyst", Config.AMETHYSTTILE, 6),
-            SAND = new Tile("Sand", Config.SANDTILE, 6),
-            GREENGARNET = new Tile("Green Garnet", Config.GREENGARNETTILE, 6);
+    public static final Tile DIRT = new Tile("Dirt", 1, Config.DIRTTILE, 6),
+            SAPPHIRE = new Tile("Sapphire", 2, Config.SAPPHIRETILE, 6),
+            RUBY = new Tile("Ruby", 3, Config.RUBYTILE, 6),
+            AMETHYST = new Tile("Amethyst", 4, Config.AMETHYSTTILE, 6),
+            SAND = new Tile("Sand", 5, Config.SANDTILE, 6),
+            GREENGARNET = new Tile("Green Garnet", 6, Config.GREENGARNETTILE, 6);
             
     
     protected String name;
+    protected int id;
     
     protected SpriteSheet image;
     
     protected int length;
     
-    protected Tile(String name, String image, int length) {
+    protected Tile(String name, int id, String image, int length) {
         try {
             this.name = name;
+            this.id = id;
             this.length = length;
             this.image = new SpriteSheet(new Image(image).getScaledCopy(length * Config.BLOCKSIZE, Config.BLOCKSIZE), Config.BLOCKSIZE, Config.BLOCKSIZE);
         } catch (SlickException ex) {}
     }
     
-    protected Tile(String name, SpriteSheet image, int length) {
+    protected Tile(String name, int id, SpriteSheet image, int length) {
         this.name = name;
+        this.id = id;
         this.length = length;
         this.image = image;
     }
     
-    protected Tile(String name, String image, int length, int width, int height, int tWidth, int tHeight) {
+    protected Tile(String name, int id, String image, int length, int width, int height, int tWidth, int tHeight) {
         try {
             this.name = name;
+            this.id = id;
             this.length = length;
             this.image = new SpriteSheet(new Image(image).getScaledCopy(width, height), tWidth, tHeight);
         } catch (SlickException ex) {}
     }
     
-    protected Tile(String name, String image, int length, int tWidth, int tHeight) {
+    protected Tile(String name, int id, String image, int length, int tWidth, int tHeight) {
         try {
             this.name = name;
+            this.id = id;
             this.length = length;
             this.image = new SpriteSheet(image, tWidth, tHeight);
         } catch (SlickException ex) {}
@@ -68,6 +73,6 @@ public class Tile {
     }
     
     public boolean equals(Tile tile) {
-        return name.equals(tile.name);
+        return tile != null ? name.equals(tile.name) : false;
     }
 }

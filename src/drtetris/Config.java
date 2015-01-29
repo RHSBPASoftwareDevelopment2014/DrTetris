@@ -27,6 +27,9 @@ public class Config {
     public static final int TUNNELSHEETWIDTH = 100;
     
     public static final String GAMEBACKGROUND = "res/gamebackground.png";
+    public static final String MAINMENU = "res/mainmenu.png";
+    public static final String ERRORSCREEN = "res/errorscreen.png";
+    public static final String PLAYBUTTON = "res/tutorialbutton.png";
     public static final String PAUSESCREEN = "res/pausedscreen.png";
     public static final String GAMEOVERSCREEN = "res/gameover.png";
     public static final String DIRTTILE = "res/Dirt.png";

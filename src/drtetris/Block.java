@@ -89,16 +89,16 @@ public class Block extends TileMap {
             }
         ),
         
-//        new Block(new Tile[][]
-//            {
-//                {Tile.AMETHYST, Tile.RUBY, Tile.SAPPHIRE, Tile.GREENGARNET, Tile.DIRT},
-//                {Tile.SAND, Tile.SAND, Tile.SAND, Tile.SAND, Tile.SAND},
-//                {Tile.AMETHYST, Tile.RUBY, Tile.SAPPHIRE, Tile.GREENGARNET, Tile.DIRT},
-//                {Tile.AMETHYST, Tile.RUBY, Tile.SAPPHIRE, Tile.GREENGARNET, Tile.DIRT},
-//                {Tile.AMETHYST, Tile.RUBY, Tile.SAPPHIRE, Tile.GREENGARNET, Tile.DIRT},
-//                {Tile.SAND, Tile.SAND, Tile.SAND, Tile.SAND, Tile.SAND},
-//            }
-//        )
+        new Block(new Tile[][]
+            {
+                {Tile.AMETHYST, Tile.RUBY, Tile.SAPPHIRE, Tile.GREENGARNET, Tile.DIRT},
+                {Tile.SAND, Tile.SAND, Tile.SAND, Tile.SAND, Tile.SAND},
+                {Tile.AMETHYST, Tile.RUBY, Tile.SAPPHIRE, Tile.GREENGARNET, Tile.DIRT},
+                {Tile.AMETHYST, Tile.RUBY, Tile.SAPPHIRE, Tile.GREENGARNET, Tile.DIRT},
+                {Tile.AMETHYST, Tile.RUBY, Tile.SAPPHIRE, Tile.GREENGARNET, Tile.DIRT},
+                {Tile.SAND, Tile.SAND, Tile.SAND, Tile.SAND, Tile.SAND},
+            }
+        )
     };
     
     public Block(Tile[][] map) {

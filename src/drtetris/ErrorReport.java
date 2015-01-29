@@ -6,6 +6,7 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
@@ -24,6 +25,7 @@ public class ErrorReport implements GameState {
     
     private int id;
     private String report;
+    private Image background;
     
     public ErrorReport(int id, Throwable e) {
         
@@ -35,6 +37,12 @@ public class ErrorReport implements GameState {
         
         this.id = id;
         this.report = header + stackTraceToString(e);
+        
+        try {
+            background = new Image(Config.ERRORSCREEN);
+        } catch (SlickException | RuntimeException sre) {
+            System.out.println("Could not create error report background image");
+        }
     }
     
     public static String stackTraceToString(Throwable e) {
@@ -57,6 +65,9 @@ public class ErrorReport implements GameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+        if (background!=null) {
+            background.draw();
+        }
         g.drawString(report, 0, 0);
     }
 

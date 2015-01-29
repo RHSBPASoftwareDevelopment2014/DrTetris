@@ -3,37 +3,20 @@ package drtetris;
 
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 
 public class Button {
     
     public static final int UNSELECTED = 0, SELECTED = 1, CLICKED = 2;
     
-    private final Image unselected, selected, clicked;
+    private final SpriteSheet sheet;
     
     private int state = 0;
     private boolean click = false;
     private int x, y;
     
-    public Button(String unselected, int x, int y) throws SlickException {
-        this.unselected = new Image(unselected);
-        this.selected = new Image(unselected);
-        this.clicked = new Image(unselected);
-        this.x = x;
-        this.y = y;
-    }
-    
-    public Button(String unselected, String selected, int x, int y) throws SlickException {
-        this.unselected = new Image(unselected);
-        this.selected = new Image(selected);
-        this.clicked = new Image(selected);
-        this.x = x;
-        this.y = y;
-    }
-    
-    public Button(String unselected, String selected, String clicked, int x, int y) throws SlickException {
-        this.unselected = new Image(unselected);
-        this.selected = new Image(selected);
-        this.clicked = new Image(clicked);
+    public Button(String image, int x, int y) throws SlickException {
+        sheet = new SpriteSheet(new Image(image).getScaledCopy(900, 150), 300, 150);
         this.x = x;
         this.y = y;
     }
@@ -42,15 +25,15 @@ public class Button {
         switch (state) {
         
             case SELECTED:
-                selected.draw(x, y);
+                sheet.getSprite(1, 0).draw(x, y);
                 break;
                 
             case CLICKED:
-                clicked.draw(x, y);
+                sheet.getSprite(2, 0).draw(x, y);
                 break;
                 
             default:
-                unselected.draw(x, y);
+                sheet.getSprite(0, 0).draw(x, y);
         }
     }
     
@@ -77,7 +60,7 @@ public class Button {
     }
     
     public boolean isFocusRegion(int x, int y) {
-        return (x >= this.x && x < (this.x + unselected.getWidth())) && (y >= this.y && y < (this.y + unselected.getHeight()));
+        return (x >= this.x && x < (this.x + sheet.getSprite(0, 0).getWidth())) && (y >= this.y && y < (this.y + sheet.getSprite(0, 0).getHeight()));
     }
     
     public void mousePressed(int button, int x, int y) {
