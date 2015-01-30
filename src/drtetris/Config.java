@@ -26,7 +26,7 @@ public class Config {
     public static final int DEFAULTX = 6;
     public static final int TUNNELSHEETWIDTH = 100;
     
-    public static final String GAMEBACKGROUND = "res/gamebackground.png";
+    public static final String GAMEBACKGROUND = "res/gamebackgroundrock.png";
     public static final String MAINMENU = "res/mainmenu.png";
     public static final String ERRORSCREEN = "res/errorscreen.png";
     public static final String TUTORIALBUTTON = "res/tutorialbutton.png";
@@ -34,8 +34,9 @@ public class Config {
     public static final String INFINITEBUTTON = "res/infinitebutton.png";
     public static final String OPTIONSBUTTON = "res/optionsbutton.png";
     public static final String EXITBUTTON = "res/exitbutton.png";
+    public static final String BACKMAINMENUBUTTON = "res/mainmenubutton.png";
     public static final String PAUSESCREEN = "res/pausedscreen.png";
-    public static final String GAMEOVERSCREEN = "res/gameover.png";
+    public static final String GAMEOVERSCREEN = "res/gameoverscreen.png";
     public static final String DIRTTILE = "res/dirt.png";
     public static final String SAPPHIRETILE = "res/sapphire.png";
     public static final String RUBYTILE = "res/ruby.png";

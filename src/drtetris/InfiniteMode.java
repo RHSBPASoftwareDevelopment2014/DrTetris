@@ -19,6 +19,8 @@ public class InfiniteMode implements GameState {
     private Image pausedOverlay;
     private Image gameoverOverlay;
     
+    private Button mainmenuButton;
+    
     private Field field;
     
     private BlockGenerator blockGen;
@@ -56,6 +58,7 @@ public class InfiniteMode implements GameState {
             background = new Image(Config.GAMEBACKGROUND);
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
+            mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 350);
             field = new Field(new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]);
             blockGen = new BlockGenerator();
             currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
@@ -78,6 +81,7 @@ public class InfiniteMode implements GameState {
                 gameoverOverlay.draw();
             } else if (paused) {
                 pausedOverlay.draw();
+                mainmenuButton.draw();
             }
         } catch (Exception e) {
             sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
@@ -96,7 +100,12 @@ public class InfiniteMode implements GameState {
             if (speed > Config.SPEEDLIMIT) {
                 speed = Config.SPEEDLIMIT;
             }
-            System.out.println(delta * speed);
+            
+            if (paused && mainmenuButton.getClicked()) {
+                sbg.enterState(DrTetris.MAIN_MENU);
+                mainmenuButton.setClicked(false);
+            }
+            
             if (!paused && !gameover) {
                 field.update(delta);
             }
@@ -200,19 +209,31 @@ public class InfiniteMode implements GameState {
     }
 
     @Override
-    public void mousePressed(int i, int i1, int i2) {
+    public void mousePressed(int button, int x, int y) {
+        if (paused) {
+            mainmenuButton.mousePressed(button, x, y);
+        }
     }
 
     @Override
-    public void mouseReleased(int i, int i1, int i2) {
+    public void mouseReleased(int button, int x, int y) {
+        if (paused) {
+            mainmenuButton.mouseReleased(button, x, y);
+        }
     }
 
     @Override
-    public void mouseMoved(int i, int i1, int i2, int i3) {
+    public void mouseMoved(int oldX, int oldY, int newX, int newY) {
+        if (paused) {
+            mainmenuButton.mouseMoved(oldX, oldY, newX, newY);
+        }
     }
 
     @Override
-    public void mouseDragged(int i, int i1, int i2, int i3) {
+    public void mouseDragged(int oldX, int oldY, int newX, int newY) {
+        if (paused) {
+            mainmenuButton.mouseDragged(oldX, oldY, newX, newY);
+        }
     }
 
     @Override

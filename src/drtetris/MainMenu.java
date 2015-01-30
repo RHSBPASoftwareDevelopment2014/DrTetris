@@ -57,9 +57,10 @@ class MainMenu implements GameState {
     public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
         if (infinitebutton.getClicked()) {
             sbg.enterState(DrTetris.INFINITE_MODE);
+            infinitebutton.setClicked(false);
         }
         if (exitbutton.getClicked()){
-            System.exit(0);
+            gc.exit();
         }
     }
 
