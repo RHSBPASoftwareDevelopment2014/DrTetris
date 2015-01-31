@@ -101,12 +101,12 @@ public class LinkedTile extends Tile {
     private final String blockId;
 
     public LinkedTile(Tile tile, String blockId) {
-        super(tile.name, tile.id, tile.image, tile.length);
+        super(tile.name, tile.image, tile.length);
         this.blockId = blockId;
     }
     
-    public LinkedTile(String name, int id, String image, int length, int tWidth, int tHeight, String blockId) {
-        super(name, id, image, length, tWidth, tHeight);
+    public LinkedTile(String name, String image, int length, int tWidth, int tHeight, String blockId) {
+        super(name, image, length, tWidth, tHeight);
         this.blockId = blockId;
     }
 

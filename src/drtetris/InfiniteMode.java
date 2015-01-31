@@ -1,6 +1,7 @@
 
 package drtetris;
 
+import java.io.IOException;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -59,10 +60,10 @@ public class InfiniteMode implements GameState {
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
             mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 350);
-            field = new Field(new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]);
+            field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
             blockGen = new BlockGenerator();
             currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
-        } catch (Exception e) {
+        } catch (SlickException | IOException | NumberFormatException e) {
             sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
             sbg.enterState(DrTetris.ERR_REPORT);
         }

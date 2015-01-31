@@ -1,5 +1,6 @@
 package drtetris;
 
+import java.io.IOException;
 import java.util.Random;
 
 public class BlockGenerator {
@@ -15,6 +16,10 @@ public class BlockGenerator {
     }
     
     public Block nextBlock() {
-        return Block.BLOCKS[(random.nextInt(Block.BLOCKS.length))];
+        try {
+            return new Block("1");
+        } catch (IOException | NumberFormatException ex) {
+            return null;
+        }
     }
 }

@@ -3,12 +3,8 @@ package drtetris;
 
 public class Tunnel extends LinkedTile {
     
-    public static final Tunnel BLUE = new Tunnel("Blue Tunnel", 7, Config.BLUETUNNEL),
-            RED = new Tunnel("Red Tunnel", 8, Config.REDTUNNEL),
-            GREEN = new Tunnel("Green Tunnel", 9, Config.GREENTUNNEL);
-    
-    public Tunnel(String name, int id, String image) {
-        super(name, id, image, 4, Config.TUNNELSHEETWIDTH, Config.TUNNELSHEETWIDTH, "Tunnel");
+    public Tunnel(String name, String image) {
+        super(name, image, 4, Config.TUNNELSHEETWIDTH, Config.TUNNELSHEETWIDTH, "Tunnel");
     }
     
     public void draw(int x, int y) {
