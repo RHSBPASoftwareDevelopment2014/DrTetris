@@ -19,7 +19,7 @@ public class Field extends TileMap {
         super(map);
         state = NORMAL;
         fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
-        checkBlocks = false;
+        checkBlocks = true;
     }
 
     @Override
@@ -32,8 +32,8 @@ public class Field extends TileMap {
     }
 
     public void update(int delta) {
-        if (fallingBlocks.size() <= 0) {
-
+        System.out.println(fallingBlocks.size());
+        if (checkBlocks && fallingBlocks.size() <= 0) {
             breakBlocks();
             findFallingBlocks();
 
@@ -60,7 +60,7 @@ public class Field extends TileMap {
         map = new Tile[getHeight()][getWidth()];
         state = NORMAL;
         fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
-        checkBlocks = false;
+        checkBlocks = true;
     }
 
     public void addMap(MovingBlock block, boolean breakBlocks) {
@@ -101,15 +101,15 @@ public class Field extends TileMap {
 
     private void findFallingBlocks() {
         List<String> antiFallingBlocks = new ArrayList<>();
-        for (int i = 0; i < map.length - 1; i++) {
+        for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] instanceof LinkedTile) {
-                    if (map[i][j] != null && (map[i + 1][j] == null || ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId()))) {
+                    if (i < map.length - 1 && map[i][j] != null && (map[i + 1][j] == null || (map[i + 1][j] instanceof LinkedTile && ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId())))) {
                         fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
                     } else {
                         antiFallingBlocks.add(((LinkedTile) map[i][j]).getBlockId());
                     }
-                } else {
+                } else if (i < map.length - 1) {
                     if (map[i][j] != null && map[i + 1][j] == null) {
                         fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
                     }
