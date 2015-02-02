@@ -1,5 +1,6 @@
 package drtetris;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -17,8 +18,10 @@ public class BlockGenerator {
     
     public Block nextBlock() {
         try {
-            return new Block("1");
-        } catch (IOException | NumberFormatException ex) {
+            File file = new File(Config.BLOCKDIRECTORY);
+            File[] files = file.listFiles();
+            return new Block(files[random.nextInt(files.length)].getName().replace(".csv", ""));
+        } catch (IOException e) {
             return null;
         }
     }
