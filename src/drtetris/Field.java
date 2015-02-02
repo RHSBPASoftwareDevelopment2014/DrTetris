@@ -1,5 +1,6 @@
 package drtetris;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -31,17 +32,12 @@ public class Field extends TileMap {
     }
 
     public void update(int delta) {
-
         if (fallingBlocks.size() <= 0) {
 
             breakBlocks();
             findFallingBlocks();
 
             checkBlocks = false;
-
-            if (fallingBlocks.size() <= 0) {
-                state = NORMAL;
-            }
         } else {
             for (MovingBlock block : fallingBlocks) {
                 if (block != null) {
@@ -99,28 +95,38 @@ public class Field extends TileMap {
         if (breakBlocks) {
             breakBlocks();
             findFallingBlocks();
+            updateState();
         }
     }
 
     private void findFallingBlocks() {
+        List<String> antiFallingBlocks = new ArrayList<>();
         for (int i = 0; i < map.length - 1; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] != null && map[i + 1][j] == null) {
-                    if (linkedFallingBlocks(j, i)) {
+                if (map[i][j] instanceof LinkedTile) {
+                    if (map[i][j] != null && (map[i + 1][j] == null || ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId()))) {
                         fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
-                        map[i][j] = null;
-                        state = ANIMATE;
+                    } else {
+                        antiFallingBlocks.add(((LinkedTile) map[i][j]).getBlockId());
+                    }
+                } else {
+                    if (map[i][j] != null && map[i + 1][j] == null) {
+                        fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
                     }
                 }
             }
         }
-    }
-
-    private boolean linkedFallingBlocks(int x, int y) {
-        if ((map[y][x] instanceof LinkedTile)) {
-            return false;
-        } else {
-            return true;
+        
+        for (String blockId : antiFallingBlocks) {
+            for (MovingBlock block : fallingBlocks) {
+                if (block.getMap()[0][0] instanceof LinkedTile && ((LinkedTile) block.getMap()[0][0]).getBlockId().equals(blockId)) {
+                    fallingBlocks.remove(block);
+                }
+            }
+        }
+            
+        for (MovingBlock block : fallingBlocks) {
+            map[(int) block.getY() / Config.BLOCKSIZE][block.getX()] = null;
         }
     }
 
@@ -193,10 +199,14 @@ public class Field extends TileMap {
     }
 
     public void updateState() {
-        if (isTunnel()) {
+        if (fallingBlocks.size() > 0) {
+            state = ANIMATE;
+        } else if (isTunnel()) {
             state = CONTINUE;
         } else if (isFull()) {
             state = END;
+        } else {
+            state = NORMAL;
         }
     }
 

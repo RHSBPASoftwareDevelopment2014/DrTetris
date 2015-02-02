@@ -12,7 +12,7 @@ public class Config {
     public static final double SPEEDLIMIT = 3.0;
     public static final double SPEEDXLIMIT = .2;
     public static final double DEFAULTY = -50;
-    public static final double FALLINGBLOCKSPEED = .04;
+    public static final double FALLINGBLOCKSPEED = .15;
     
     public static final int FIELDHEIGHT = 12;
     public static final int FIELDWIDTH = 12;
