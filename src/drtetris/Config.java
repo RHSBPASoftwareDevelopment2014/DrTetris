@@ -46,18 +46,22 @@ public class Config {
     public static final String BLUETUNNEL = "res/bluetunnelspritesheet.png";
     public static final String REDTUNNEL = "res/redtunnelspritesheet.png";
     public static final String GREENTUNNEL = "res/greentunnelspritesheet.png";
+    public static final String ROOTTILE = "res/roottilespritesheet.png";
     public static final String LEVELDIRECTORY = "res/levels/";
     public static final String BLOCKDIRECTORY = "res/blocks/";
     public static final String BACKGROUNDMUSIC = "res/LiveAndSlam.ogg";
     
-    public static final Tile[] TILELIST = {null,
-            new Tile("Dirt", Config.DIRTTILE, 6),
-            new Tile("Sapphire", Config.SAPPHIRETILE, 6),
-            new Tile("Ruby", Config.RUBYTILE, 6),
-            new Tile("Amethyst", Config.AMETHYSTTILE, 6),
-            new Tile("Sand", Config.SANDTILE, 6),
-            new Tile("Green Garnet", Config.GREENGARNETTILE, 6),
+    public static final Tile[] TILELIST = {
+            null,
+            new Tile("Dirt", Config.DIRTTILE, 6, false),
+            new Tile("Sapphire", Config.SAPPHIRETILE, 6, false),
+            new Tile("Ruby", Config.RUBYTILE, 6, false),
+            new Tile("Amethyst", Config.AMETHYSTTILE, 6, false),
+            new Tile("Sand", Config.SANDTILE, 6, true),
+            new Tile("Green Garnet", Config.GREENGARNETTILE, 6, false),
             new Tunnel("Blue Tunnel", Config.BLUETUNNEL),
             new Tunnel("Red Tunnel", Config.REDTUNNEL),
-            new Tunnel("Green Tunnel", Config.GREENTUNNEL)};
+            new Tunnel("Green Tunnel", Config.GREENTUNNEL),
+//            new Tile("Root", Config.ROOTTILE, 6, false)
+        };
 }
