@@ -118,7 +118,7 @@ public class Field extends TileMap {
         
         for (String blockId : antiFallingBlocks) {
             for (MovingBlock block : fallingBlocks) {
-                if (block.getMap()[0][0] instanceof LinkedTile && ((LinkedTile) block.getMap()[0][0]).getBlockId().equals(blockId)) {
+                if (block.getMap()[0][0] instanceof LinkedTile && !block.getMap()[0][0].hasGravity() && ((LinkedTile) block.getMap()[0][0]).getBlockId().equals(blockId)) {
                     fallingBlocks.remove(block);
                 }
             }
