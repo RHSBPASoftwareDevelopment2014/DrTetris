@@ -103,7 +103,7 @@ public class Field extends TileMap {
         List<String> antiFallingBlocks = new ArrayList<>();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] instanceof LinkedTile) {
+                if (map[i][j] instanceof LinkedTile && !map[i][j].hasGravity()) {
                     if (i < map.length - 1 && map[i][j] != null && (map[i + 1][j] == null || (map[i + 1][j] instanceof LinkedTile && ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId())))) {
                         fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
                     } else {
