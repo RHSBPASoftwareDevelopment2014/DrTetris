@@ -32,7 +32,6 @@ public class Field extends TileMap {
     }
 
     public void update(int delta) {
-        System.out.println(fallingBlocks.size());
         if (checkBlocks && fallingBlocks.size() <= 0) {
             breakBlocks();
             findFallingBlocks();

@@ -7,10 +7,10 @@ public class Config {
     public static final double BASEXSPEED = .015;
     public static final double SPEEDINCREMENT = .02;
     public static final double SPEEDXINCREMENT = .002;
-    public static final double STACKTOLERANCE = 12;
+    public static final double STACKTOLERANCE = 13;
     public static final double PARTICLESTRAY = 1.2;
-    public static final double SPEEDLIMIT = 3.0;
-    public static final double SPEEDXLIMIT = .2;
+    public static final double SPEEDLIMIT = 1.0;
+    public static final double SPEEDXLIMIT = .15;
     public static final double DEFAULTY = -50;
     public static final double FALLINGBLOCKSPEED = .15;
     
@@ -26,7 +26,7 @@ public class Config {
     public static final int DEFAULTX = 6;
     public static final int TUNNELSHEETWIDTH = 100;
     
-    public static final String GAMEBACKGROUND = "res/gamebackgroundrock.png";
+    public static final String GAMEBACKGROUND = "res/gamebackgrounddirt.png";
     public static final String MAINMENU = "res/mainmenu.png";
     public static final String ERRORSCREEN = "res/errorscreen.png";
     public static final String TUTORIALBUTTON = "res/tutorialbutton.png";
@@ -57,8 +57,8 @@ public class Config {
             new Tile("Sapphire", Config.SAPPHIRETILE, 6, false),
             new Tile("Ruby", Config.RUBYTILE, 6, false),
             new Tile("Amethyst", Config.AMETHYSTTILE, 6, false),
-            new Tile("Sand", Config.SANDTILE, 6, true),
             new Tile("Green Garnet", Config.GREENGARNETTILE, 6, false),
+            new Tile("Sand", Config.SANDTILE, 6, true),
             new Tunnel("Blue Tunnel", Config.BLUETUNNEL),
             new Tunnel("Red Tunnel", Config.REDTUNNEL),
             new Tunnel("Green Tunnel", Config.GREENTUNNEL),
