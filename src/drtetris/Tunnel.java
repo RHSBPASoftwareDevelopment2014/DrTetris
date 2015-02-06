@@ -4,7 +4,7 @@ package drtetris;
 public class Tunnel extends LinkedTile {
     
     public Tunnel(String name, String image) {
-        super(name, image, 4, Config.TUNNELSHEETWIDTH, Config.TUNNELSHEETWIDTH, "Tunnel", false);
+        super(name, image, 4, Config.TUNNELSHEETWIDTH, Config.TUNNELSHEETWIDTH, "Tunnel", false, false);
     }
     
     public void draw(int x, int y) {

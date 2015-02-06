@@ -20,6 +20,14 @@ public class Field extends TileMap {
         state = NORMAL;
         fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
         checkBlocks = true;
+        
+        for (Tile[] tiles : map) {
+            for (Tile tile : tiles) {
+                if (tile != null) {
+                    tile.setLocked(true);
+                }
+            }
+        }
     }
 
     @Override
@@ -81,7 +89,7 @@ public class Field extends TileMap {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] != null) {
                     if (yPos + i >= 0) {
-                        if (map[i][j] instanceof Tunnel) {
+                        if (map[i][j] instanceof Tunnel || map[i][j] instanceof LinkedTile) {
                             this.map[yPos + i][x + j] = map[i][j];
                         } else {
                             this.map[yPos + i][x + j] = new LinkedTile(map[i][j], id.toString());
@@ -103,13 +111,13 @@ public class Field extends TileMap {
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] instanceof LinkedTile && !map[i][j].hasGravity()) {
-                    if (i < map.length - 1 && map[i][j] != null && (map[i + 1][j] == null || (map[i + 1][j] instanceof LinkedTile && ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId())))) {
+                    if (i < map.length - 1 && map[i][j] != null && !map[i][j].isLocked() && (map[i + 1][j] == null || (map[i + 1][j] instanceof LinkedTile && ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId())))) {
                         fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
                     } else {
                         antiFallingBlocks.add(((LinkedTile) map[i][j]).getBlockId());
                     }
                 } else if (i < map.length - 1) {
-                    if (map[i][j] != null && map[i + 1][j] == null) {
+                    if (map[i][j] != null && !map[i][j].isLocked() && map[i + 1][j] == null) {
                         fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
                     }
                 }
