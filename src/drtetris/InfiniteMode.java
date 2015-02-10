@@ -60,7 +60,7 @@ public class InfiniteMode implements GameState {
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
             mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 350);
-            field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
+            field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field1")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
             blockGen = new BlockGenerator();
             currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
         } catch (SlickException | IOException | NumberFormatException e) {

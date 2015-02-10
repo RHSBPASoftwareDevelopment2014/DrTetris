@@ -24,7 +24,7 @@ public class Field extends TileMap {
         
         for (Tile[] tiles : map) {
             for (Tile tile : tiles) {
-                if (tile != null) {
+                if (tile != null && tile.getId() != 6) {
                     tile.setLocked(true);
                 }
             }
