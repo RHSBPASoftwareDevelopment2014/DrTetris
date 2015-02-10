@@ -6,7 +6,7 @@ import java.util.UUID;
 public class Tunnel extends LinkedTile {
     
     public Tunnel(int index) {
-        super(index, 4, false, false, "Tunnel");
+        super(index, 4, true, false, "Tunnel");
     }
     
     @Override

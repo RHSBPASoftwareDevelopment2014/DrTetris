@@ -19,7 +19,7 @@ public class Field extends TileMap {
     public Field(Tile[][] map) {
         super(map);
         state = NORMAL;
-        fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
+        fallingBlocks = new CopyOnWriteArrayList<>();
         checkBlocks = true;
         
         for (Tile[] tiles : map) {
@@ -111,9 +111,10 @@ public class Field extends TileMap {
 
     private void findFallingBlocks() {
         System.out.println("-----FindFallingBlocks()-----");
-        int lastSize = fallingBlocks.size();
+        int lastSize;
         do {
             System.out.println("--Iterate--");
+            lastSize = fallingBlocks.size();
             List<String> antiFallingBlocks = new ArrayList<>();
             for (int i = 0; i < map.length; i++) {
                 for (int j = 0; j < map[i].length; j++) {
@@ -126,7 +127,7 @@ public class Field extends TileMap {
                             System.out.println("\tGravity: " + map[i][j].hasGravity());
                             System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].getId() : "null"));
                             fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
-                        } else {
+                        } else if (!(map[i][j] instanceof Tunnel)) {
                             System.out.println("Added to Anti-Falling Blocks: (" + i + "," + j + ")");
                             System.out.println("\tTile: " + map[i][j].getId());
                             System.out.println("\tId: " + ((LinkedTile) map[i][j]).getBlockId());
@@ -160,8 +161,6 @@ public class Field extends TileMap {
             for (MovingBlock block : fallingBlocks) {
                 map[(int) block.getY() / Config.BLOCKSIZE][block.getX()] = null;
             }
-            
-            lastSize = fallingBlocks.size();
         } while ((lastSize != fallingBlocks.size()));
     }
 
