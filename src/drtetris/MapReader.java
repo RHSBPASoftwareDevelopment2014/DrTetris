@@ -29,6 +29,7 @@ public class MapReader {
                 for (int j = 0; j < records.get(i).length; j++) {
                     Tile tile = Config.TILELIST[Integer.parseInt(records.get(i)[j])];
                     if (tile != null) {
+                        tile.setLocked(false);
                         map[i][j] = tile instanceof Tunnel ? tile : new LinkedTile(tile, uuid);
                     }
                 }

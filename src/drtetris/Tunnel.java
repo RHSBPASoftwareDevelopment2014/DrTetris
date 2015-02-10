@@ -1,10 +1,16 @@
 
 package drtetris;
 
+import java.util.UUID;
+
 public class Tunnel extends LinkedTile {
     
     public Tunnel(String name, String image) {
-        super(name, image, 4, Config.TUNNELSHEETWIDTH, Config.TUNNELSHEETWIDTH, "Tunnel", false, false);
+        super(name, image, 4, Config.TUNNELSHEETWIDTH, Config.TUNNELSHEETWIDTH, null, false, false);
+    }
+    
+    public String getBlockId() {
+        return UUID.randomUUID().toString();
     }
     
     public void draw(int x, int y) {

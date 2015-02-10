@@ -66,7 +66,7 @@ public class Field extends TileMap {
     public void reset() {
         map = new Tile[getHeight()][getWidth()];
         state = NORMAL;
-        fallingBlocks = new CopyOnWriteArrayList<MovingBlock>();
+        fallingBlocks = new CopyOnWriteArrayList<>();
         checkBlocks = true;
     }
 
@@ -107,34 +107,59 @@ public class Field extends TileMap {
     }
 
     private void findFallingBlocks() {
-        List<String> antiFallingBlocks = new ArrayList<>();
-        for (int i = 0; i < map.length; i++) {
-            for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] instanceof LinkedTile && !map[i][j].hasGravity()) {
-                    if (i < map.length - 1 && map[i][j] != null && !map[i][j].isLocked() && (map[i + 1][j] == null || (map[i + 1][j] instanceof LinkedTile && ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId())))) {
-                        fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
-                    } else {
-                        antiFallingBlocks.add(((LinkedTile) map[i][j]).getBlockId());
-                    }
-                } else if (i < map.length - 1) {
-                    if (map[i][j] != null && !map[i][j].isLocked() && map[i + 1][j] == null) {
-                        fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
+        System.out.println("-----FindFallingBlocks()-----");
+        int lastSize = fallingBlocks.size();
+        do {
+            System.out.println("--Iterate--");
+            List<String> antiFallingBlocks = new ArrayList<>();
+            for (int i = 0; i < map.length; i++) {
+                for (int j = 0; j < map[i].length; j++) {
+                    if (map[i][j] instanceof LinkedTile && !map[i][j].hasGravity()) {
+                        if (i < map.length - 1 && map[i][j] != null && !map[i][j].isLocked() && (map[i + 1][j] == null || (map[i + 1][j] instanceof LinkedTile && ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId())))) {
+                            System.out.println("Added to Falling Blocks: (" + i + "," + j + ")");
+                            System.out.println("\tTile: " + map[i][j].name);
+                            System.out.println("\tId: " + ((LinkedTile) map[i][j]).getBlockId());
+                            System.out.println("\tLocked: " + map[i][j].isLocked());
+                            System.out.println("\tGravity: " + map[i][j].hasGravity());
+                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].name : "null"));
+                            fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
+                        } else {
+                            System.out.println("Added to Anti-Falling Blocks: (" + i + "," + j + ")");
+                            System.out.println("\tTile: " + map[i][j].name);
+                            System.out.println("\tId: " + ((LinkedTile) map[i][j]).getBlockId());
+                            System.out.println("\tLocked: " + map[i][j].isLocked());
+                            System.out.println("\tGravity: " + map[i][j].hasGravity());
+                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].name : "null"));
+                            antiFallingBlocks.add(((LinkedTile) map[i][j]).getBlockId());
+                        }
+                    } else if (i < map.length - 1) {
+                        if (map[i][j] != null && !map[i][j].isLocked() && map[i + 1][j] == null) {
+                            System.out.println("Added to Falling Blocks: (" + i + "," + j + ")");
+                            System.out.println("\tTile: " + map[i][j].name);
+                            System.out.println("\tId: None");
+                            System.out.println("\tLocked: " + map[i][j].isLocked());
+                            System.out.println("\tGravity: " + map[i][j].hasGravity());
+                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].name : "null"));
+                            fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
+                        }
                     }
                 }
             }
-        }
-        
-        for (String blockId : antiFallingBlocks) {
+
+            for (String blockId : antiFallingBlocks) {
+                for (MovingBlock block : fallingBlocks) {
+                    if (block.getMap()[0][0] instanceof LinkedTile && !block.getMap()[0][0].hasGravity() && ((LinkedTile) block.getMap()[0][0]).getBlockId().equals(blockId)) {
+                        fallingBlocks.remove(block);
+                    }
+                }
+            }
+
             for (MovingBlock block : fallingBlocks) {
-                if (block.getMap()[0][0] instanceof LinkedTile && !block.getMap()[0][0].hasGravity() && ((LinkedTile) block.getMap()[0][0]).getBlockId().equals(blockId)) {
-                    fallingBlocks.remove(block);
-                }
+                map[(int) block.getY() / Config.BLOCKSIZE][block.getX()] = null;
             }
-        }
             
-        for (MovingBlock block : fallingBlocks) {
-            map[(int) block.getY() / Config.BLOCKSIZE][block.getX()] = null;
-        }
+            lastSize = fallingBlocks.size();
+        } while ((lastSize != fallingBlocks.size()));
     }
 
     private void breakBlocks() {
