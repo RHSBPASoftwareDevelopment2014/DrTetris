@@ -5,52 +5,28 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
-import org.newdawn.slick.opengl.Texture;
 
 
 public class Tile {
     
-    protected String name;
-    protected SpriteSheet image;
-    protected int length;
+    private int id;
+    private SpriteSheet image;
     private boolean gravity;
     private boolean locked;
     
-    protected Tile(String name, String image, int length, boolean gravity, boolean locked) {
-        try {
-            this.name = name;
-            this.length = length;
-            this.gravity = gravity;
-            this.image = new SpriteSheet(new Image(image).getScaledCopy(length * Config.BLOCKSIZE, Config.BLOCKSIZE), Config.BLOCKSIZE, Config.BLOCKSIZE);
-            this.locked = locked;
-        } catch (SlickException ex) {}
+    public Tile(int index) throws SlickException, ArrayIndexOutOfBoundsException {
+        this.id = index;
+        this.gravity = false;
+        this.image = new SpriteSheet(new Image(Config.TILEIMAGELIST[index]).getScaledCopy(6 * Config.BLOCKSIZE, Config.BLOCKSIZE), Config.BLOCKSIZE, Config.BLOCKSIZE);
+        this.locked = false;
     }
     
-    protected Tile(String name, SpriteSheet image, int length, boolean gravity, boolean locked) {
-        this.name = name;
-        this.length = length;
-        this.image = image;
-        this.gravity = gravity;
-        this.locked = locked;
-    }
-    
-    protected Tile(String name, String image, int length, int width, int height, int tWidth, int tHeight, boolean gravity, boolean locked) {
+    protected Tile(int index, int length, boolean gravity, boolean locked) {
         try {
-            this.name = name;
-            this.length = length;
-            this.image = new SpriteSheet(new Image(image).getScaledCopy(width, height), tWidth, tHeight);
+            this.id = index;
+            this.image = new SpriteSheet(new Image(Config.TILEIMAGELIST[index]).getScaledCopy(length * Config.BLOCKSIZE, Config.BLOCKSIZE), Config.BLOCKSIZE, Config.BLOCKSIZE);
             this.gravity = gravity;
             this.locked = locked;
-        } catch (SlickException ex) {}
-    }
-    
-    protected Tile(String name, String image, int length, int tWidth, int tHeight, boolean gravity, boolean locked) {
-        try {
-            this.name = name;
-            this.length = length;
-            this.gravity = gravity;
-            this.locked = locked;
-            this.image = new SpriteSheet(image, tWidth, tHeight);
         } catch (SlickException ex) {}
     }
 
@@ -73,6 +49,10 @@ public class Tile {
         draw(construct.getState(), 0, x, y, construct.getRotation());
     }
     
+    public int getId() {
+        return id;
+    }
+    
     public boolean hasGravity() {
         return gravity;
     }
@@ -86,6 +66,6 @@ public class Tile {
     }
     
     public boolean equals(Tile tile) {
-        return tile != null ? name.equals(tile.name) : false;
+        return tile != null ? id == tile.getId() : false;
     }
 }

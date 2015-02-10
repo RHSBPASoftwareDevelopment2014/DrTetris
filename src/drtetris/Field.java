@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
+import org.newdawn.slick.SlickException;
 
 public class Field extends TileMap {
 
@@ -84,7 +85,7 @@ public class Field extends TileMap {
 
     public void addMap(Tile[][] map, int x, double y, boolean breakBlocks) {
         int yPos = (int) (y + Config.FIELDOFFSET) / Config.BLOCKSIZE;
-        UUID id = UUID.randomUUID();
+        String blockId = UUID.randomUUID().toString();
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
                 if (map[i][j] != null) {
@@ -92,7 +93,9 @@ public class Field extends TileMap {
                         if (map[i][j] instanceof Tunnel || map[i][j] instanceof LinkedTile) {
                             this.map[yPos + i][x + j] = map[i][j];
                         } else {
-                            this.map[yPos + i][x + j] = new LinkedTile(map[i][j], id.toString());
+                            try {
+                                this.map[yPos + i][x + j] = new LinkedTile(map[i][j].getId(), blockId);
+                            } catch (SlickException | ArrayIndexOutOfBoundsException ex) {}
                         }
                     }
                 }
@@ -117,29 +120,29 @@ public class Field extends TileMap {
                     if (map[i][j] instanceof LinkedTile && !map[i][j].hasGravity()) {
                         if (i < map.length - 1 && map[i][j] != null && !map[i][j].isLocked() && (map[i + 1][j] == null || (map[i + 1][j] instanceof LinkedTile && ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId())))) {
                             System.out.println("Added to Falling Blocks: (" + i + "," + j + ")");
-                            System.out.println("\tTile: " + map[i][j].name);
+                            System.out.println("\tTile: " + map[i][j].getId());
                             System.out.println("\tId: " + ((LinkedTile) map[i][j]).getBlockId());
                             System.out.println("\tLocked: " + map[i][j].isLocked());
                             System.out.println("\tGravity: " + map[i][j].hasGravity());
-                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].name : "null"));
+                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].getId() : "null"));
                             fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
                         } else {
                             System.out.println("Added to Anti-Falling Blocks: (" + i + "," + j + ")");
-                            System.out.println("\tTile: " + map[i][j].name);
+                            System.out.println("\tTile: " + map[i][j].getId());
                             System.out.println("\tId: " + ((LinkedTile) map[i][j]).getBlockId());
                             System.out.println("\tLocked: " + map[i][j].isLocked());
                             System.out.println("\tGravity: " + map[i][j].hasGravity());
-                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].name : "null"));
+                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].getId() : "null"));
                             antiFallingBlocks.add(((LinkedTile) map[i][j]).getBlockId());
                         }
                     } else if (i < map.length - 1) {
                         if (map[i][j] != null && !map[i][j].isLocked() && map[i + 1][j] == null) {
                             System.out.println("Added to Falling Blocks: (" + i + "," + j + ")");
-                            System.out.println("\tTile: " + map[i][j].name);
+                            System.out.println("\tTile: " + map[i][j].getId());
                             System.out.println("\tId: None");
                             System.out.println("\tLocked: " + map[i][j].isLocked());
                             System.out.println("\tGravity: " + map[i][j].hasGravity());
-                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].name : "null"));
+                            System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].getId() : "null"));
                             fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
                         }
                     }

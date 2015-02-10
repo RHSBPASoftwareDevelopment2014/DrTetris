@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.newdawn.slick.SlickException;
 
 public class MapReader {
     
@@ -27,11 +30,18 @@ public class MapReader {
             Tile[][] map = new Tile[records.size()][records.get(0).length];
             for (int i = 0; i < records.size(); i++) {
                 for (int j = 0; j < records.get(i).length; j++) {
-                    Tile tile = Config.TILELIST[Integer.parseInt(records.get(i)[j])];
-                    if (tile != null) {
-                        tile.setLocked(false);
-                        map[i][j] = tile instanceof Tunnel ? tile : new LinkedTile(tile, uuid);
-                    }
+                    try {
+                        int id = Integer.parseInt(records.get(i)[j]);
+                        switch (Config.TILETYPELIST[id]) {
+                            case Config.TILETYPENORMAL:
+                                map[i][j] = new LinkedTile(id, uuid);
+                                break;
+                                
+                            case Config.TILETYPETUNNEL:
+                                map[i][j] = new Tunnel(id);
+                                break;
+                        }
+                    } catch (SlickException | ArrayIndexOutOfBoundsException ex) {}
                 }
             }
             return map;

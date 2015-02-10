@@ -1,5 +1,7 @@
 package drtetris;
 
+import org.newdawn.slick.SlickException;
+
 public class LinkedTile extends Tile {
 
     public static final int STRAIGHT = 0, ALL = 1, CORNER = 2, T = 3, LEG = 4, NONE = 5;
@@ -100,13 +102,13 @@ public class LinkedTile extends Tile {
 
     private final String blockId;
 
-    public LinkedTile(Tile tile, String blockId) {
-        super(tile.name, tile.image, tile.length, tile.hasGravity(), tile.isLocked());
+    public LinkedTile(int index, String blockId) throws SlickException, ArrayIndexOutOfBoundsException {
+        super(index);
         this.blockId = blockId;
     }
     
-    public LinkedTile(String name, String image, int length, int tWidth, int tHeight, String blockId, boolean gravity, boolean locked) {
-        super(name, image, length, tWidth, tHeight, gravity, locked);
+    public LinkedTile(int index, int length, boolean gravity, boolean locked, String blockId) {
+        super(index, length, gravity, locked);
         this.blockId = blockId;
     }
 

@@ -51,17 +51,49 @@ public class Config {
     public static final String BLOCKDIRECTORY = "res/blocks/";
     public static final String BACKGROUNDMUSIC = "res/LiveAndSlam.ogg";
     
-    public static final Tile[] TILELIST = {
+    public static final int TILETYPENORMAL = 0;
+    public static final int TILETYPETUNNEL = 1;
+    public static final int TILETYPEAIR = 2;
+    
+    public static final String[] TILENAMELIST = {
             null,
-            new Tile("Dirt", Config.DIRTTILE, 6, false, false),
-            new Tile("Sapphire", Config.SAPPHIRETILE, 6, false, false),
-            new Tile("Ruby", Config.RUBYTILE, 6, false, false),
-            new Tile("Amethyst", Config.AMETHYSTTILE, 6, false, false),
-            new Tile("Green Garnet", Config.GREENGARNETTILE, 6, false, false),
-            new Tile("Sand", Config.SANDTILE, 6, true, false),
-            new Tunnel("Blue Tunnel", Config.BLUETUNNEL),
-            new Tunnel("Red Tunnel", Config.REDTUNNEL),
-            new Tunnel("Green Tunnel", Config.GREENTUNNEL),
-            new Tile("Roots", Config.ROOTSTILE, 6, false, false)
+            "Dirt",
+            "Sapphire",
+            "Ruby",
+            "Amethyst",
+            "Green Garnet",
+            "Sand",
+            "Blue Tunnel",
+            "Red Tunnel",
+            "Green Tunnel",
+            "Roots"
+        };
+    
+    public static final String[] TILEIMAGELIST = {
+            null,
+            DIRTTILE,
+            SAPPHIRETILE,
+            RUBYTILE,
+            AMETHYSTTILE,
+            GREENGARNETTILE,
+            SANDTILE,
+            BLUETUNNEL,
+            REDTUNNEL,
+            GREENTUNNEL,
+            ROOTSTILE
+        };
+    
+    public static final int[] TILETYPELIST = {
+            TILETYPEAIR,
+            TILETYPENORMAL,
+            TILETYPENORMAL,
+            TILETYPENORMAL,
+            TILETYPENORMAL,
+            TILETYPENORMAL,
+            TILETYPENORMAL,
+            TILETYPETUNNEL,
+            TILETYPETUNNEL,
+            TILETYPETUNNEL,
+            TILETYPENORMAL
         };
 }
