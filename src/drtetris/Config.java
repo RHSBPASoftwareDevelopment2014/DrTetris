@@ -7,23 +7,25 @@ public class Config {
     public static final double BASEXSPEED = .015;
     public static final double SPEEDINCREMENT = .02;
     public static final double SPEEDXINCREMENT = .002;
-    public static final double STACKTOLERANCE = 13;
+    public static final double STACKTOLERANCE = 12;
     public static final double PARTICLESTRAY = 1.2;
     public static final double SPEEDLIMIT = 1.0;
     public static final double SPEEDXLIMIT = .15;
     public static final double DEFAULTY = -50;
     public static final double FALLINGBLOCKSPEED = .15;
     
+    public static final int BLOCKSIZE = 40;
     public static final int FIELDHEIGHT = 12;
     public static final int FIELDWIDTH = 12;
-    public static final int FIELDOFFSET = 10;
+    public static final int FIELDOFFSET = 29;
     public static final int FIELDX = 150;
-    public static final int FIELDY = 90;
+    public static final int FIELDY = 91;
     public static final int BLOCKDELAY = 400;
-    public static final int BLOCKSIZE = 40;
     public static final int XMOVEDELAY = 200;
     public static final int XMOVEDELAYDECREMENT = 5;
     public static final int DEFAULTX = 6;
+    public static final int NEXTBLOCKX = 658;
+    public static final int NEXTBLOCKY = 115;
     public static final int TUNNELSHEETWIDTH = 100;
     
     public static final String GAMEBACKGROUND = "res/gamebackgrounddirt.png";

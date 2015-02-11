@@ -7,9 +7,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.newdawn.slick.SlickException;
 
 public class Field extends TileMap {
-
+    
     public static final int END = 0, CONTINUE = 1, NORMAL = 2, ANIMATE = 3;
-
+    
     private static final int UP = 0, DOWN = 1, LEFT = 2, RIGHT = 3;
 
     private int state;

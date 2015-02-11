@@ -26,6 +26,7 @@ public class InfiniteMode implements GameState {
     
     private BlockGenerator blockGen;
     
+    private Block nextBlock;
     private MovingBlock currentBlock;
     
     private boolean gameover = false,
@@ -63,6 +64,7 @@ public class InfiniteMode implements GameState {
             field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field1")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
             blockGen = new BlockGenerator();
             currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
+            nextBlock = blockGen.nextBlock();
         } catch (SlickException | IOException | NumberFormatException e) {
             sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
             sbg.enterState(DrTetris.ERR_REPORT);
@@ -76,6 +78,7 @@ public class InfiniteMode implements GameState {
             if(field.getState() == Field.NORMAL) {
                 currentBlock.draw(Config.FIELDX, Config.FIELDY);
             }
+            nextBlock.draw(Config.NEXTBLOCKX, Config.NEXTBLOCKY);
             field.draw(Config.FIELDX, Config.FIELDY);
             g.drawString("Level: " + level, 5, 5);
             if (gameover) {
@@ -174,7 +177,8 @@ public class InfiniteMode implements GameState {
                         if (!field.isRoom(currentBlock, Config.STACKTOLERANCE, true)) {
                             if (stackDelay >= Config.BLOCKDELAY) {
                                 field.addMap(currentBlock);
-                                currentBlock = new MovingBlock(blockGen.nextBlock(), Field.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
+                                currentBlock = new MovingBlock(nextBlock, TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
+                                nextBlock = blockGen.nextBlock();
                                 stackDelay = 0;
                                 aDelay = 0;
                                 dDelay = 0;
