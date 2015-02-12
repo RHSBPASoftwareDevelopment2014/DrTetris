@@ -3,7 +3,7 @@ package drtetris;
 
 public class Config {
     
-    public static final double BASESPEED = .16;
+    public static final double BASESPEED = .08;
     public static final double BASEXSPEED = .015;
     public static final double SPEEDINCREMENT = .02;
     public static final double SPEEDXINCREMENT = .002;
@@ -28,7 +28,7 @@ public class Config {
     public static final int NEXTBLOCKY = 115;
     public static final int TUNNELSHEETWIDTH = 100;
     
-    public static final String GAMEBACKGROUND = "res/gamebackgrounddirt.png";
+    public static final String GAMEBACKGROUND = "res/gamebackgroundend.png";
     public static final String MAINMENU = "res/mainmenu.png";
     public static final String ERRORSCREEN = "res/errorscreen.png";
     public static final String TUTORIALBUTTON = "res/tutorialbutton.png";
@@ -65,8 +65,8 @@ public class Config {
             "Amethyst",
             "Green Garnet",
             "Sand",
-            "Blue Tunnel",
             "Red Tunnel",
+            "Blue Tunnel",
             "Green Tunnel",
             "Roots"
         };
