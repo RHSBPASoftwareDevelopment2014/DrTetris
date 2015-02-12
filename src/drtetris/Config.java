@@ -37,6 +37,9 @@ public class Config {
     public static final String OPTIONSBUTTON = "res/optionsbutton.png";
     public static final String EXITBUTTON = "res/exitbutton.png";
     public static final String BACKMAINMENUBUTTON = "res/mainmenubutton.png";
+    public static final String INNEROPTIONSBUTTON = "res/optionsbutton2.png";
+    public static final String SAVEBUTTON = "res/savebutton.png";
+    public static final String INNEREXITBUTTON = "res/exitbutton2.png";
     public static final String PAUSESCREEN = "res/pausedscreen.png";
     public static final String GAMEOVERSCREEN = "res/gameoverscreen.png";
     public static final String DIRTTILE = "res/dirt.png";

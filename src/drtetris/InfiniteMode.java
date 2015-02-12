@@ -21,6 +21,10 @@ public class InfiniteMode implements GameState {
     private Image gameoverOverlay;
     
     private Button mainmenuButton;
+    private Button pausedOptionsButton;
+    private Button saveButton;
+    private Button pausedExitButton;
+    
     
     private Field field;
     
@@ -60,8 +64,11 @@ public class InfiniteMode implements GameState {
             background = new Image(Config.GAMEBACKGROUND);
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
-            mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 350);
-            field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
+            mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315);
+            pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380);
+            saveButton = new Button (Config.SAVEBUTTON, 250, 445);
+            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510);
+            field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field1")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
             blockGen = new BlockGenerator();
             currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = blockGen.nextBlock();
@@ -86,6 +93,9 @@ public class InfiniteMode implements GameState {
             } else if (paused) {
                 pausedOverlay.draw();
                 mainmenuButton.draw();
+                pausedOptionsButton.draw();
+                saveButton.draw();
+                pausedExitButton.draw();
             }
         } catch (Exception e) {
             sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
@@ -218,6 +228,10 @@ public class InfiniteMode implements GameState {
     public void mousePressed(int button, int x, int y) {
         if (paused) {
             mainmenuButton.mousePressed(button, x, y);
+            pausedOptionsButton.mousePressed(button, x, y);
+            saveButton.mousePressed(button, x, y);
+            pausedExitButton.mousePressed(button, x, y);
+
         }
     }
 
@@ -225,6 +239,9 @@ public class InfiniteMode implements GameState {
     public void mouseReleased(int button, int x, int y) {
         if (paused) {
             mainmenuButton.mouseReleased(button, x, y);
+            pausedOptionsButton.mouseReleased(button, x, y);
+            saveButton.mouseReleased(button, x, y);
+            pausedExitButton.mouseReleased(button, x, y);
         }
     }
 
@@ -232,6 +249,9 @@ public class InfiniteMode implements GameState {
     public void mouseMoved(int oldX, int oldY, int newX, int newY) {
         if (paused) {
             mainmenuButton.mouseMoved(oldX, oldY, newX, newY);
+            pausedOptionsButton.mouseMoved(oldX, oldY, newX, newY);
+            saveButton.mouseMoved(oldX, oldY, newX, newY);
+            pausedExitButton.mouseMoved(oldX, oldY, newX, newY);
         }
     }
 
@@ -239,6 +259,9 @@ public class InfiniteMode implements GameState {
     public void mouseDragged(int oldX, int oldY, int newX, int newY) {
         if (paused) {
             mainmenuButton.mouseDragged(oldX, oldY, newX, newY);
+            pausedOptionsButton.mouseDragged(oldX, oldY, newX, newY);
+            saveButton.mouseDragged(oldX, oldY, newX, newY);
+            pausedExitButton.mouseDragged(oldX, oldY, newX, newY);
         }
     }
 
