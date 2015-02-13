@@ -16,7 +16,7 @@ public class Tile {
     
     public Tile(int index) throws SlickException, ArrayIndexOutOfBoundsException {
         this.id = index;
-        this.gravity = false;
+        this.gravity = Config.TILEGRAVITYLIST[index];
         this.image = new SpriteSheet(new Image(Config.TILEIMAGELIST[index]).getScaledCopy(6 * Config.BLOCKSIZE, Config.BLOCKSIZE), Config.BLOCKSIZE, Config.BLOCKSIZE);
         this.locked = false;
     }

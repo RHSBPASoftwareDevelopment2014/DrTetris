@@ -101,4 +101,18 @@ public class Config {
             TILETYPETUNNEL,
             TILETYPENORMAL
         };
+    
+    public static final boolean[] TILEGRAVITYLIST = {
+        false,
+        false,
+        false,
+        false,
+        false,
+        false,
+        true,
+        true,
+        true,
+        true,
+        false
+    };
 }

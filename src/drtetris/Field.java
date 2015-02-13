@@ -1,5 +1,6 @@
 package drtetris;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +23,10 @@ public class Field extends TileMap {
         fallingBlocks = new CopyOnWriteArrayList<>();
         checkBlocks = true;
         
+        lockBlocks();
+    }
+    
+    private void lockBlocks() {
         for (Tile[] tiles : map) {
             for (Tile tile : tiles) {
                 if (tile != null && tile.getId() != 6) {
@@ -64,11 +69,12 @@ public class Field extends TileMap {
         updateState();
     }
 
-    public void reset() {
-        map = new Tile[getHeight()][getWidth()];
+    public void reset(Tile[][] map) throws IOException, NumberFormatException {
+        this.map = map;
         state = NORMAL;
         fallingBlocks = new CopyOnWriteArrayList<>();
         checkBlocks = true;
+        lockBlocks();
     }
 
     public void addMap(MovingBlock block, boolean breakBlocks) {

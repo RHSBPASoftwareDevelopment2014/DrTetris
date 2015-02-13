@@ -68,7 +68,7 @@ public class InfiniteMode implements GameState {
             pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380);
             saveButton = new Button (Config.SAVEBUTTON, 250, 445);
             pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510);
-            field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field1")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
+            field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
             blockGen = new BlockGenerator();
             currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = blockGen.nextBlock();
@@ -116,9 +116,15 @@ public class InfiniteMode implements GameState {
                 speed = Config.SPEEDLIMIT;
             }
             
-            if (paused && mainmenuButton.getClicked()) {
-                sbg.enterState(DrTetris.MAIN_MENU);
-                mainmenuButton.setClicked(false);
+            if (paused) {
+                if (mainmenuButton.getClicked()) {
+                    sbg.enterState(DrTetris.MAIN_MENU);
+                    mainmenuButton.setClicked(false);
+                }
+                
+                if (pausedExitButton.getClicked()) {
+                    gc.exit();
+                }
             }
             
             if (!paused && !gameover) {
@@ -127,8 +133,8 @@ public class InfiniteMode implements GameState {
             
             switch (field.getState()) {
                 case Field.CONTINUE:
-                    field.reset();
                     level++;
+                    field.reset(MapReader.getMapFromFile(Config.LEVELDIRECTORY, level + "/field"));
                     break;
                 case Field.END:
                     gameover = true;
