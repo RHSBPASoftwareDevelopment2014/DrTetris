@@ -121,10 +121,10 @@ public class Field extends TileMap {
         do {
             System.out.println("--Iterate--");
             lastSize = fallingBlocks.size();
-            List<String> antiFallingBlocks = new ArrayList<>();
+            List<LinkedTile> antiFallingBlocks = new ArrayList<>();
             for (int i = 0; i < map.length; i++) {
                 for (int j = 0; j < map[i].length; j++) {
-                    if (map[i][j] instanceof LinkedTile && !map[i][j].hasGravity()) {
+                    if (map[i][j] instanceof LinkedTile) {
                         if (i < map.length - 1 && map[i][j] != null && !map[i][j].isLocked() && (map[i + 1][j] == null || (map[i + 1][j] instanceof LinkedTile && ((LinkedTile) map[i][j]).getBlockId().equals(((LinkedTile) map[i + 1][j]).getBlockId())))) {
                             System.out.println("Added to Falling Blocks: (" + i + "," + j + ")");
                             System.out.println("\tTile: " + map[i][j].getId());
@@ -133,14 +133,14 @@ public class Field extends TileMap {
                             System.out.println("\tGravity: " + map[i][j].hasGravity());
                             System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].getId() : "null"));
                             fallingBlocks.add(new MovingBlock(new Tile[][]{{map[i][j]}}, TileMap.ROTATENONE, j, i * Config.BLOCKSIZE));
-                        } else if (!(map[i][j] instanceof Tunnel)) {
+                        } else {
                             System.out.println("Added to Anti-Falling Blocks: (" + i + "," + j + ")");
                             System.out.println("\tTile: " + map[i][j].getId());
                             System.out.println("\tId: " + ((LinkedTile) map[i][j]).getBlockId());
                             System.out.println("\tLocked: " + map[i][j].isLocked());
                             System.out.println("\tGravity: " + map[i][j].hasGravity());
                             System.out.println("\tBeneath: " + (i < map.length - 1 && map[i + 1][j] != null ? map[i + 1][j].getId() : "null"));
-                            antiFallingBlocks.add(((LinkedTile) map[i][j]).getBlockId());
+                            antiFallingBlocks.add(((LinkedTile) map[i][j]));
                         }
                     } else if (i < map.length - 1) {
                         if (map[i][j] != null && !map[i][j].isLocked() && map[i + 1][j] == null) {
@@ -156,9 +156,9 @@ public class Field extends TileMap {
                 }
             }
 
-            for (String blockId : antiFallingBlocks) {
+            for (LinkedTile antiFallingBlock : antiFallingBlocks) {
                 for (MovingBlock block : fallingBlocks) {
-                    if (block.getMap()[0][0] instanceof LinkedTile && !block.getMap()[0][0].hasGravity() && ((LinkedTile) block.getMap()[0][0]).getBlockId().equals(blockId)) {
+                    if (block.getMap()[0][0] instanceof LinkedTile && ((!block.getMap()[0][0].hasGravity() && !antiFallingBlock.hasGravity()) || (block.getMap()[0][0].getId() == 6 && antiFallingBlock.getId() == 6)) && ((LinkedTile) block.getMap()[0][0]).getBlockId().equals(antiFallingBlock.getBlockId())) {
                         fallingBlocks.remove(block);
                     }
                 }
@@ -174,7 +174,7 @@ public class Field extends TileMap {
         boolean[][] breakMap = new boolean[map.length][map[0].length];
         for (int i = 0; i < map.length; i++) {
             for (int j = 0; j < map[i].length; j++) {
-                if (map[i][j] != null) {
+                if (map[i][j] != null && map[i][j].getId() != 10) {
                     for (int k = (j > map[i].length - 4 ? 3 - map[i].length + j : j); k >= j - 3 && k >= 0; k--) {
                         if (map[i][k] != null && (map[i][k].equals(map[i][k + 1]) && map[i][k].equals(map[i][k + 2]) && map[i][k].equals(map[i][k + 3]))) {
                             breakMap[i][k] = true;
@@ -278,7 +278,7 @@ public class Field extends TileMap {
     private boolean isTunnel(int x, int y, int direction) {
 
         boolean isTunnel = false;
-        if (y < 3) {
+        if (y < 2) {
             isTunnel = true;
         } else {
             if (y > 0 && map[y - 1][x] instanceof Tunnel && !isTunnel) {

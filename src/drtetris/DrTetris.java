@@ -10,7 +10,7 @@ import org.newdawn.slick.util.Log;
 
 public class DrTetris extends StateBasedGame {
 
-    public static final int MAIN_MENU = 0, INFINITE_MODE = 1, ERR_REPORT = 2;
+    public static final int MAIN_MENU = 0, INFINITE_MODE = 1, CHALLENGE_MODE = 2, ERR_REPORT = 3;
     
     public DrTetris() {
         super("Siranga");
@@ -36,5 +36,6 @@ public class DrTetris extends StateBasedGame {
     public void initStatesList(GameContainer gc) throws SlickException {
         addState(new MainMenu(MAIN_MENU));
         addState(new InfiniteMode(INFINITE_MODE));
+        addState(new ChallengeMode(CHALLENGE_MODE));
     }
 }

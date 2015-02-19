@@ -5,7 +5,7 @@ public class Config {
     
     public static final double BASESPEED = .08;
     public static final double BASEXSPEED = .015;
-    public static final double SPEEDINCREMENT = .02;
+    public static final double SPEEDINCREMENT = .01;
     public static final double SPEEDXINCREMENT = .002;
     public static final double STACKTOLERANCE = 12;
     public static final double PARTICLESTRAY = 1.2;
@@ -54,7 +54,7 @@ public class Config {
     public static final String ROOTSTILE = "res/roots.png";
     public static final String LEVELDIRECTORY = "res/levels/";
     public static final String BLOCKDIRECTORY = "res/blocks/";
-    public static final String BACKGROUNDMUSIC = "res/LiveAndSlam.ogg";
+    public static final String BACKGROUNDMUSIC = "res/sounds/Island_Fever.ogg";
     
     public static final int TILETYPENORMAL = 0;
     public static final int TILETYPETUNNEL = 1;

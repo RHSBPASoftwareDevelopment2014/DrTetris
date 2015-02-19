@@ -7,6 +7,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -16,7 +17,6 @@ public class InfiniteMode implements GameState {
     
     private final int id;
     
-    private Image background;
     private Image pausedOverlay;
     private Image gameoverOverlay;
     
@@ -25,10 +25,7 @@ public class InfiniteMode implements GameState {
     private Button saveButton;
     private Button pausedExitButton;
     
-    
-    private Field field;
-    
-    private BlockGenerator blockGen;
+    private Level currentLevel;
     
     private Block nextBlock;
     private MovingBlock currentBlock;
@@ -36,13 +33,13 @@ public class InfiniteMode implements GameState {
     private boolean gameover = false,
             paused = false;
     
-    private double speed = Config.BASESPEED;
+    private double speed;
     
     private int stackDelay = 0,
             aDelay = 0,
             dDelay = 0;
     
-    private int level = 1;
+    private int level = 18;
     
     private boolean A = false,
             D = false;
@@ -61,17 +58,16 @@ public class InfiniteMode implements GameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) {
         try {
-            background = new Image(Config.GAMEBACKGROUND);
+	    currentLevel = new Level(String.valueOf(level));
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
             mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315);
             pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380);
             saveButton = new Button (Config.SAVEBUTTON, 250, 445);
             pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510);
-            field = new Field(MapReader.getMapFromFile(Config.LEVELDIRECTORY, "0/field")/**new Tile[Config.FIELDHEIGHT][Config.FIELDWIDTH]**/);
-            blockGen = new BlockGenerator();
-            currentBlock = new MovingBlock(blockGen.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
-            nextBlock = blockGen.nextBlock();
+            currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
+            nextBlock = currentLevel.nextBlock();
+	    speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
         } catch (SlickException | IOException | NumberFormatException e) {
             sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
             sbg.enterState(DrTetris.ERR_REPORT);
@@ -81,13 +77,13 @@ public class InfiniteMode implements GameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         try {
-            background.draw();
-            if(field.getState() == Field.NORMAL) {
+            currentLevel.getBackground().draw();
+            if(currentLevel.getField().getState() == Field.NORMAL) {
                 currentBlock.draw(Config.FIELDX, Config.FIELDY);
             }
             nextBlock.draw(Config.NEXTBLOCKX, Config.NEXTBLOCKY);
-            field.draw(Config.FIELDX, Config.FIELDY);
-            g.drawString("Level: " + level, 5, 5);
+            currentLevel.getField().draw(Config.FIELDX, Config.FIELDY);
+            g.drawString(currentLevel.getName(), 5, 5);
             if (gameover) {
                 gameoverOverlay.draw();
             } else if (paused) {
@@ -128,13 +124,16 @@ public class InfiniteMode implements GameState {
             }
             
             if (!paused && !gameover) {
-                field.update(delta);
+                currentLevel.getField().update(delta);
             }
             
-            switch (field.getState()) {
+            switch (currentLevel.getField().getState()) {
                 case Field.CONTINUE:
-                    level++;
-                    field.reset(MapReader.getMapFromFile(Config.LEVELDIRECTORY, level + "/field"));
+		    level++;
+                    currentLevel = new Level(String.valueOf(level));
+		    currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
+		    nextBlock = currentLevel.nextBlock();
+		    speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
                     break;
                 case Field.END:
                     gameover = true;
@@ -165,9 +164,9 @@ public class InfiniteMode implements GameState {
                             
                             int xDelta = -(int)((aDelay - Config.XMOVEDELAY) * speed);
                             if (xDelta < 0) {
-                                for (int i = -1; i >= xDelta && field.isRoom(currentBlock.getMap(), currentBlock.getX() + i, (int) currentBlock.getY(), Config.STACKTOLERANCE, false); i--) {
+                                for (int i = -1; i >= xDelta && currentLevel.getField().isRoom(currentBlock.getMap(), currentBlock.getX() + i, (int) currentBlock.getY(), Config.STACKTOLERANCE, false); i--) {
                                     currentBlock.modX(-1);
-                                    field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                                    currentLevel.getField().yLimit(currentBlock, Config.STACKTOLERANCE);
                                 }
                                 aDelay = Config.XMOVEDELAY;
                             }
@@ -182,19 +181,19 @@ public class InfiniteMode implements GameState {
                             
                             int xDelta = (int)((dDelay - Config.XMOVEDELAY) * speed);
                             if (xDelta > 0) {
-                                for (int i = 1; i <= xDelta && field.isRoom(currentBlock.getMap(), currentBlock.getX() + i, (int) currentBlock.getY(), Config.STACKTOLERANCE, false); i++) {
+                                for (int i = 1; i <= xDelta && currentLevel.getField().isRoom(currentBlock.getMap(), currentBlock.getX() + i, (int) currentBlock.getY(), Config.STACKTOLERANCE, false); i++) {
                                     currentBlock.modX(1);
-                                    field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                                    currentLevel.getField().yLimit(currentBlock, Config.STACKTOLERANCE);
                                 }
                                 dDelay = Config.XMOVEDELAY;
                             }
                         }
 
-                        if (!field.isRoom(currentBlock, Config.STACKTOLERANCE, true)) {
+                        if (!currentLevel.getField().isRoom(currentBlock, Config.STACKTOLERANCE, true)) {
                             if (stackDelay >= Config.BLOCKDELAY) {
-                                field.addMap(currentBlock);
+                                currentLevel.getField().addMap(currentBlock);
                                 currentBlock = new MovingBlock(nextBlock, TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
-                                nextBlock = blockGen.nextBlock();
+                                nextBlock = currentLevel.nextBlock();
                                 stackDelay = 0;
                                 aDelay = 0;
                                 dDelay = 0;
@@ -203,7 +202,7 @@ public class InfiniteMode implements GameState {
                             }
                         } else {
                             currentBlock.modY(delta * speed);
-                            field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                            currentLevel.getField().yLimit(currentBlock, Config.STACKTOLERANCE);
                             stackDelay = 0;
                         }
                     }
@@ -216,6 +215,7 @@ public class InfiniteMode implements GameState {
 
     @Override
     public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
+	    (new Music("res/sounds/BEAST1.ogg")).loop(1F, 0.07F);
     }
 
     @Override
@@ -295,8 +295,8 @@ public class InfiniteMode implements GameState {
                 switch(key) {
                     case Keyboard.KEY_Q:
                         currentBlock.modRotation(Block.ROTATELEFT);
-                        if (field.isRoom(currentBlock, Config.STACKTOLERANCE, false)) {
-                            field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                        if (currentLevel.getField().isRoom(currentBlock, Config.STACKTOLERANCE, false)) {
+                            currentLevel.getField().yLimit(currentBlock, Config.STACKTOLERANCE);
                         } else {
                             currentBlock.modRotation(Block.ROTATERIGHT);
                         }
@@ -304,26 +304,26 @@ public class InfiniteMode implements GameState {
 
                     case Keyboard.KEY_E:
                         currentBlock.modRotation(Block.ROTATERIGHT);
-                        if (field.isRoom(currentBlock, Config.STACKTOLERANCE, false)) {
-                            field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                        if (currentLevel.getField().isRoom(currentBlock, Config.STACKTOLERANCE, false)) {
+                            currentLevel.getField().yLimit(currentBlock, Config.STACKTOLERANCE);
                         } else {
                             currentBlock.modRotation(Block.ROTATELEFT);
                         }
                         break;
 
                     case Keyboard.KEY_A:
-                        if (field.isRoom(currentBlock.getMap(currentBlock.getRotation()), currentBlock.getX() - 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
+                        if (currentLevel.getField().isRoom(currentBlock.getMap(currentBlock.getRotation()), currentBlock.getX() - 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
                             currentBlock.modX(-1);
-                            field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                            currentLevel.getField().yLimit(currentBlock, Config.STACKTOLERANCE);
                         }
                         A = true;
                         D = false;
                         break;
 
                     case Keyboard.KEY_D:
-                        if (field.isRoom(currentBlock.getMap(currentBlock.getRotation()), currentBlock.getX() + 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
+                        if (currentLevel.getField().isRoom(currentBlock.getMap(currentBlock.getRotation()), currentBlock.getX() + 1, currentBlock.getY(), Config.STACKTOLERANCE, false)) {
                             currentBlock.modX(1);
-                             field.yLimit(currentBlock, Config.STACKTOLERANCE);
+                             currentLevel.getField().yLimit(currentBlock, Config.STACKTOLERANCE);
                         }
                         D = true;
                         A = false;
