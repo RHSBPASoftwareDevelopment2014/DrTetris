@@ -1,7 +1,7 @@
 
 package drtetris;
 
-import java.io.IOException;
+import java.awt.Color;
 import org.lwjgl.input.Keyboard;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -9,6 +9,8 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -17,8 +19,12 @@ public class InfiniteMode implements GameState {
     
     private final int id;
     
+    private UnicodeFont font;
+    private Music music;
+    
     private Image pausedOverlay;
     private Image gameoverOverlay;
+    private Image levelNameBackground;
     
     private Button mainmenuButton;
     private Button pausedOptionsButton;
@@ -39,7 +45,7 @@ public class InfiniteMode implements GameState {
             aDelay = 0,
             dDelay = 0;
     
-    private int level = 18;
+    private int level = 10;
     
     private boolean A = false,
             D = false;
@@ -58,9 +64,11 @@ public class InfiniteMode implements GameState {
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) {
         try {
+	    music = new Music(Config.GAMEBACKGROUNDMUSIC);
 	    currentLevel = new Level(String.valueOf(level));
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
+	    levelNameBackground = new Image(Config.LEVELNAMEBACKGROUND);
             mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315);
             pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380);
             saveButton = new Button (Config.SAVEBUTTON, 250, 445);
@@ -68,7 +76,11 @@ public class InfiniteMode implements GameState {
             currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = currentLevel.nextBlock();
 	    speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
-        } catch (SlickException | IOException | NumberFormatException e) {
+	    font = new UnicodeFont(Config.FONT, 14, false, false);
+	    font.addAsciiGlyphs();
+	    font.getEffects().add(new ColorEffect(Color.WHITE));
+	    font.loadGlyphs();
+        } catch (Exception e) {
             sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
             sbg.enterState(DrTetris.ERR_REPORT);
         }
@@ -77,13 +89,15 @@ public class InfiniteMode implements GameState {
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         try {
+	    g.setFont(font);
             currentLevel.getBackground().draw();
             if(currentLevel.getField().getState() == Field.NORMAL) {
                 currentBlock.draw(Config.FIELDX, Config.FIELDY);
             }
             nextBlock.draw(Config.NEXTBLOCKX, Config.NEXTBLOCKY);
             currentLevel.getField().draw(Config.FIELDX, Config.FIELDY);
-            g.drawString(currentLevel.getName(), 5, 5);
+	    levelNameBackground.draw(642, 273);
+            g.drawString(currentLevel.getName(), 643, 281);
             if (gameover) {
                 gameoverOverlay.draw();
             } else if (paused) {
@@ -215,7 +229,7 @@ public class InfiniteMode implements GameState {
 
     @Override
     public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-	    (new Music("res/sounds/BEAST1.ogg")).loop(1F, 0.07F);
+	    music.loop(1F, 0.07F);
     }
 
     @Override

@@ -32,7 +32,7 @@ class MainMenu implements GameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		backgroundMusic = new Music(Config.BACKGROUNDMUSIC);
+		backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
 		background = new Image(Config.MAINMENU);
 		tutorialbutton = new Button(Config.TUTORIALBUTTON, 5, 200);
 		challengebutton = new Button(Config.CHALLENGEBUTTON, 5, 265);
@@ -59,7 +59,7 @@ class MainMenu implements GameState {
 		}
 
 		if (challengebutton.getClicked()) {
-			sbg.enterState(DrTetris.CHALLENGE_MODE);
+			sbg.enterState(DrTetris.LEVEL_SELECTION);
 			challengebutton.setClicked(false);
 		}
 

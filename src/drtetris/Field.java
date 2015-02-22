@@ -55,8 +55,8 @@ public class Field extends TileMap {
             for (MovingBlock block : fallingBlocks) {
                 if (block != null) {
                     if (!isRoom(block, Config.STACKTOLERANCE, true)) {
-                        addMap(block, false);
-                        checkBlocks = true;
+                        addMap(block, false, false);
+			checkBlocks = true;
                         fallingBlocks.remove(block);
                     } else {
                         block.modY(delta * Config.FALLINGBLOCKSPEED);
@@ -77,19 +77,19 @@ public class Field extends TileMap {
         lockBlocks();
     }
 
-    public void addMap(MovingBlock block, boolean breakBlocks) {
-        addMap(block.getMap(), block.getX(), block.getY(), breakBlocks);
+    public void addMap(MovingBlock block, boolean breakBlocks, boolean findFallingBlocks) {
+        addMap(block.getMap(), block.getX(), block.getY(), breakBlocks, findFallingBlocks);
     }
 
     public void addMap(MovingBlock block) {
-        addMap(block.getMap(), block.getX(), block.getY(), true);
+        addMap(block.getMap(), block.getX(), block.getY(), true, true);
     }
 
     public void addMap(TileMap map, int rotation, int x, double y) {
-        addMap(map.getMap(rotation), x, y, true);
+        addMap(map.getMap(rotation), x, y, true, true);
     }
 
-    public void addMap(Tile[][] map, int x, double y, boolean breakBlocks) {
+    public void addMap(Tile[][] map, int x, double y, boolean breakBlocks, boolean findFallingBlocks) {
         int yPos = (int) (y + Config.FIELDOFFSET) / Config.BLOCKSIZE;
         String blockId = UUID.randomUUID().toString();
         for (int i = 0; i < map.length; i++) {
@@ -110,9 +110,10 @@ public class Field extends TileMap {
 
         if (breakBlocks) {
             breakBlocks();
+	}
+	if (findFallingBlocks) {
             findFallingBlocks();
-            updateState();
-        }
+	}
     }
 
     private void findFallingBlocks() {

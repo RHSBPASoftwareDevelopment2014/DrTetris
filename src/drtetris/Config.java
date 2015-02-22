@@ -28,7 +28,6 @@ public class Config {
     public static final int NEXTBLOCKY = 115;
     public static final int TUNNELSHEETWIDTH = 100;
     
-    public static final String GAMEBACKGROUND = "res/gamebackgroundend.png";
     public static final String MAINMENU = "res/mainmenu.png";
     public static final String ERRORSCREEN = "res/errorscreen.png";
     public static final String TUTORIALBUTTON = "res/tutorialbutton.png";
@@ -52,9 +51,13 @@ public class Config {
     public static final String REDTUNNEL = "res/redtunnelspritesheet.png";
     public static final String GREENTUNNEL = "res/greentunnelspritesheet.png";
     public static final String ROOTSTILE = "res/roots.png";
+    public static final String LEVELNAMEBACKGROUND = "res/levelnamebackground.png";
+    public static final String LEVELSELECTIONBACKGROUND = "res/levelselect.png";
     public static final String LEVELDIRECTORY = "res/levels/";
     public static final String BLOCKDIRECTORY = "res/blocks/";
-    public static final String BACKGROUNDMUSIC = "res/sounds/Island_Fever.ogg";
+    public static final String MAINMENUBACKGROUNDMUSIC = "res/sounds/Island_Fever.ogg";
+    public static final String GAMEBACKGROUNDMUSIC = "res/sounds/BEAST1.ogg";
+    public static final String FONT = "res/font.TTF";
     
     public static final int TILETYPENORMAL = 0;
     public static final int TILETYPETUNNEL = 1;
