@@ -8,7 +8,6 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.CrossStateTransition;
 
 public class MainMenu implements GameState {
 
@@ -36,11 +35,11 @@ public class MainMenu implements GameState {
 		try {
 			backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
 			background = new Image(Config.MAINMENU);
-			tutorialbutton = new Button(Config.TUTORIALBUTTON, 5, 200, 300, 50);
-			challengebutton = new Button(Config.CHALLENGEBUTTON, 5, 265, 300, 50);
-			infinitebutton = new Button(Config.INFINITEBUTTON, 5, 330, 300, 50);
-			optionsbutton = new Button(Config.OPTIONSBUTTON, 5, 395, 300, 50);
-			exitbutton = new Button(Config.EXITBUTTON, 5, 460, 300, 50);
+			tutorialbutton = new Button(Config.TUTORIALBUTTON, 5, 200, 300, 60);
+			challengebutton = new Button(Config.CHALLENGEBUTTON, 5, 265, 300, 60);
+			infinitebutton = new Button(Config.INFINITEBUTTON, 5, 330, 300, 60);
+			optionsbutton = new Button(Config.OPTIONSBUTTON, 5, 395, 300, 60);
+			exitbutton = new Button(Config.EXITBUTTON, 5, 460, 300, 60);
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);
@@ -65,6 +64,13 @@ public class MainMenu implements GameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		try {
+			backgroundMusic.setVolume(((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
+			
+			if (tutorialbutton.getClicked()) {
+				sbg.enterState(DrTetris.TUTORIAL);
+				tutorialbutton.setClicked(false);
+			}
+			
 			if (infinitebutton.getClicked()) {
 				sbg.enterState(DrTetris.INFINITE_MODE);
 				infinitebutton.setClicked(false);
@@ -94,7 +100,7 @@ public class MainMenu implements GameState {
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
 			if (!backgroundMusic.playing()) {
-				backgroundMusic.loop(1F, 0.07F);
+				backgroundMusic.loop(1F, ((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
 			}
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));

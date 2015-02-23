@@ -1,11 +1,14 @@
 
 package drtetris;
 
+import java.awt.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.UnicodeFont;
+import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -14,8 +17,9 @@ public class Options implements GameState {
 	private final int id;
 	
 	private int difficulty;
-	private float volume;
+	private int volume;
 	
+	private UnicodeFont font;
 	private Image background;
 	private int backgroundState;
 	private Button backButton;
@@ -29,7 +33,7 @@ public class Options implements GameState {
 		this.id = id;
 		this.backgroundState = backgroundState;
 		difficulty = Config.MEDIUM;
-		volume = 1.0f;
+		volume = 100;
 	}
 	
 	@Override
@@ -46,19 +50,23 @@ public class Options implements GameState {
 	}
 	
 	public float getVolume() {
-		return volume;
+		return ((float) volume) / 100f;
 	}
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
 			background = new Image(Config.OPTIONSBACKGROUND);
-			backButton = new Button(Config.BACKBUTTON, 250, 500, 300, 50);
-			plusButton = new Button(Config.PLUSBUTTON, 250, 395, 50, 50);
-			minusButton = new Button(Config.MINUSBUTTON, 500, 395, 50, 50);
-			easyButton = new Button(Config.EASYBUTTON, 250, 150, 300, 50);
-			mediumButton = new Button(Config.MEDIUMBUTTON, 250, 201, 300, 50);
-			extremeButton = new Button(Config.EXTREMEBUTTON, 250, 252, 300, 50);
+			backButton = new Button(Config.BACKBUTTON, 250, 500, 300, 60);
+			plusButton = new Button(Config.PLUSBUTTON, 500, 395, 50, 50);
+			minusButton = new Button(Config.MINUSBUTTON, 250, 395, 50, 50);
+			easyButton = new Button(Config.EASYBUTTON, 250, 150, 300, 60);
+			mediumButton = new Button(Config.MEDIUMBUTTON, 250, 212, 300, 60);
+			extremeButton = new Button(Config.EXTREMEBUTTON, 250, 274, 300, 60);
+			font = new UnicodeFont(Config.FONT, 36, false, false);
+			font.addAsciiGlyphs();
+			font.getEffects().add(new ColorEffect(Color.BLACK));
+			font.loadGlyphs();
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);
@@ -69,6 +77,7 @@ public class Options implements GameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		try {
 			sbg.getState(backgroundState).render(gc, sbg, g);
+			g.setFont(font);
 			background.draw();
 			backButton.draw();
 			plusButton.draw();
@@ -76,15 +85,20 @@ public class Options implements GameState {
 			easyButton.draw();
 			mediumButton.draw();
 			extremeButton.draw();
+			g.drawString(String.valueOf(volume), 360, 403);
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);
 		}
 	}
 
+	private int volumeDelay = 250;
+	
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		try {
+			volumeDelay += delta;
+			
 			if (backButton.getClicked()) {
 				sbg.enterState(backgroundState);
 				backButton.setClicked(false);
@@ -92,25 +106,46 @@ public class Options implements GameState {
 			
 			if (easyButton.getClicked()) {
 				difficulty = Config.EASY;
+				easyButton.setClicked(false);
 			}
 			
 			if (mediumButton.getClicked()) {
 				difficulty = Config.MEDIUM;
+				mediumButton.setClicked(false);
 			}
 			
 			if (extremeButton.getClicked()) {
 				difficulty = Config.EXTREME;
+				extremeButton.setClicked(false);
+			}
+			
+			if (volumeDelay >= 250) {
+				if (plusButton.getClicked()) {
+					if (volume < 100) {
+						volume += 5;
+						volumeDelay = 0;
+						plusButton.setClicked(false);
+					}
+				}
+			
+				if (minusButton.getClicked()) {
+					if (volume > 0) {
+						volume -= 5;
+						volumeDelay = 0;
+						minusButton.setClicked(false);
+					}
+				}
 			}
 			
 			switch(difficulty) {
 				case Config.EASY:
-					easyButton.setClicked(true);
+					easyButton.setState(Button.SELECTED);
 					break;
 				case Config.MEDIUM:
-					mediumButton.setClicked(true);
+					mediumButton.setState(Button.SELECTED);
 					break;
 				case Config.EXTREME:
-					extremeButton.setClicked(true);
+					extremeButton.setState(Button.SELECTED);
 					break;
 			}
 		} catch (Exception e) {

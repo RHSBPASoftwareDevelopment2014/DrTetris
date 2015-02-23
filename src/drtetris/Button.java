@@ -22,19 +22,22 @@ public class Button {
     }
     
     public void draw() {
-        switch (state) {
-        
-            case SELECTED:
-                sheet.getSprite(1, 0).draw(x, y);
-                break;
-                
-            case CLICKED:
-                sheet.getSprite(2, 0).draw(x, y);
-                break;
-                
-            default:
-                sheet.getSprite(0, 0).draw(x, y);
-        }
+	if (click) {
+		sheet.getSprite(2, 0).draw(x, y);
+	} else {
+		switch (state) {
+
+		    case SELECTED:
+			sheet.getSprite(1, 0).draw(x, y);
+			break;
+
+		    case CLICKED:
+			sheet.getSprite(2, 0).draw(x, y);
+			break;
+		    default:
+			sheet.getSprite(0, 0).draw(x, y);
+		}
+	}
     }
     
     public void draw(int x, int y) {
@@ -45,11 +48,6 @@ public class Button {
     
     public void setState(int state) {
         this.state = state;
-	if (state == CLICKED) {
-		click = true;
-	} else {
-		click = false;
-	}
     }
     
     public int getState() {
@@ -57,11 +55,7 @@ public class Button {
     }
     
     public void setClicked(boolean click) {
-	if (click) {
-		setState(CLICKED);
-	} else {
-		setState(UNSELECTED);
-	}
+	this.click = click;
     }
     
     public boolean getClicked() {

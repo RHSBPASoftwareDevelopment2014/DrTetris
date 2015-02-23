@@ -65,6 +65,20 @@ public class InfiniteMode implements GameState {
     public void setDifficulty(int difficulty) {
 	    this.difficulty = difficulty;
     }
+    
+    public void setLevel(int level) {
+	try {
+		this.level = level;
+		currentLevel = new Level(String.valueOf(level));
+		currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
+		nextBlock = currentLevel.nextBlock();
+		stackDelay = 0;
+                aDelay = 0;
+                dDelay = 0;
+	} catch (Exception e) {
+		exception = e;
+	}
+    }
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) {
@@ -75,10 +89,10 @@ public class InfiniteMode implements GameState {
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
 	    levelNameBackground = new Image(Config.LEVELNAMEBACKGROUND);
-            mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315, 300, 50);
-            pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380, 300, 50);
-            saveButton = new Button (Config.SAVEBUTTON, 250, 445, 300, 50);
-            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510, 300, 50);
+            mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315, 300, 60);
+            pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380, 300, 60);
+            saveButton = new Button (Config.SAVEBUTTON, 250, 445, 300, 60);
+            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510, 300, 60);
             currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = currentLevel.nextBlock();
 	    speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
@@ -104,7 +118,6 @@ public class InfiniteMode implements GameState {
             currentLevel.getField().draw(Config.FIELDX, Config.FIELDY);
 	    levelNameBackground.draw(642, 273);
             g.drawString(currentLevel.getName(), 643, 281);
-	    g.drawString(String.valueOf(speed), 0, 0);
             if (gameover) {
                 gameoverOverlay.draw();
             } else if (paused) {
@@ -129,6 +142,8 @@ public class InfiniteMode implements GameState {
                 sbg.enterState(DrTetris.ERR_REPORT);
             }
             
+	    music.setVolume(((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
+	    
 	    difficulty = ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty();
 	    
             if (speed > Config.SPEEDLIMIT) {
@@ -244,7 +259,7 @@ public class InfiniteMode implements GameState {
 
     @Override
     public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-	    music.loop(1F, 0.07F);
+	    music.loop(1F, ((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
     }
 
     @Override

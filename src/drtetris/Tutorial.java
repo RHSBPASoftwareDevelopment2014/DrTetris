@@ -1,27 +1,23 @@
 
 package drtetris;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
-import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class Credits implements GameState {
+public class Tutorial implements GameState {
 
 	private final int id;
 	
-	private Image credits;
-	private Music backgroundMusic;
+	private SpriteSheet tutorialSlides;
+	private int slide = 0;
 	
-	private int y = 0;
-	private boolean clicked = false;
-	
-	public Credits(int id) {
+	public Tutorial(int id) {
 		this.id = id;
 	}
 	
@@ -32,51 +28,24 @@ public class Credits implements GameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		try {
-			backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
-			credits = new Image(Config.CREDITSIMAGE);
-		} catch (Exception e) {
-			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
-			sbg.enterState(DrTetris.ERR_REPORT);
-		}
+		tutorialSlides = new SpriteSheet(new Image(Config.TUTORIALSLIDES), 800, 600);
 	}
 
 	@Override
-	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		try {
-			credits.draw(0, y);
-		} catch (Exception e) {
-			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
-			sbg.enterState(DrTetris.ERR_REPORT);
-		}
+	public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
+		tutorialSlides.getSprite(slide, 0).draw();
 	}
 
 	@Override
-	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		try {
-			backgroundMusic.setVolume(((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
-			if (clicked) {
-				sbg.enterState(DrTetris.MAIN_MENU);
-			}
-			if (y <= 600 - credits.getHeight()) {
-				y = 600 - credits.getHeight();
-			} else {
-				y -= delta * Config.CREDITSSPEED;
-			}
-		} catch (Exception e) {
-			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
-			sbg.enterState(DrTetris.ERR_REPORT);
+	public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
+		if (slide > 7) {
+			sbg.enterState(DrTetris.MAIN_MENU);
+			slide = 0;
 		}
 	}
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		try {
-			backgroundMusic.loop(1F, ((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
-		} catch (Exception e) {
-			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
-			sbg.enterState(DrTetris.ERR_REPORT);
-		}
 	}
 
 	@Override
@@ -89,7 +58,7 @@ public class Credits implements GameState {
 
 	@Override
 	public void mouseClicked(int i, int i1, int i2, int i3) {
-		clicked = true;
+		slide++;
 	}
 
 	@Override
@@ -131,7 +100,7 @@ public class Credits implements GameState {
 
 	@Override
 	public void keyReleased(int i, char c) {
-		clicked = true;
+		slide++;
 	}
 
 	@Override

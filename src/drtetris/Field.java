@@ -46,24 +46,23 @@ public class Field extends TileMap {
     }
 
     public void update(int delta) {
-        if (checkBlocks && fallingBlocks.size() <= 0) {
-            breakBlocks();
-            findFallingBlocks();
-
-            checkBlocks = false;
-        } else {
-            for (MovingBlock block : fallingBlocks) {
-                if (block != null) {
-                    if (!isRoom(block, Config.STACKTOLERANCE, true)) {
-                        addMap(block, false, false);
-			checkBlocks = true;
-                        fallingBlocks.remove(block);
-                    } else {
-                        block.modY(delta * Config.FALLINGBLOCKSPEED);
-                        yLimit(block, Config.STACKTOLERANCE);
-                    }
-                }
-            }
+	for (MovingBlock block : fallingBlocks) {
+		if (block != null) {
+			if (!isRoom(block, Config.STACKTOLERANCE, true)) {
+				addMap(block, false, false);
+				checkBlocks = true;
+				fallingBlocks.remove(block);
+			} else {
+				block.modY(delta * Config.FALLINGBLOCKSPEED);
+				yLimit(block, Config.STACKTOLERANCE);
+			}
+		}
+	}
+	
+	if (checkBlocks && fallingBlocks.size() <= 0) {
+		breakBlocks();
+		findFallingBlocks();
+		checkBlocks = false;
         }
 
         updateState();

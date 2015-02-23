@@ -28,6 +28,7 @@ public class Config {
     public static final int NEXTBLOCKX = 658;
     public static final int NEXTBLOCKY = 115;
     public static final int TUNNELSHEETWIDTH = 100;
+    public static final int NUMBEROFLEVELS = 20;
     
     public static final String MAINMENU = "res/mainmenu.png";
     public static final String ERRORSCREEN = "res/errorscreen.png";
@@ -63,6 +64,7 @@ public class Config {
     public static final String LEVELSELECTIONBACKGROUND = "res/levelselect.png";
     public static final String CREDITSIMAGE = "res/credits.png";
     public static final String OPTIONSBACKGROUND = "res/optionsmenu.png";
+    public static final String TUTORIALSLIDES = "res/tutorial.png";
     public static final String LEVELDIRECTORY = "res/levels/";
     public static final String BLOCKDIRECTORY = "res/blocks/";
     public static final String MAINMENUBACKGROUNDMUSIC = "res/sounds/Island_Fever.ogg";
