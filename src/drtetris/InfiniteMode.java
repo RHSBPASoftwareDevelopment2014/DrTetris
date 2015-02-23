@@ -45,7 +45,7 @@ public class InfiniteMode implements GameState {
             aDelay = 0,
             dDelay = 0;
     
-    private int level = 10;
+    private int level = 0;
     
     private boolean A = false,
             D = false;
@@ -75,7 +75,7 @@ public class InfiniteMode implements GameState {
             pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510);
             currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = currentLevel.nextBlock();
-	    speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
+	    speed = Config.BASESPEED + Config.SPEEDINCREMENT * level;
 	    font = new UnicodeFont(Config.FONT, 14, false, false);
 	    font.addAsciiGlyphs();
 	    font.getEffects().add(new ColorEffect(Color.WHITE));

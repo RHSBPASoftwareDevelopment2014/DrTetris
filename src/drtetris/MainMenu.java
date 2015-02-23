@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-class MainMenu implements GameState {
+public class MainMenu implements GameState {
 
 	private final int id;
 
@@ -32,45 +32,65 @@ class MainMenu implements GameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
-		background = new Image(Config.MAINMENU);
-		tutorialbutton = new Button(Config.TUTORIALBUTTON, 5, 200);
-		challengebutton = new Button(Config.CHALLENGEBUTTON, 5, 265);
-		infinitebutton = new Button(Config.INFINITEBUTTON, 5, 330);
-		optionsbutton = new Button(Config.OPTIONSBUTTON, 5, 395);
-		exitbutton = new Button(Config.EXITBUTTON, 5, 460);
+		try {
+			backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
+			background = new Image(Config.MAINMENU);
+			tutorialbutton = new Button(Config.TUTORIALBUTTON, 5, 200);
+			challengebutton = new Button(Config.CHALLENGEBUTTON, 5, 265);
+			infinitebutton = new Button(Config.INFINITEBUTTON, 5, 330);
+			optionsbutton = new Button(Config.OPTIONSBUTTON, 5, 395);
+			exitbutton = new Button(Config.EXITBUTTON, 5, 460);
+		} catch (Exception e) {
+			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
+			sbg.enterState(DrTetris.ERR_REPORT);
+		}
 	}
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		background.draw();
-		tutorialbutton.draw();
-		challengebutton.draw();
-		infinitebutton.draw();
-		optionsbutton.draw();
-		exitbutton.draw();
+		try {
+			background.draw();
+			tutorialbutton.draw();
+			challengebutton.draw();
+			infinitebutton.draw();
+			optionsbutton.draw();
+			exitbutton.draw();
+		} catch (Exception e) {
+			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
+			sbg.enterState(DrTetris.ERR_REPORT);
+		}
 	}
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		if (infinitebutton.getClicked()) {
-			sbg.enterState(DrTetris.INFINITE_MODE);
-			infinitebutton.setClicked(false);
-		}
+		try {
+			if (infinitebutton.getClicked()) {
+				sbg.enterState(DrTetris.INFINITE_MODE);
+				infinitebutton.setClicked(false);
+			}
 
-		if (challengebutton.getClicked()) {
-			sbg.enterState(DrTetris.LEVEL_SELECTION);
-			challengebutton.setClicked(false);
-		}
+			if (challengebutton.getClicked()) {
+				sbg.enterState(DrTetris.LEVEL_SELECTION);
+				challengebutton.setClicked(false);
+			}
 
-		if (exitbutton.getClicked()) {
-			gc.exit();
+			if (exitbutton.getClicked()) {
+				gc.exit();
+			}
+		} catch (Exception e) {
+			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
+			sbg.enterState(DrTetris.ERR_REPORT);
 		}
 	}
 
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		backgroundMusic.loop(1F, 0.07F);
+		try {
+			backgroundMusic.loop(1F, 0.07F);
+		} catch (Exception e) {
+			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
+			sbg.enterState(DrTetris.ERR_REPORT);
+		}
 	}
 
 	@Override

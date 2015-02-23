@@ -13,6 +13,7 @@ public class Config {
     public static final double SPEEDXLIMIT = .15;
     public static final double DEFAULTY = -50;
     public static final double FALLINGBLOCKSPEED = .15;
+    public static final double CREDITSSPEED = .1;
     
     public static final int BLOCKSIZE = 40;
     public static final int FIELDHEIGHT = 12;
@@ -53,6 +54,7 @@ public class Config {
     public static final String ROOTSTILE = "res/roots.png";
     public static final String LEVELNAMEBACKGROUND = "res/levelnamebackground.png";
     public static final String LEVELSELECTIONBACKGROUND = "res/levelselect.png";
+    public static final String CREDITSIMAGE = "res/credits.png";
     public static final String LEVELDIRECTORY = "res/levels/";
     public static final String BLOCKDIRECTORY = "res/blocks/";
     public static final String MAINMENUBACKGROUNDMUSIC = "res/sounds/Island_Fever.ogg";
