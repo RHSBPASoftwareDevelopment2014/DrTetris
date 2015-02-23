@@ -9,13 +9,13 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-public class LevelSelectionMode implements GameState {
+public class LevelSelection implements GameState {
 
 	private int id;
 	
 	private Image background;
 	
-	public LevelSelectionMode(int id) {
+	public LevelSelection(int id) {
 		this.id = id;
 	}
 	

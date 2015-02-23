@@ -12,8 +12,8 @@ public class Config {
     public static final double SPEEDLIMIT = 1.0;
     public static final double SPEEDXLIMIT = .15;
     public static final double DEFAULTY = -50;
-    public static final double FALLINGBLOCKSPEED = .15;
-    public static final double CREDITSSPEED = .1;
+    public static final double FALLINGBLOCKSPEED = .2;
+    public static final double CREDITSSPEED = .15;
     
     public static final int BLOCKSIZE = 40;
     public static final int FIELDHEIGHT = 12;
@@ -40,6 +40,13 @@ public class Config {
     public static final String INNEROPTIONSBUTTON = "res/optionsbutton2.png";
     public static final String SAVEBUTTON = "res/savebutton.png";
     public static final String INNEREXITBUTTON = "res/exitbutton2.png";
+    public static final String BACKBUTTON = "res/backbutton.png";
+    public static final String PLUSBUTTON = "res/plusbutton.png";
+    public static final String MINUSBUTTON = "res/minusbutton.png";
+    public static final String LEVELSELECTBUTTON = "res/levelselectoutline.png";
+    public static final String EASYBUTTON = "res/easybutton.png";
+    public static final String MEDIUMBUTTON = "res/mediumbutton.png";
+    public static final String EXTREMEBUTTON = "res/extremebutton.png";
     public static final String PAUSESCREEN = "res/pausedscreen.png";
     public static final String GAMEOVERSCREEN = "res/gameoverscreen.png";
     public static final String DIRTTILE = "res/dirt.png";
@@ -55,15 +62,15 @@ public class Config {
     public static final String LEVELNAMEBACKGROUND = "res/levelnamebackground.png";
     public static final String LEVELSELECTIONBACKGROUND = "res/levelselect.png";
     public static final String CREDITSIMAGE = "res/credits.png";
+    public static final String OPTIONSBACKGROUND = "res/optionsmenu.png";
     public static final String LEVELDIRECTORY = "res/levels/";
     public static final String BLOCKDIRECTORY = "res/blocks/";
     public static final String MAINMENUBACKGROUNDMUSIC = "res/sounds/Island_Fever.ogg";
     public static final String GAMEBACKGROUNDMUSIC = "res/sounds/BEAST1.ogg";
     public static final String FONT = "res/font.TTF";
     
-    public static final int TILETYPENORMAL = 0;
-    public static final int TILETYPETUNNEL = 1;
-    public static final int TILETYPEAIR = 2;
+    public static final int TILETYPENORMAL = 0, TILETYPETUNNEL = 1, TILETYPEAIR = 2;
+    public static final int EASY = 0, MEDIUM = 1, EXTREME = 2;
     
     public static final String[] TILENAMELIST = {
             null,

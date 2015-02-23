@@ -8,6 +8,7 @@ import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.state.transition.CrossStateTransition;
 
 public class MainMenu implements GameState {
 
@@ -35,11 +36,11 @@ public class MainMenu implements GameState {
 		try {
 			backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
 			background = new Image(Config.MAINMENU);
-			tutorialbutton = new Button(Config.TUTORIALBUTTON, 5, 200);
-			challengebutton = new Button(Config.CHALLENGEBUTTON, 5, 265);
-			infinitebutton = new Button(Config.INFINITEBUTTON, 5, 330);
-			optionsbutton = new Button(Config.OPTIONSBUTTON, 5, 395);
-			exitbutton = new Button(Config.EXITBUTTON, 5, 460);
+			tutorialbutton = new Button(Config.TUTORIALBUTTON, 5, 200, 300, 50);
+			challengebutton = new Button(Config.CHALLENGEBUTTON, 5, 265, 300, 50);
+			infinitebutton = new Button(Config.INFINITEBUTTON, 5, 330, 300, 50);
+			optionsbutton = new Button(Config.OPTIONSBUTTON, 5, 395, 300, 50);
+			exitbutton = new Button(Config.EXITBUTTON, 5, 460, 300, 50);
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);
@@ -73,6 +74,12 @@ public class MainMenu implements GameState {
 				sbg.enterState(DrTetris.LEVEL_SELECTION);
 				challengebutton.setClicked(false);
 			}
+			
+			if (optionsbutton.getClicked()) {
+				((Options) sbg.getState(DrTetris.OPTIONS)).setBackgroundState(sbg.getCurrentStateID());
+				sbg.enterState(DrTetris.OPTIONS);
+				optionsbutton.setClicked(false);
+			}
 
 			if (exitbutton.getClicked()) {
 				gc.exit();
@@ -86,7 +93,9 @@ public class MainMenu implements GameState {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
-			backgroundMusic.loop(1F, 0.07F);
+			if (!backgroundMusic.playing()) {
+				backgroundMusic.loop(1F, 0.07F);
+			}
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);

@@ -126,6 +126,7 @@ public class Credits implements GameState {
 
 	@Override
 	public void keyPressed(int i, char c) {
+		clicked = true;
 	}
 
 	@Override

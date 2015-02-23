@@ -15,8 +15,8 @@ public class Button {
     private boolean click = false;
     private int x, y;
     
-    public Button(String image, int x, int y) throws SlickException {
-        sheet = new SpriteSheet(new Image(image), 300, 60);
+    public Button(String image, int x, int y, int width, int height) throws SlickException {
+        sheet = new SpriteSheet(new Image(image), width, height);
         this.x = x;
         this.y = y;
     }
@@ -45,6 +45,11 @@ public class Button {
     
     public void setState(int state) {
         this.state = state;
+	if (state == CLICKED) {
+		click = true;
+	} else {
+		click = false;
+	}
     }
     
     public int getState() {
@@ -52,7 +57,11 @@ public class Button {
     }
     
     public void setClicked(boolean click) {
-        this.click = click;
+	if (click) {
+		setState(CLICKED);
+	} else {
+		setState(UNSELECTED);
+	}
     }
     
     public boolean getClicked() {
@@ -65,32 +74,32 @@ public class Button {
     
     public void mousePressed(int button, int x, int y) {
         if(isFocusRegion(x, y)) {
-            setState(2);
+            setState(CLICKED);
         }
     }
 
     public void mouseReleased(int button, int x, int y) {
         if (isFocusRegion(x, y)) {
-            setState(1);
+            setState(SELECTED);
             setClicked(true);
         } else {
-            setState(0);
+            setState(UNSELECTED);
         }
     }
 
     public void mouseMoved(int oldX, int oldY, int newX, int newY) {
         if (isFocusRegion(newX, newY)) {
-            setState(1);
+            setState(SELECTED);
         } else {
-            setState(0);
+            setState(UNSELECTED);
         }
     }
 
     public void mouseDragged(int oldX, int oldY, int newX, int newY) {
         if (isFocusRegion(newX, newY)) {
-            setState(2);
+            setState(CLICKED);
         } else {
-            setState(0);
+            setState(UNSELECTED);
         }
     }
 }

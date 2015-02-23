@@ -36,8 +36,9 @@ public class DrTetris extends StateBasedGame {
     public void initStatesList(GameContainer gc) throws SlickException {
 	this.addState(new Credits(CREDITS));
         this.addState(new MainMenu(MAIN_MENU));
+	this.addState(new LevelSelection(LEVEL_SELECTION));
+	this.addState(new ChallengeMode(CHALLENGE_MODE));
         this.addState(new InfiniteMode(INFINITE_MODE));
-        this.addState(new ChallengeMode(CHALLENGE_MODE));
-	this.addState(new LevelSelectionMode(LEVEL_SELECTION));
+	this.addState(new Options(OPTIONS, MAIN_MENU));
     }
 }

@@ -46,6 +46,7 @@ public class InfiniteMode implements GameState {
             dDelay = 0;
     
     private int level = 0;
+    private int difficulty;
     
     private boolean A = false,
             D = false;
@@ -60,22 +61,27 @@ public class InfiniteMode implements GameState {
     public int getID() {
         return id;
     }
+    
+    public void setDifficulty(int difficulty) {
+	    this.difficulty = difficulty;
+    }
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) {
         try {
+	    difficulty = ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty();
 	    music = new Music(Config.GAMEBACKGROUNDMUSIC);
 	    currentLevel = new Level(String.valueOf(level));
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
 	    levelNameBackground = new Image(Config.LEVELNAMEBACKGROUND);
-            mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315);
-            pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380);
-            saveButton = new Button (Config.SAVEBUTTON, 250, 445);
-            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510);
+            mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315, 300, 50);
+            pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380, 300, 50);
+            saveButton = new Button (Config.SAVEBUTTON, 250, 445, 300, 50);
+            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510, 300, 50);
             currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = currentLevel.nextBlock();
-	    speed = Config.BASESPEED + Config.SPEEDINCREMENT * level;
+	    speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
 	    font = new UnicodeFont(Config.FONT, 14, false, false);
 	    font.addAsciiGlyphs();
 	    font.getEffects().add(new ColorEffect(Color.WHITE));
@@ -98,6 +104,7 @@ public class InfiniteMode implements GameState {
             currentLevel.getField().draw(Config.FIELDX, Config.FIELDY);
 	    levelNameBackground.draw(642, 273);
             g.drawString(currentLevel.getName(), 643, 281);
+	    g.drawString(String.valueOf(speed), 0, 0);
             if (gameover) {
                 gameoverOverlay.draw();
             } else if (paused) {
@@ -135,6 +142,12 @@ public class InfiniteMode implements GameState {
                 if (pausedExitButton.getClicked()) {
                     gc.exit();
                 }
+		
+		if (pausedOptionsButton.getClicked()) {
+		    ((Options) sbg.getState(DrTetris.OPTIONS)).setBackgroundState(sbg.getCurrentStateID());
+		    sbg.enterState(DrTetris.OPTIONS);
+		    pausedOptionsButton.setClicked(false);
+		}
             }
             
             if (!paused && !gameover) {
@@ -147,7 +160,7 @@ public class InfiniteMode implements GameState {
                     currentLevel = new Level(String.valueOf(level));
 		    currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
 		    nextBlock = currentLevel.nextBlock();
-		    speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
+		    speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
                     break;
                 case Field.END:
                     gameover = true;
@@ -343,10 +356,10 @@ public class InfiniteMode implements GameState {
                         A = false;
                         break;
                     case Keyboard.KEY_S:
-                        speed = (Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1)) * 2;
+                        speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * 2 * (difficulty + 1);
                         break;
                     case Keyboard.KEY_P:
-                        speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
+                        speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
                         paused = true;
                         break;
                 }
@@ -366,7 +379,7 @@ public class InfiniteMode implements GameState {
             if (!paused && !gameover) {
                 switch (key) {
                     case Keyboard.KEY_S:
-                        speed = Config.BASESPEED + Config.SPEEDINCREMENT * (level - 1);
+                        speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
                         break;
 
                     case Keyboard.KEY_A:
