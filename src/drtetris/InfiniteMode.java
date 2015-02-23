@@ -129,6 +129,8 @@ public class InfiniteMode implements GameState {
                 sbg.enterState(DrTetris.ERR_REPORT);
             }
             
+	    difficulty = ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty();
+	    
             if (speed > Config.SPEEDLIMIT) {
                 speed = Config.SPEEDLIMIT;
             }
