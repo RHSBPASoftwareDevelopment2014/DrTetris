@@ -15,8 +15,8 @@ public class Level {
     private String[] blocks;
     private Image background;
     private Field field;
-    private Random random;
-    //Decides the name, background, and spawning blocks of a level by reading the .csv file
+    private final Random random;
+    //Decides the name, background, and spawning blocks of a level by reading the level.config file
     public Level(String local) throws SlickException, IOException {
 	random = new Random();
         File dir = new File(Config.LEVELDIRECTORY + local);
@@ -28,16 +28,12 @@ public class Level {
 	while(scanner.hasNextLine()) {
 		String line = scanner.nextLine();
 		String[] keyValue = line.split(":");
-		switch (keyValue[0].toLowerCase()) {
-			case "name":
-				name = keyValue[1];
-				break;
-			case "blocks":
-				blocks = keyValue[1].split(",");
-				break;
-			case "gamebackground":
-				background = new Image("res/" + keyValue[1]);
-				break;
+		if (keyValue[0].toLowerCase().equals("name")) {
+			name = keyValue[1];
+		} else if (keyValue[0].toLowerCase().equals("blocks")) {
+			blocks = keyValue[1].split(",");
+		} else if (keyValue[0].toLowerCase().equals("gamebackground")) {
+			background = new Image("res/" + keyValue[1]);
 		}
 	}
     }
@@ -45,7 +41,9 @@ public class Level {
     public Block nextBlock() {
 	    try {
 		return new Block(blocks[random.nextInt(blocks.length)]);
-	    } catch (IOException | NumberFormatException ex) {
+	    } catch (IOException ex) {
+		return null;
+	    } catch(NumberFormatException ex) {
 		return null;
 	    }
     }

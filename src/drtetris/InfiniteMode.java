@@ -31,7 +31,7 @@ public class InfiniteMode implements GameState {
     private Button saveButton;
     private Button pausedExitButton;
     
-    private Level currentLevel;
+    protected Level currentLevel;
     
     private Block nextBlock;
     private MovingBlock currentBlock;
@@ -79,11 +79,15 @@ public class InfiniteMode implements GameState {
 		exception = e;
 	}
     }
+    
+    public int getLevel() {
+	    return level;
+    }
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) {
         try {
-	    difficulty = ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty();
+	    difficulty = (double)((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty();
 	    music = new Music(Config.GAMEBACKGROUNDMUSIC);
 	    currentLevel = new Level(String.valueOf(level));
             pausedOverlay = new Image(Config.PAUSESCREEN);
@@ -143,8 +147,6 @@ public class InfiniteMode implements GameState {
             }
             
 	    music.setVolume(((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
-	    
-	    difficulty = ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty();
 	    
             if (speed > Config.SPEEDLIMIT) {
                 speed = Config.SPEEDLIMIT;
@@ -260,6 +262,8 @@ public class InfiniteMode implements GameState {
     @Override
     public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 	    music.loop(1F, ((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
+	    difficulty = (double) ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty();
+	    speed = (Config.BASESPEED) * ((difficulty/4) + .8);
     }
 
     @Override

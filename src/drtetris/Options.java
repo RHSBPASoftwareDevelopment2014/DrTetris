@@ -16,7 +16,7 @@ public class Options implements GameState {
 
 	private final int id;
 	
-	private double difficulty;
+	private int difficulty;
 	private int volume;
 	
 	private UnicodeFont font;
@@ -32,8 +32,6 @@ public class Options implements GameState {
 	public Options(int id, int backgroundState) {
 		this.id = id;
 		this.backgroundState = backgroundState;
-		difficulty = Config.MEDIUM;
-		volume = 100;
 	}
 	
 	@Override
@@ -45,7 +43,7 @@ public class Options implements GameState {
 		backgroundState = id;
 	}
 	
-	public double getDifficulty() {
+	public int getDifficulty() {
 		return difficulty;
 	}
 	
@@ -57,6 +55,8 @@ public class Options implements GameState {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
                         //Initializes the buttons and backgrounds of the options menu
+			difficulty = ((MainMenu) sbg.getState(DrTetris.MAIN_MENU)).getSaveHandler().getDifficulty();
+			volume = ((MainMenu) sbg.getState(DrTetris.MAIN_MENU)).getSaveHandler().getVolume();
 			background = new Image(Config.OPTIONSBACKGROUND);
 			backButton = new Button(Config.BACKBUTTON, 250, 500, 300, 60);
 			plusButton = new Button(Config.PLUSBUTTON, 500, 395, 50, 50);
@@ -139,14 +139,14 @@ public class Options implements GameState {
 				}
 			}
 			//Makes the selected difficulty be pressed down at all times to show which difficult is set
-			switch((int)difficulty) {
-				case ((int)Config.EASY):
+			switch(difficulty) {
+				case (Config.EASY):
 					easyButton.setState(Button.SELECTED);
 					break;
-				case ((int)Config.MEDIUM):
+				case (Config.MEDIUM):
 					mediumButton.setState(Button.SELECTED);
 					break;
-				case ((int)Config.EXTREME):
+				case (Config.EXTREME):
 					extremeButton.setState(Button.SELECTED);
 					break;
 			}

@@ -20,6 +20,8 @@ public class MainMenu implements GameState {
 	private Button optionsbutton;
 	private Button exitbutton;
 	private Music backgroundMusic;
+	
+	private SaveHandler saveHandler;
 
 	public MainMenu(int id) {
 		this.id = id;
@@ -28,6 +30,10 @@ public class MainMenu implements GameState {
 	@Override
 	public int getID() {
 		return id;
+	}
+	
+	public SaveHandler getSaveHandler() {
+		return saveHandler;
 	}
 
 	@Override
@@ -41,6 +47,8 @@ public class MainMenu implements GameState {
 			infinitebutton = new Button(Config.INFINITEBUTTON, 5, 330, 300, 60);
 			optionsbutton = new Button(Config.OPTIONSBUTTON, 5, 395, 300, 60);
 			exitbutton = new Button(Config.EXITBUTTON, 5, 460, 300, 60);
+			saveHandler = new SaveHandler(Config.SAVEFILE);
+			saveHandler.load();
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);
@@ -91,6 +99,7 @@ public class MainMenu implements GameState {
 			}
 
 			if (exitbutton.getClicked()) {
+				saveHandler.save(((InfiniteMode) sbg.getState(DrTetris.INFINITE_MODE)).getLevel(), ((ChallengeMode) sbg.getState(DrTetris.CHALLENGE_MODE)).getLevel(), ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty(), (int) (((Options) sbg.getState(DrTetris.OPTIONS)).getVolume() * 100));
 				gc.exit();
 			}
 		} catch (Exception e) {

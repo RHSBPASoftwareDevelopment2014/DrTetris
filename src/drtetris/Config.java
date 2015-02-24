@@ -70,10 +70,11 @@ public class Config {
     public static final String MAINMENUBACKGROUNDMUSIC = "res/sounds/Island_Fever.ogg";
     public static final String GAMEBACKGROUNDMUSIC = "res/sounds/BEAST1.ogg";
     public static final String FONT = "res/font.TTF";
+    public static final String SAVEFILE = "user.save";
     
     //Creates the different types of blocks and the three difficulty levels
-    public static final int TILETYPENORMAL = 0, TILETYPETUNNEL = 1, TILETYPEAIR = 2;
-    public static final double EASY = 0.0, MEDIUM = 1.0, EXTREME = 2.0;
+    public static final int TILETYPENORMAL = 0, TILETYPETUNNEL = 1, TILETYPEAIR = 2, TILETYPESAND = 3;
+    public static final int EASY = 0, MEDIUM = 1, EXTREME = 2;
     
     public static final String[] TILENAMELIST = {
             null,
@@ -110,7 +111,7 @@ public class Config {
             TILETYPENORMAL,
             TILETYPENORMAL,
             TILETYPENORMAL,
-            TILETYPENORMAL,
+            TILETYPESAND,
             TILETYPETUNNEL,
             TILETYPETUNNEL,
             TILETYPETUNNEL,

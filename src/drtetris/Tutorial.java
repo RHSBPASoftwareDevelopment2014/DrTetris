@@ -38,7 +38,7 @@ public class Tutorial implements GameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
-		if (slide > 7) {
+		if (slide > tutorialSlides.getWidth() / 800 - 1) {
 			sbg.enterState(DrTetris.MAIN_MENU);
 			slide = 0;
 		}

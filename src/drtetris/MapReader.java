@@ -9,11 +9,11 @@ import java.util.UUID;
 import org.newdawn.slick.SlickException;
 
 public class MapReader {
-    //This is used to read the .csv that contains the information of which blocks make up each level
+    //This is used to read .csv files that contain tables of tile data and turn them into two dimensional arrays of Tiles that represents blocks and fields
     public static Tile[][] getMapFromFile(String dir, String name) throws IOException, NumberFormatException {
         CsvReader reader = new CsvReader(dir + name + ".csv");
         
-        List<String[]> records = new ArrayList<>();
+        List<String[]> records = new ArrayList<String[]>();
         
         while(reader.readRecord()) {
             String[] record = new String[reader.getColumnCount()];
@@ -34,12 +34,17 @@ public class MapReader {
                             case Config.TILETYPENORMAL:
                                 map[i][j] = new LinkedTile(id, uuid);
                                 break;
+				    
+			    case Config.TILETYPESAND:
+				map[i][j] = new LinkedTile(id, UUID.randomUUID().toString());
+				break;
                                 
                             case Config.TILETYPETUNNEL:
                                 map[i][j] = new Tunnel(id);
                                 break;
                         }
-                    } catch (SlickException | ArrayIndexOutOfBoundsException ex) {}
+                    } catch (SlickException ex) {
+		    } catch (ArrayIndexOutOfBoundsException ex) {}
                 }
             }
             return map;

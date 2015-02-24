@@ -40,7 +40,9 @@ public class ErrorReport implements GameState {
         
         try {
             background = new Image(Config.ERRORSCREEN);
-        } catch (SlickException | RuntimeException sre) {
+        } catch (SlickException se) {
+	    System.out.println("Could not create error report background image");
+	} catch (RuntimeException re) {
             System.out.println("Could not create error report background image");
         }
     }
