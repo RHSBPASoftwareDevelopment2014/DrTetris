@@ -1,7 +1,5 @@
-
 package drtetris;
 
-import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -14,17 +12,17 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Credits implements GameState {
 
 	private final int id;
-	
+
 	private Image credits;
 	private Music backgroundMusic;
-	
+
 	private int y = 0;
 	private boolean clicked = false;
-	
+
 	public Credits(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public int getID() {
 		return id;
@@ -34,7 +32,7 @@ public class Credits implements GameState {
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
 			//Initializes the background music and the credits image
-                        backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
+			backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
 			credits = new Image(Config.CREDITSIMAGE);
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
@@ -46,7 +44,7 @@ public class Credits implements GameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		try {
 			//Makes the credits appear
-                        credits.draw(0, y);
+			credits.draw(0, y);
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);
@@ -56,7 +54,7 @@ public class Credits implements GameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		try {
-                        //Allows the credits image to be any length
+			//Allows the credits image to be any length
 			backgroundMusic.setVolume(((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
 			if (clicked) {
 				sbg.enterState(DrTetris.MAIN_MENU);
@@ -176,5 +174,5 @@ public class Credits implements GameState {
 	@Override
 	public void controllerButtonReleased(int i, int i1) {
 	}
-	
+
 }

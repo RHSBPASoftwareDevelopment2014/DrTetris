@@ -1,4 +1,3 @@
-
 package drtetris;
 
 import java.awt.Color;
@@ -16,15 +15,15 @@ public class LevelSelection implements GameState {
 
 	private final int id;
 	private final Button[] levelOptionButtons = new Button[Config.NUMBEROFLEVELS];
-	
+
 	private UnicodeFont font;
 	private Image background;
 	private Button mainMenuButton;
-	
+
 	public LevelSelection(int id) {
 		this.id = id;
 	}
-	
+
 	@Override
 	public int getID() {
 		return id;
@@ -50,7 +49,11 @@ public class LevelSelection implements GameState {
 		mainMenuButton.draw();
 		for (int i = 0; i < levelOptionButtons.length; i++) {
 			levelOptionButtons[i].draw();
-			g.drawString(String.valueOf(i + 1), (i >= 9 ? (i >= 19 ? 72 : 77) : 87) + 150 * (i % 5), 185 + 100 * (i / 5));
+			if (i <= ((ChallengeMode) sbg.getState(DrTetris.CHALLENGE_MODE)).getHighestLevel()) {
+				g.drawString(String.valueOf(i + 1), (i >= 9 ? (i >= 19 ? 72 : 77) : 87) + 150 * (i % 5), 185 + 100 * (i / 5));
+			} else {
+				g.drawString("?", 87 + 150 * (i % 5), 185 + 100 * (i / 5));
+			}
 		}
 	}
 
@@ -60,14 +63,13 @@ public class LevelSelection implements GameState {
 			sbg.enterState(DrTetris.MAIN_MENU);
 			mainMenuButton.setClicked(false);
 		}
-		
+
 		for (int i = 0; i < levelOptionButtons.length; i++) {
-			if (levelOptionButtons[i].getClicked()) {
+			if (levelOptionButtons[i].getClicked() && i <= ((ChallengeMode) sbg.getState(DrTetris.CHALLENGE_MODE)).getHighestLevel()) {
 				((ChallengeMode) sbg.getState(DrTetris.CHALLENGE_MODE)).setLevel(i);
 				sbg.enterState(DrTetris.CHALLENGE_MODE);
-				levelOptionButtons[i].setClicked(false);
 			}
-			
+			levelOptionButtons[i].setClicked(false);
 		}
 	}
 
@@ -183,5 +185,5 @@ public class LevelSelection implements GameState {
 	@Override
 	public void controllerButtonReleased(int i, int i1) {
 	}
-	
+
 }

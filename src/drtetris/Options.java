@@ -1,4 +1,3 @@
-
 package drtetris;
 
 import java.awt.Color;
@@ -15,10 +14,10 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Options implements GameState {
 
 	private final int id;
-	
+
 	private int difficulty;
 	private int volume;
-	
+
 	private UnicodeFont font;
 	private Image background;
 	private int backgroundState;
@@ -28,25 +27,25 @@ public class Options implements GameState {
 	private Button easyButton;
 	private Button mediumButton;
 	private Button extremeButton;
-	
+
 	public Options(int id, int backgroundState) {
 		this.id = id;
 		this.backgroundState = backgroundState;
 	}
-	
+
 	@Override
 	public int getID() {
 		return id;
 	}
-	
+
 	public void setBackgroundState(int id) {
 		backgroundState = id;
 	}
-	
+
 	public int getDifficulty() {
 		return difficulty;
 	}
-	
+
 	public float getVolume() {
 		return ((float) volume) / 100f;
 	}
@@ -54,7 +53,7 @@ public class Options implements GameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
-                        //Initializes the buttons and backgrounds of the options menu
+			//Initializes the buttons and backgrounds of the options menu
 			difficulty = ((MainMenu) sbg.getState(DrTetris.MAIN_MENU)).getSaveHandler().getDifficulty();
 			volume = ((MainMenu) sbg.getState(DrTetris.MAIN_MENU)).getSaveHandler().getVolume();
 			background = new Image(Config.OPTIONSBACKGROUND);
@@ -77,7 +76,7 @@ public class Options implements GameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		try {
-                        //Draws all of the buttons and backgrounds of the options menu
+			//Draws all of the buttons and backgrounds of the options menu
 			sbg.getState(backgroundState).render(gc, sbg, g);
 			g.setFont(font);
 			background.draw();
@@ -95,7 +94,7 @@ public class Options implements GameState {
 	}
 
 	private int volumeDelay = 250;
-	
+
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		try {
@@ -105,17 +104,17 @@ public class Options implements GameState {
 				sbg.enterState(backgroundState);
 				backButton.setClicked(false);
 			}
-			
+
 			if (easyButton.getClicked()) {
 				difficulty = Config.EASY;
 				easyButton.setClicked(false);
 			}
-			
+
 			if (mediumButton.getClicked()) {
 				difficulty = Config.MEDIUM;
 				mediumButton.setClicked(false);
 			}
-			
+
 			if (extremeButton.getClicked()) {
 				difficulty = Config.EXTREME;
 				extremeButton.setClicked(false);
@@ -129,7 +128,7 @@ public class Options implements GameState {
 						plusButton.setClicked(false);
 					}
 				}
-			
+
 				if (minusButton.getClicked()) {
 					if (volume > 0) {
 						volume -= 5;
@@ -139,7 +138,7 @@ public class Options implements GameState {
 				}
 			}
 			//Makes the selected difficulty be pressed down at all times to show which difficult is set
-			switch(difficulty) {
+			switch (difficulty) {
 				case (Config.EASY):
 					easyButton.setState(Button.SELECTED);
 					break;
@@ -276,5 +275,5 @@ public class Options implements GameState {
 	@Override
 	public void controllerButtonReleased(int i, int i1) {
 	}
-	
+
 }
