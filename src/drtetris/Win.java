@@ -39,6 +39,10 @@ public class Win implements GameState {
 
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
+		if (backButton.getClicked()) {
+			backButton.setClicked(false);
+			sbg.enterState(DrTetris.MAIN_MENU);
+		}
 	}
 
 	@Override
