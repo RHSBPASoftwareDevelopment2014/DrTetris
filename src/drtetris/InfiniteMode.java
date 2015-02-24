@@ -46,7 +46,7 @@ public class InfiniteMode implements GameState {
             dDelay = 0;
     
     private int level = 0;
-    private int difficulty;
+    private double difficulty;
     
     private boolean A = false,
             D = false;
@@ -95,7 +95,7 @@ public class InfiniteMode implements GameState {
             pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510, 300, 60);
             currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = currentLevel.nextBlock();
-	    speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
+	    speed = (Config.BASESPEED) * ((difficulty/4) + .8);
 	    font = new UnicodeFont(Config.FONT, 14, false, false);
 	    font.addAsciiGlyphs();
 	    font.getEffects().add(new ColorEffect(Color.WHITE));
@@ -177,7 +177,7 @@ public class InfiniteMode implements GameState {
                     currentLevel = new Level(String.valueOf(level));
 		    currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
 		    nextBlock = currentLevel.nextBlock();
-		    speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
+		    speed = (Config.BASESPEED) * (difficulty/4 + 1);
                     break;
                 case Field.END:
                     gameover = true;
@@ -373,10 +373,10 @@ public class InfiniteMode implements GameState {
                         A = false;
                         break;
                     case Keyboard.KEY_S:
-                        speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * 2 * (difficulty + 1);
+                        speed = (Config.BASESPEED) * 2 * (difficulty/4 + 1);
                         break;
                     case Keyboard.KEY_P:
-                        speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
+                        speed = (Config.BASESPEED) * (difficulty/4 + 1);
                         paused = true;
                         break;
                 }
@@ -396,7 +396,7 @@ public class InfiniteMode implements GameState {
             if (!paused && !gameover) {
                 switch (key) {
                     case Keyboard.KEY_S:
-                        speed = (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + 1);
+                        speed = (Config.BASESPEED) * (difficulty/4 + 1);
                         break;
 
                     case Keyboard.KEY_A:

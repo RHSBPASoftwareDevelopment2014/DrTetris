@@ -237,7 +237,8 @@ public class Field extends TileMap {
             block.setY(((int) block.getY() / Config.BLOCKSIZE) * Config.BLOCKSIZE);
         }
     }
-
+    //Decides whether the blocks are falling, the next level is continued to, 
+    //there is a game over, or if the game is continuing as normal
     public void updateState() {
         if (fallingBlocks.size() > 0) {
             state = ANIMATE;
@@ -253,7 +254,7 @@ public class Field extends TileMap {
     public int getState() {
         return state;
     }
-
+    //Checks to see if the there is a block above the limit
     private boolean isFull() {
         for (Tile tile : map[0]) {
             if (tile != null) {
@@ -263,7 +264,7 @@ public class Field extends TileMap {
 
         return false;
     }
-
+    //The isTunnel methods are used to check if a tunnel is connected from the bottom to the top
     private boolean isTunnel() {
         boolean isTunnel = false;
         for (int i = 0; i < map[map.length - 1].length && !isTunnel; i++) {

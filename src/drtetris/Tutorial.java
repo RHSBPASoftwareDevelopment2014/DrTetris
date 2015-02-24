@@ -9,7 +9,7 @@ import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
-
+//This class is used to make a slideshow of the spritesheet for a tutorial
 public class Tutorial implements GameState {
 
 	private final int id;

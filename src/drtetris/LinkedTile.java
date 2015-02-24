@@ -1,7 +1,8 @@
 package drtetris;
 
 import org.newdawn.slick.SlickException;
-
+//This class creates linkage between blocks so that linked blocks do not break when there is overhang by assigning a falling block an ID.
+//Blocks with the same ID will not break apart.
 public class LinkedTile extends Tile {
 
     public static final int STRAIGHT = 0, ALL = 1, CORNER = 2, T = 3, LEG = 4, NONE = 5;

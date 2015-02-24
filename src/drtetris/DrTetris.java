@@ -31,7 +31,7 @@ public class DrTetris extends StateBasedGame {
             Log.error(e);
         }
     }
-
+    //Creates the multiple gamestates
     @Override
     public void initStatesList(GameContainer gc) throws SlickException {
 	this.addState(new Credits(CREDITS));

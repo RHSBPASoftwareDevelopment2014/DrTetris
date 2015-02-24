@@ -9,7 +9,7 @@ import java.util.UUID;
 import org.newdawn.slick.SlickException;
 
 public class MapReader {
-    
+    //This is used to read the .csv that contains the information of which blocks make up each level
     public static Tile[][] getMapFromFile(String dir, String name) throws IOException, NumberFormatException {
         CsvReader reader = new CsvReader(dir + name + ".csv");
         

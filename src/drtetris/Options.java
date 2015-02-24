@@ -16,7 +16,7 @@ public class Options implements GameState {
 
 	private final int id;
 	
-	private int difficulty;
+	private double difficulty;
 	private int volume;
 	
 	private UnicodeFont font;
@@ -45,7 +45,7 @@ public class Options implements GameState {
 		backgroundState = id;
 	}
 	
-	public int getDifficulty() {
+	public double getDifficulty() {
 		return difficulty;
 	}
 	
@@ -56,6 +56,7 @@ public class Options implements GameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
+                        //Initializes the buttons and backgrounds of the options menu
 			background = new Image(Config.OPTIONSBACKGROUND);
 			backButton = new Button(Config.BACKBUTTON, 250, 500, 300, 60);
 			plusButton = new Button(Config.PLUSBUTTON, 500, 395, 50, 50);
@@ -76,6 +77,7 @@ public class Options implements GameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		try {
+                        //Draws all of the buttons and backgrounds of the options menu
 			sbg.getState(backgroundState).render(gc, sbg, g);
 			g.setFont(font);
 			background.draw();
@@ -98,7 +100,7 @@ public class Options implements GameState {
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		try {
 			volumeDelay += delta;
-			
+			//Lets the difficulty be set from the buttons 
 			if (backButton.getClicked()) {
 				sbg.enterState(backgroundState);
 				backButton.setClicked(false);
@@ -118,7 +120,7 @@ public class Options implements GameState {
 				difficulty = Config.EXTREME;
 				extremeButton.setClicked(false);
 			}
-			
+			//Lets the volume be altered with a + and - button
 			if (volumeDelay >= 250) {
 				if (plusButton.getClicked()) {
 					if (volume < 100) {
@@ -136,15 +138,15 @@ public class Options implements GameState {
 					}
 				}
 			}
-			
-			switch(difficulty) {
-				case Config.EASY:
+			//Makes the selected difficulty be pressed down at all times to show which difficult is set
+			switch((int)difficulty) {
+				case ((int)Config.EASY):
 					easyButton.setState(Button.SELECTED);
 					break;
-				case Config.MEDIUM:
+				case ((int)Config.MEDIUM):
 					mediumButton.setState(Button.SELECTED);
 					break;
-				case Config.EXTREME:
+				case ((int)Config.EXTREME):
 					extremeButton.setState(Button.SELECTED);
 					break;
 			}

@@ -12,7 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class MainMenu implements GameState {
 
 	private final int id;
-
+        //Declares the background image and music along with the buttons
 	private Image background;
 	private Button tutorialbutton;
 	private Button challengebutton;
@@ -32,7 +32,8 @@ public class MainMenu implements GameState {
 
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-		try {
+		//Initializes the background image and music along with the buttons' positions
+                try {
 			backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
 			background = new Image(Config.MAINMENU);
 			tutorialbutton = new Button(Config.TUTORIALBUTTON, 5, 200, 300, 60);
@@ -48,7 +49,8 @@ public class MainMenu implements GameState {
 
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		try {
+		//Draws all of the buttons and the background
+                try {
 			background.draw();
 			tutorialbutton.draw();
 			challengebutton.draw();
@@ -64,7 +66,8 @@ public class MainMenu implements GameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		try {
-			backgroundMusic.setVolume(((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
+			//Gives the buttons their purposes and sets the volume
+                        backgroundMusic.setVolume(((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
 			
 			if (tutorialbutton.getClicked()) {
 				sbg.enterState(DrTetris.TUTORIAL);
@@ -99,7 +102,8 @@ public class MainMenu implements GameState {
 	@Override
 	public void enter(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
-			if (!backgroundMusic.playing()) {
+			//Loops the music
+                        if (!backgroundMusic.playing()) {
 				backgroundMusic.loop(1F, ((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
 			}
 		} catch (Exception e) {
@@ -122,7 +126,7 @@ public class MainMenu implements GameState {
 	public void mouseClicked(int button, int x, int y, int clickCount) {
 
 	}
-
+        //The next four methods tell the buttons what to do depending on what the mouse does in relation to them
 	@Override
 	public void mousePressed(int button, int x, int y) {
 		tutorialbutton.mousePressed(button, x, y);
@@ -131,7 +135,7 @@ public class MainMenu implements GameState {
 		optionsbutton.mousePressed(button, x, y);
 		exitbutton.mousePressed(button, x, y);
 	}
-
+        
 	@Override
 	public void mouseReleased(int button, int x, int y) {
 		tutorialbutton.mouseReleased(button, x, y);

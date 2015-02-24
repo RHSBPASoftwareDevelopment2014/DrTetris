@@ -28,7 +28,7 @@ public class ErrorReport implements GameState {
     private Image background;
     
     public ErrorReport(int id, Throwable e) {
-        
+        //Copies an error report to your clipboard and displays an error screen
         Log.error(e);
         
         StringSelection selection = new StringSelection(report);

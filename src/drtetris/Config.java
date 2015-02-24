@@ -71,8 +71,9 @@ public class Config {
     public static final String GAMEBACKGROUNDMUSIC = "res/sounds/BEAST1.ogg";
     public static final String FONT = "res/font.TTF";
     
+    //Creates the different types of blocks and the three difficulty levels
     public static final int TILETYPENORMAL = 0, TILETYPETUNNEL = 1, TILETYPEAIR = 2;
-    public static final int EASY = 0, MEDIUM = 1, EXTREME = 2;
+    public static final double EASY = 0.0, MEDIUM = 1.0, EXTREME = 2.0;
     
     public static final String[] TILENAMELIST = {
             null,
@@ -101,7 +102,7 @@ public class Config {
             GREENTUNNEL,
             ROOTSTILE
         };
-    
+    //Chooses which block has which properties 
     public static final int[] TILETYPELIST = {
             TILETYPEAIR,
             TILETYPENORMAL,
@@ -115,7 +116,7 @@ public class Config {
             TILETYPETUNNEL,
             TILETYPENORMAL
         };
-    
+    //This adds gravity effects to the sand and tunnel blocks
     public static final boolean[] TILEGRAVITYLIST = {
         false,
         false,

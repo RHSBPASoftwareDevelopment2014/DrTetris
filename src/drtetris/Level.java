@@ -16,7 +16,7 @@ public class Level {
     private Image background;
     private Field field;
     private Random random;
-    
+    //Decides the name, background, and spawning blocks of a level by reading the .csv file
     public Level(String local) throws SlickException, IOException {
 	random = new Random();
         File dir = new File(Config.LEVELDIRECTORY + local);

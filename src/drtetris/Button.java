@@ -20,7 +20,7 @@ public class Button {
         this.x = x;
         this.y = y;
     }
-    
+    //Chooses what the button looks like
     public void draw() {
 	if (click) {
 		sheet.getSprite(2, 0).draw(x, y);

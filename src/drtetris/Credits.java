@@ -33,7 +33,8 @@ public class Credits implements GameState {
 	@Override
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		try {
-			backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
+			//Initializes the background music and the credits image
+                        backgroundMusic = new Music(Config.MAINMENUBACKGROUNDMUSIC);
 			credits = new Image(Config.CREDITSIMAGE);
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
@@ -44,7 +45,8 @@ public class Credits implements GameState {
 	@Override
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		try {
-			credits.draw(0, y);
+			//Makes the credits appear
+                        credits.draw(0, y);
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);
@@ -54,6 +56,7 @@ public class Credits implements GameState {
 	@Override
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		try {
+                        //Allows the credits image to be any length
 			backgroundMusic.setVolume(((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
 			if (clicked) {
 				sbg.enterState(DrTetris.MAIN_MENU);

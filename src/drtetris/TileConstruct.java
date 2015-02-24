@@ -1,7 +1,7 @@
 
 package drtetris;
 
-
+//This class is used to find which links should be used by the state and how it is rotated by the rotation
 public class TileConstruct {
 
     private int state;
