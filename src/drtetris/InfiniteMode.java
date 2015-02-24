@@ -74,6 +74,8 @@ public class InfiniteMode implements GameState {
 			stackDelay = 0;
 			aDelay = 0;
 			dDelay = 0;
+			paused = false;
+			gameover = false;
 		} catch (Exception e) {
 			exception = e;
 		}
@@ -131,7 +133,7 @@ public class InfiniteMode implements GameState {
 			nextBlock.draw(Config.NEXTBLOCKX, Config.NEXTBLOCKY);
 			currentLevel.getField().draw(Config.FIELDX, Config.FIELDY);
 			levelNameBackground.draw(642, 273);
-			g.drawString(currentLevel.getName(), 643, 281);
+			g.drawString(challenge ? currentLevel.getName() : String.valueOf(levelCount + 1), 643, 281);
 			if (gameover) {
 				gameoverOverlay.draw();
 				backButton.draw();

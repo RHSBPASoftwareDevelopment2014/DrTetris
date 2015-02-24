@@ -7,7 +7,6 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
-import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -40,7 +39,7 @@ public class MainMenu implements GameState {
 	}
 
 	public void save(StateBasedGame sbg) throws FileNotFoundException {
-		saveHandler.save(((InfiniteMode) sbg.getState(DrTetris.INFINITE_MODE)).getHighestLevel(), ((ChallengeMode) sbg.getState(DrTetris.CHALLENGE_MODE)).getHighestLevel(), ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty(), (int) (((Options) sbg.getState(DrTetris.OPTIONS)).getVolume() * 100));
+		saveHandler.save(((ChallengeMode) sbg.getState(DrTetris.CHALLENGE_MODE)).getHighestLevel(), ((InfiniteMode) sbg.getState(DrTetris.INFINITE_MODE)).getHighestLevel(), ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty(), (int) (((Options) sbg.getState(DrTetris.OPTIONS)).getVolume() * 100));
 	}
 
 	@Override

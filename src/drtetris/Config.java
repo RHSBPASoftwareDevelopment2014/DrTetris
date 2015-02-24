@@ -55,9 +55,9 @@ public class Config {
 	public static final String AMETHYSTTILE = "res/amethyst.png";
 	public static final String SANDTILE = "res/sand.png";
 	public static final String GREENGARNETTILE = "res/greengarnet.png";
-	public static final String BLUETUNNEL = "res/bluetunnelspritesheet.png";
-	public static final String REDTUNNEL = "res/redtunnelspritesheet.png";
-	public static final String GREENTUNNEL = "res/greentunnelspritesheet.png";
+	public static final String BLUETUNNEL = "res/bluetunnel.png";
+	public static final String REDTUNNEL = "res/redtunnel.png";
+	public static final String GREENTUNNEL = "res/greentunnel.png";
 	public static final String ROOTSTILE = "res/roots.png";
 	public static final String LEVELNAMEBACKGROUND = "res/levelnamebackground.png";
 	public static final String LEVELSELECTIONBACKGROUND = "res/levelselect.png";
@@ -70,6 +70,7 @@ public class Config {
 	public static final String GAMEBACKGROUNDMUSIC = "res/sounds/BEAST1.ogg";
 	public static final String FONT = "res/font.TTF";
 	public static final String SAVEFILE = "user.save";
+	public static final String WINIMAGE = "res/winscreen.png";
 
 	//Creates the different types of blocks and the three difficulty levels
 	public static final int TILETYPENORMAL = 0, TILETYPETUNNEL = 1, TILETYPEAIR = 2, TILETYPESAND = 3;
