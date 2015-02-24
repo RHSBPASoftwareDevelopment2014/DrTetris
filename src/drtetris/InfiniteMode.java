@@ -9,6 +9,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.GameState;
@@ -28,7 +29,6 @@ public class InfiniteMode implements GameState {
     
     private Button mainmenuButton;
     private Button pausedOptionsButton;
-    private Button saveButton;
     private Button pausedExitButton;
     
     private Level currentLevel;
@@ -91,8 +91,7 @@ public class InfiniteMode implements GameState {
 	    levelNameBackground = new Image(Config.LEVELNAMEBACKGROUND);
             mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315, 300, 60);
             pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380, 300, 60);
-            saveButton = new Button (Config.SAVEBUTTON, 250, 445, 300, 60);
-            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510, 300, 60);
+            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 445, 300, 60);
             currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = currentLevel.nextBlock();
 	    speed = (Config.BASESPEED) * ((difficulty/4) + .8);
@@ -124,7 +123,6 @@ public class InfiniteMode implements GameState {
                 pausedOverlay.draw();
                 mainmenuButton.draw();
                 pausedOptionsButton.draw();
-                saveButton.draw();
                 pausedExitButton.draw();
             }
         } catch (Exception e) {
@@ -279,7 +277,6 @@ public class InfiniteMode implements GameState {
         if (paused) {
             mainmenuButton.mousePressed(button, x, y);
             pausedOptionsButton.mousePressed(button, x, y);
-            saveButton.mousePressed(button, x, y);
             pausedExitButton.mousePressed(button, x, y);
 
         }
@@ -290,7 +287,6 @@ public class InfiniteMode implements GameState {
         if (paused) {
             mainmenuButton.mouseReleased(button, x, y);
             pausedOptionsButton.mouseReleased(button, x, y);
-            saveButton.mouseReleased(button, x, y);
             pausedExitButton.mouseReleased(button, x, y);
         }
     }
@@ -300,7 +296,6 @@ public class InfiniteMode implements GameState {
         if (paused) {
             mainmenuButton.mouseMoved(oldX, oldY, newX, newY);
             pausedOptionsButton.mouseMoved(oldX, oldY, newX, newY);
-            saveButton.mouseMoved(oldX, oldY, newX, newY);
             pausedExitButton.mouseMoved(oldX, oldY, newX, newY);
         }
     }
@@ -310,7 +305,6 @@ public class InfiniteMode implements GameState {
         if (paused) {
             mainmenuButton.mouseDragged(oldX, oldY, newX, newY);
             pausedOptionsButton.mouseDragged(oldX, oldY, newX, newY);
-            saveButton.mouseDragged(oldX, oldY, newX, newY);
             pausedExitButton.mouseDragged(oldX, oldY, newX, newY);
         }
     }

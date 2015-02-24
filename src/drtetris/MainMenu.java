@@ -6,6 +6,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.state.GameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -19,6 +20,7 @@ public class MainMenu implements GameState {
 	private Button infinitebutton;
 	private Button optionsbutton;
 	private Button exitbutton;
+        private Button savebutton;
 	private Music backgroundMusic;
 
 	public MainMenu(int id) {
@@ -40,7 +42,8 @@ public class MainMenu implements GameState {
 			challengebutton = new Button(Config.CHALLENGEBUTTON, 5, 265, 300, 60);
 			infinitebutton = new Button(Config.INFINITEBUTTON, 5, 330, 300, 60);
 			optionsbutton = new Button(Config.OPTIONSBUTTON, 5, 395, 300, 60);
-			exitbutton = new Button(Config.EXITBUTTON, 5, 460, 300, 60);
+                        savebutton = new Button(Config.SAVEBUTTON, 5, 460, 300, 60);
+			exitbutton = new Button(Config.EXITBUTTON, 5, 525, 300, 60);
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
 			sbg.enterState(DrTetris.ERR_REPORT);
@@ -56,6 +59,7 @@ public class MainMenu implements GameState {
 			challengebutton.draw();
 			infinitebutton.draw();
 			optionsbutton.draw();
+                        savebutton.draw();
 			exitbutton.draw();
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
@@ -133,6 +137,7 @@ public class MainMenu implements GameState {
 		challengebutton.mousePressed(button, x, y);
 		infinitebutton.mousePressed(button, x, y);
 		optionsbutton.mousePressed(button, x, y);
+                savebutton.mousePressed(button, x, y);
 		exitbutton.mousePressed(button, x, y);
 	}
         
@@ -142,6 +147,7 @@ public class MainMenu implements GameState {
 		challengebutton.mouseReleased(button, x, y);
 		infinitebutton.mouseReleased(button, x, y);
 		optionsbutton.mouseReleased(button, x, y);
+                savebutton.mouseReleased(button, x, y);
 		exitbutton.mouseReleased(button, x, y);
 	}
 
@@ -151,6 +157,7 @@ public class MainMenu implements GameState {
 		challengebutton.mouseMoved(oldX, oldY, newX, newY);
 		infinitebutton.mouseMoved(oldX, oldY, newX, newY);
 		optionsbutton.mouseMoved(oldX, oldY, newX, newY);
+                savebutton.mouseMoved(oldX, oldY, newX, newY);
 		exitbutton.mouseMoved(oldX, oldY, newX, newY);
 	}
 
@@ -160,6 +167,7 @@ public class MainMenu implements GameState {
 		challengebutton.mouseDragged(oldX, oldY, newX, newY);
 		infinitebutton.mouseDragged(oldX, oldY, newX, newY);
 		optionsbutton.mouseDragged(oldX, oldY, newX, newY);
+                savebutton.mouseDragged(oldX, oldY, newX, newY);
 		exitbutton.mouseDragged(oldX, oldY, newX, newY);
 	}
 
