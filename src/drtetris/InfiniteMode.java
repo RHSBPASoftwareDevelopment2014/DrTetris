@@ -200,7 +200,7 @@ public class InfiniteMode implements GameState {
 				case Field.CONTINUE:
 					if (challenge) {
 						nextLevel();
-						if (getLevel() >= Config.NUMBEROFLEVELS) {
+						if (getLevel() >= Config.NUMBEROFLEVELS - 1) {
 							sbg.enterState(DrTetris.WIN);
 						} else {
 							sbg.enterState(DrTetris.LEVEL_SELECTION);
