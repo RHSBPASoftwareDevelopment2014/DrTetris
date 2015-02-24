@@ -9,6 +9,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.Music;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.Sound;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.state.GameState;
@@ -26,9 +27,8 @@ public class InfiniteMode implements GameState {
     private Image gameoverOverlay;
     private Image levelNameBackground;
     
-    private Button mainmenuButton;
+    private Button backButton;
     private Button pausedOptionsButton;
-    private Button saveButton;
     private Button pausedExitButton;
     
     protected Level currentLevel;
@@ -93,10 +93,9 @@ public class InfiniteMode implements GameState {
             pausedOverlay = new Image(Config.PAUSESCREEN);
             gameoverOverlay = new Image(Config.GAMEOVERSCREEN);
 	    levelNameBackground = new Image(Config.LEVELNAMEBACKGROUND);
-            mainmenuButton = new Button(Config.BACKMAINMENUBUTTON, 250, 315, 300, 60);
-            pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 380, 300, 60);
-            saveButton = new Button (Config.SAVEBUTTON, 250, 445, 300, 60);
-            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 510, 300, 60);
+            backButton = new Button(Config.BACKBUTTON, 250, 335, 300, 60);
+            pausedOptionsButton = new Button (Config.INNEROPTIONSBUTTON, 250, 400, 300, 60);
+            pausedExitButton = new Button (Config.INNEREXITBUTTON, 250, 465, 300, 60);
             currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
             nextBlock = currentLevel.nextBlock();
 	    speed = (Config.BASESPEED) * ((difficulty/4) + .8);
@@ -124,11 +123,11 @@ public class InfiniteMode implements GameState {
             g.drawString(currentLevel.getName(), 643, 281);
             if (gameover) {
                 gameoverOverlay.draw();
+                backButton.draw();
             } else if (paused) {
                 pausedOverlay.draw();
-                mainmenuButton.draw();
+                backButton.draw();
                 pausedOptionsButton.draw();
-                saveButton.draw();
                 pausedExitButton.draw();
             }
         } catch (Exception e) {
@@ -153,9 +152,9 @@ public class InfiniteMode implements GameState {
             }
             
             if (paused) {
-                if (mainmenuButton.getClicked()) {
+                if (backButton.getClicked()) {
                     sbg.enterState(DrTetris.MAIN_MENU);
-                    mainmenuButton.setClicked(false);
+                    backButton.setClicked(false);
                 }
                 
                 if (pausedExitButton.getClicked()) {
@@ -168,7 +167,12 @@ public class InfiniteMode implements GameState {
 		    pausedOptionsButton.setClicked(false);
 		}
             }
-            
+            if (gameover) {
+                if (backButton.getClicked()) {
+                    sbg.enterState(DrTetris.MAIN_MENU);
+                    backButton.setClicked(false);
+                }
+            }
             if (!paused && !gameover) {
                 currentLevel.getField().update(delta);
             }
@@ -281,41 +285,49 @@ public class InfiniteMode implements GameState {
     @Override
     public void mousePressed(int button, int x, int y) {
         if (paused) {
-            mainmenuButton.mousePressed(button, x, y);
+            backButton.mousePressed(button, x, y);
             pausedOptionsButton.mousePressed(button, x, y);
-            saveButton.mousePressed(button, x, y);
             pausedExitButton.mousePressed(button, x, y);
 
+        }
+        if (gameover) {
+            backButton.mousePressed(button, x, y);
         }
     }
 
     @Override
     public void mouseReleased(int button, int x, int y) {
         if (paused) {
-            mainmenuButton.mouseReleased(button, x, y);
+            backButton.mouseReleased(button, x, y);
             pausedOptionsButton.mouseReleased(button, x, y);
-            saveButton.mouseReleased(button, x, y);
             pausedExitButton.mouseReleased(button, x, y);
+        }
+        if (gameover) {
+            backButton.mouseReleased(button, x, y);
         }
     }
 
     @Override
     public void mouseMoved(int oldX, int oldY, int newX, int newY) {
         if (paused) {
-            mainmenuButton.mouseMoved(oldX, oldY, newX, newY);
+            backButton.mouseMoved(oldX, oldY, newX, newY);
             pausedOptionsButton.mouseMoved(oldX, oldY, newX, newY);
-            saveButton.mouseMoved(oldX, oldY, newX, newY);
             pausedExitButton.mouseMoved(oldX, oldY, newX, newY);
+        }
+        if (gameover) {
+            backButton.mouseMoved(oldX, oldY, newX, newY);
         }
     }
 
     @Override
     public void mouseDragged(int oldX, int oldY, int newX, int newY) {
         if (paused) {
-            mainmenuButton.mouseDragged(oldX, oldY, newX, newY);
+            backButton.mouseDragged(oldX, oldY, newX, newY);
             pausedOptionsButton.mouseDragged(oldX, oldY, newX, newY);
-            saveButton.mouseDragged(oldX, oldY, newX, newY);
             pausedExitButton.mouseDragged(oldX, oldY, newX, newY);
+        }
+        if (gameover) {
+            backButton.mouseDragged(oldX, oldY, newX, newY);
         }
     }
 
