@@ -90,7 +90,7 @@ public class InfiniteMode implements GameState {
 		highestLevel = Math.max(highestLevel, levelCount);
 		return random.nextInt(Config.NUMBEROFLEVELS);
 	}
-	
+
 	public int getHighestLevel() {
 		return highestLevel;
 	}
@@ -109,7 +109,7 @@ public class InfiniteMode implements GameState {
 			pausedExitButton = new Button(Config.INNEREXITBUTTON, 250, 465, 300, 60);
 			currentBlock = new MovingBlock(currentLevel.nextBlock(), TileMap.ROTATENONE, Config.DEFAULTX, Config.DEFAULTY);
 			nextBlock = currentLevel.nextBlock();
-			speed = (Config.BASESPEED) * ((difficulty / 4) + .8);
+			speed = challenge ? (Config.BASESPEED) * ((difficulty / 4) + .8) : (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + .8);
 			random = new Random();
 			highestLevel = challenge ? highestLevel = ((MainMenu) sbg.getState(DrTetris.MAIN_MENU)).getSaveHandler().getChallengeLevel() : ((MainMenu) sbg.getState(DrTetris.MAIN_MENU)).getSaveHandler().getInfiniteLevel();
 			font = new UnicodeFont(Config.FONT, 14, false, false);
@@ -134,6 +134,9 @@ public class InfiniteMode implements GameState {
 			currentLevel.getField().draw(Config.FIELDX, Config.FIELDY);
 			levelNameBackground.draw(642, 273);
 			g.drawString(challenge ? currentLevel.getName() : String.valueOf(levelCount + 1), 643, 281);
+			if (!challenge) {
+				g.drawString("Highest: " + highestLevel, 0, 0);
+			}
 			if (gameover) {
 				gameoverOverlay.draw();
 				backButton.draw();
@@ -197,7 +200,11 @@ public class InfiniteMode implements GameState {
 				case Field.CONTINUE:
 					if (challenge) {
 						nextLevel();
-						sbg.enterState(DrTetris.LEVEL_SELECTION);
+						if (getLevel() >= Config.NUMBEROFLEVELS) {
+							sbg.enterState(DrTetris.WIN);
+						} else {
+							sbg.enterState(DrTetris.LEVEL_SELECTION);
+						}
 						gameover = false;
 						paused = false;
 					} else {
@@ -291,7 +298,7 @@ public class InfiniteMode implements GameState {
 		try {
 			music.loop(1F, ((Options) sbg.getState(DrTetris.OPTIONS)).getVolume());
 			difficulty = (double) ((Options) sbg.getState(DrTetris.OPTIONS)).getDifficulty();
-			speed = (Config.BASESPEED) * ((difficulty / 4) + .8);
+			speed = challenge ? (Config.BASESPEED) * ((difficulty / 4) + .8) : (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + .8);
 			gameover = false;
 		} catch (Exception e) {
 			sbg.addState(new ErrorReport(DrTetris.ERR_REPORT, e));
@@ -418,10 +425,10 @@ public class InfiniteMode implements GameState {
 						A = false;
 						break;
 					case Keyboard.KEY_S:
-						speed = (Config.BASESPEED) * 2 * (difficulty / 4 + 1);
+						speed = 2 * (challenge ? (Config.BASESPEED) * ((difficulty / 4) + .8) : (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + .8));
 						break;
 					case Keyboard.KEY_P:
-						speed = (Config.BASESPEED) * (difficulty / 4 + 1);
+						speed = challenge ? (Config.BASESPEED) * ((difficulty / 4) + .8) : (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + .8);
 						paused = true;
 						break;
 				}
@@ -441,7 +448,7 @@ public class InfiniteMode implements GameState {
 			if (!paused && !gameover) {
 				switch (key) {
 					case Keyboard.KEY_S:
-						speed = (Config.BASESPEED) * (difficulty / 4 + 1);
+						speed = challenge ? (Config.BASESPEED) * ((difficulty / 4) + .8) : (Config.BASESPEED + Config.SPEEDINCREMENT * level) * (difficulty + .8);
 						break;
 
 					case Keyboard.KEY_A:
